@@ -1,0 +1,19 @@
+global using NUnit.Framework;
+global using Microsoft.Playwright;
+global using Microsoft.Playwright.NUnit;
+global using Npgsql.EntityFrameworkCore.PostgreSQL;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.Logging;
+global using Moq;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Mvc.ViewFeatures;
+global using System.Text.Json;
+global using Microsoft.AspNetCore.Mvc.Abstractions;
+global using Microsoft.AspNetCore.Mvc.Filters;
+global using Microsoft.AspNetCore.Routing;
+global using System.Text.RegularExpressions;
+global using Microsoft.Extensions.Configuration;
+
+global using VisitEmAll.Models;
