@@ -48,7 +48,7 @@ The process is as follows...
 In removing the secrets, there is now a small config step that's need to connect to your database.
 
 - Add `appsettings.Development.json` to `/VisitEmAll` from the project root
-    * `touch Acebook/appsettings.Development.json` 
+    * `touch VisitEmAll/appsettings.Development.json` 
 - Add the `"ConnectionStrings"` to `appsettings.Development.json`.      
     * It should look like this:
 ```json
@@ -69,9 +69,9 @@ In removing the secrets, there is now a small config step that's need to connect
 
 ## BaseTest Classes & Test Configuration
 
-For the new configuration to work, you will need to create a `Acebook.Test/appsettings.Test.json` using the `example.appsettings.Development.json` as a guide.  
+For the new configuration to work, you will need to create a `VisitEmAll.Test/appsettings.Test.json` using the `example.appsettings.Development.json` as a guide.  
 ```bash
-touch Acebook.Test/appsettings.Test.json
+touch VisitEmAll.Test/appsettings.Test.json
 ```
 
 For new tests the TestBase classes can be inherited.
