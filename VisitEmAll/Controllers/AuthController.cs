@@ -1,33 +1,45 @@
 using Microsoft.AspNetCore.Mvc;
-using VisitEmAll.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
+using VisitEmAll.Models;
+using VisitEmAll.Services;
 
 namespace VisitEmAll.Controllers;
 
 public class AuthController : Controller
 {
     private readonly VisitEmAllDbContext _context;
+    private readonly PasswordHasher _hasher;
 
     public AuthController(VisitEmAllDbContext context)
     {
         _context = context;
+        _hasher = new PasswordHasher();
     }
 
     [HttpGet]
     public IActionResult Login()
     {
+        if (HttpContext.Session.GetInt32("UserId") != null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
         return View(new LoginViewModel());
     }
 
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
+        if (!ModelState.IsValid)
+        {
+            model.ErrorMessage = "Please fill in all fields correctly";
+            return View(model);
+        }
+
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == model.Email);
 
-        if (user == null || !VerifyPassword(model.Password, user.Password))
+        if (user == null || !_hasher.Verify(model.Password, user.Password))
         {
             model.ErrorMessage = "Invalid email or password";
             return View(model);
@@ -41,14 +53,5 @@ public class AuthController : Controller
     {
         HttpContext.Session.Clear();
         return RedirectToAction("Login");
-    }
-
-    // PW Hashing
-    private bool VerifyPassword(string plain, string hashed)
-    {
-        using var sha = SHA256.Create();
-        var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(plain));
-        var hash = BitConverter.ToString(bytes).Replace("-", "").ToLower();
-        return hash == hashed;
     }
 }
