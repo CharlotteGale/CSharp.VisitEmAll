@@ -6,6 +6,8 @@ public class VisitEmAllDbContext : DbContext
 {
 
     private readonly IConfiguration _configuration;
+
+    public DbSet<User>? Users { get; set; }
     public string? DbPath { get; }
 
     public string? GetDatabaseName()
