@@ -8,6 +8,8 @@ public class DashboardController : Controller
 {
     public IActionResult Index()
     {
+        int? currentUserId = HttpContext.Session.GetInt32("user_id");
+        if (currentUserId == null) return Redirect("/");
         return View();
     }
 
