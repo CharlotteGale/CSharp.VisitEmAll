@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+namespace VisitEmAll.Models;
 public class Activity
 {
     public int Id { get; set; }

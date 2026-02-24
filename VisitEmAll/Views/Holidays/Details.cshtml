@@ -1,0 +1,21 @@
+@model Holiday
+
+<h1>@Model.Title</h1>
+<p>Accomodation: @Model.Accommodation, @Model.Location </br> </p>
+
+<h2>From: @Model.StartDate </br> Till: @Model.EndDate</h2>
+
+<h3>Activities</h3>
+<ul>
+  @if(Model.Activities != null && Model.Activities.Any()){
+    @foreach (Activity activity in Model.Activities)
+    {
+      <li>@activity.Name</li>
+    }
+  } else {
+    <p>You did nothing but rest?</p>
+  }
+</ul>
+
+<h4>Cost: @Model.Cost</h4>
+
