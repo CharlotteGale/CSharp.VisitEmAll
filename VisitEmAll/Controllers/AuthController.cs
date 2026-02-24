@@ -43,7 +43,7 @@ public class AuthController : Controller
         return RedirectToAction("Login");
     }
 
-    // --- Helper ---
+    // PW Hashing
     private bool VerifyPassword(string plain, string hashed)
     {
         using var sha = SHA256.Create();
