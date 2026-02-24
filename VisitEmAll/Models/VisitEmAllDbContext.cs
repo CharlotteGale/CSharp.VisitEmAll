@@ -48,6 +48,18 @@ public class VisitEmAllDbContext : DbContext
     }
 
     // ==== Models to be tweaked === \\
+    public DbSet<Holiday> Holidays => Set<Holiday>();
+    public DbSet<Activity> Activities => Set<Activity>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Holiday>()
+            .HasMany(h => h.Activities)
+            .WithOne(a => a.Holiday)
+            .HasForeignKey(a => a.HolidayId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
     // protected override void OnModelCreating(ModelBuilder modelBuilder)
     // {
     //     modelBuilder.Entity<Post>()
