@@ -14,7 +14,6 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Login(LoginViewModel model)
     {
-        // TEMPORARY: Stubbed login until your teammate creates the User table
         if (model.Email == "test@example.com" && model.Password == "password123")
         {
             HttpContext.Session.SetInt32("UserId", 1);
@@ -24,7 +23,6 @@ public class AuthController : Controller
         model.ErrorMessage = "Invalid email or password";
         return View(model);
     }
-
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
