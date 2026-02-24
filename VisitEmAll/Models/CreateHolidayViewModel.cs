@@ -1,19 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 
-public class Holiday
+namespace VisitEmAll.ViewModels;
+
+public class CreateHolidayViewModel
 {
-    public int Id { get; set; }
-
-    [Required]
-    public int UserId { get; set; }
-
     [Required, MaxLength(150)]
     public string Title { get; set; } = string.Empty;
 
     [MaxLength(200)]
     public string? Location { get; set; }
 
+    [DataType(DataType.Date)]
     public DateOnly? StartDate { get; set; }
+
+    [DataType(DataType.Date)]
     public DateOnly? EndDate { get; set; }
 
     [MaxLength(200)]
@@ -21,10 +21,13 @@ public class Holiday
 
     public decimal? Cost { get; set; }
 
-    [MaxLength(500)]
     public string? ThumbnailUrl { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public List<ActivityInput> Activities { get; set; } = new();
 
-    public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+    public class ActivityInput
+    {
+        [MaxLength(150)]
+        public string? Name { get; set; }
+    }
 }
