@@ -12,8 +12,8 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    [Migration("20260224133415_AddHolidayAndActivity")]
-    partial class AddHolidayAndActivity
+    [Migration("20260225115356_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace VisitEmAll.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Activity", b =>
+            modelBuilder.Entity("VisitEmAll.Models.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,7 @@ namespace VisitEmAll.Migrations
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("Holiday", b =>
+            modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,9 +93,40 @@ namespace VisitEmAll.Migrations
                     b.ToTable("Holidays");
                 });
 
-            modelBuilder.Entity("Activity", b =>
+            modelBuilder.Entity("VisitEmAll.Models.User", b =>
                 {
-                    b.HasOne("Holiday", "Holiday")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("HomeTown")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfileImg")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.Activity", b =>
+                {
+                    b.HasOne("VisitEmAll.Models.Holiday", "Holiday")
                         .WithMany("Activities")
                         .HasForeignKey("HolidayId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -104,7 +135,7 @@ namespace VisitEmAll.Migrations
                     b.Navigation("Holiday");
                 });
 
-            modelBuilder.Entity("Holiday", b =>
+            modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
                 {
                     b.Navigation("Activities");
                 });

@@ -67,6 +67,7 @@ public static class DbSeeder
             }
         };
         context.Users.AddRange(users);
+        context.SaveChanges();
 
 
 
@@ -129,6 +130,7 @@ public static class DbSeeder
             }
         };
         context.Holidays.AddRange(holidays);
+        context.SaveChanges();
 
 
 
@@ -156,6 +158,7 @@ public static class DbSeeder
             new Activity { HolidayId = holidays[3].Id, Name = "Pasta Making Class" }
         };
         context.Activities.AddRange(activities);
+        context.SaveChanges();
 
         context.SaveChanges();
     }
