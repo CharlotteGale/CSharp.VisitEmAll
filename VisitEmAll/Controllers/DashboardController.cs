@@ -6,17 +6,60 @@ namespace VisitEmAll.Controllers;
 
 public class DashboardController : Controller
 {
-    public IActionResult Index()
-    {
-        int? currentUserId = HttpContext.Session.GetInt32("user_id");
-        if (currentUserId == null) return Redirect("/");
-        return View();
-    }
+    private readonly VisitEmAllDbContext _context;
+    private readonly ILogger<Controller> _logger;
 
-    public IActionResult Privacy()
+    public DashboardController(VisitEmAllDbContext context, ILogger<DashboardController> logger)
     {
-        return View();
+        _context = context;
+        _logger = logger;
     }
+    [Route("/dashboard")]
+    [HttpGet]
+    public IActionResult Index()
+{
+    int? currentUserId = HttpContext.Session.GetInt32("user_id");
+    if (currentUserId == null) return Redirect("/");
+
+    var currentUser = _context.Users
+        .FirstOrDefault(u => u.Id == currentUserId);
+
+    var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+    var userHolidays = _context.Holidays
+        .Where(h => h.UserId == currentUserId)
+        .ToList();
+
+    var upcomingHolidays = userHolidays
+    .Where(h => h.StartDate >= today)
+    .OrderBy(h => h.StartDate)
+    .Select(h => new
+    {
+        h.Id,
+        h.Title,
+        h.ThumbnailUrl,
+        h.StartDate
+    })
+    .ToList();
+
+var pastHolidays = userHolidays
+    .Where(h => h.StartDate < today)
+    .OrderByDescending(h => h.StartDate)
+    .Select(h => new
+    {
+        h.Id,
+        h.Title,
+        h.ThumbnailUrl,
+        h.StartDate
+    })
+    .ToList();
+
+    ViewData["CurrentUser"] = currentUser;
+    ViewData["UpcomingHolidays"] = upcomingHolidays;
+    ViewData["PastHolidays"] = pastHolidays;
+
+    return View();
+}
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
