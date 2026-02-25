@@ -18,7 +18,7 @@ public class DashboardController : Controller
     [HttpGet]
     public IActionResult Index()
 {
-    int? currentUserId = HttpContext.Session.GetInt32("user_id");
+    int? currentUserId = HttpContext.Session.GetInt32("User_Id");
     if (currentUserId == null) return Redirect("/");
 
     var currentUser = _context.Users
@@ -33,27 +33,11 @@ public class DashboardController : Controller
     var upcomingHolidays = userHolidays
     .Where(h => h.StartDate >= today)
     .OrderBy(h => h.StartDate)
-    .Select(h => new
-    {
-        h.Id,
-        h.Title,
-        h.ThumbnailUrl,
-        h.StartDate,
-        h.EndDate
-    })
     .ToList();
 
 var pastHolidays = userHolidays
     .Where(h => h.StartDate < today)
     .OrderByDescending(h => h.StartDate)
-    .Select(h => new
-    {
-        h.Id,
-        h.Title,
-        h.ThumbnailUrl,
-        h.StartDate,
-        h.EndDate
-    })
     .ToList();
 
     ViewData["CurrentUser"] = currentUser;
