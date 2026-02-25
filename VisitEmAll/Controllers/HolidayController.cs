@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VisitEmAll.Models;
 using VisitEmAll.ViewModels;
 
@@ -31,10 +32,11 @@ public class HolidaysController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateHolidayViewModel vm)
     {
-        if (vm.StartDate.HasValue && vm.EndDate.HasValue 
-            && vm.EndDate.Value < vm.StartDate.Value)
+        // Date validation (DateOnly)
+        if (vm.StartDate.HasValue && vm.EndDate.HasValue &&
+            vm.EndDate.Value < vm.StartDate.Value)
         {
-            ModelState.AddModelError(nameof(vm.EndDate), 
+            ModelState.AddModelError(nameof(vm.EndDate),
                 "End date cannot be before start date.");
         }
 
@@ -45,6 +47,7 @@ public class HolidaysController : Controller
             return View(vm);
         }
 
+        // Session user (temporary fallback while auth settles)
         var userId = HttpContext.Session.GetInt32("user_id");
 
         var holiday = new Holiday
@@ -80,5 +83,17 @@ public class HolidaysController : Controller
 
         TempData["Success"] = "Holiday created successfully!";
         return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet("/holidays/{id:int}")]
+    public async Task<IActionResult> GetHoliday(int id)
+    {
+        var holiday = await _db.Holidays
+            .Include(h => h.Activities)
+            .FirstOrDefaultAsync(h => h.Id == id);
+
+        if (holiday == null) return NotFound();
+
+        return View("Details", holiday);
     }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+namespace VisitEmAll.Models;
 
 public class Holiday
 {
