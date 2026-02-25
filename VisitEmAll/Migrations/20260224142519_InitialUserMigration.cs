@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace VisitEmAll.Migrations
 {
     /// <inheritdoc />
-    public partial class UserModel : Migration
+    public partial class InitialUserMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

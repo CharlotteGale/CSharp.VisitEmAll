@@ -11,8 +11,8 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    [Migration("20260224122435_UserModel2")]
-    partial class UserModel2
+    [Migration("20260224142519_InitialUserMigration")]
+    partial class InitialUserMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
