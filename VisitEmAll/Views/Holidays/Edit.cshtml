@@ -62,6 +62,7 @@
                 <label>Activity name</label>
                 <input asp-for="@activitiesList[i].Name" name="Activities[@i].Name" />
                 <span asp-validation-for="@activitiesList[i].Name"></span>
+                <button type="button" class="btn btn-danger ms-2 mt-4 remove-btn">&times;</button>
             </div>
         }
     </div>
@@ -83,6 +84,17 @@
             const container = document.getElementById("activities");
             const addBtn = document.getElementById("add-activity");
 
+            function reIndexer(){
+              const rows = container.querySelectorAll(".activity-row");
+              rows.forEach((row, index) => {
+                const input = row.querySelector("input");
+                const validation = row.querySelector("span")
+                if (input){
+                  input.name = `Activities[${index}].Name`;
+                }
+              });
+            }
+
             addBtn.addEventListener("click", () => {
                 const index = container.querySelectorAll(".activity-row").length;
                 const row = document.createElement("div");
@@ -90,9 +102,16 @@
                 row.innerHTML = `
                     <label>Activity name</label>
                     <input name="Activities[${index}].Name" placeholder="e.g. Museum visit" />
+                    <button type="button" class="btn btn-danger ms-2 mt-4 remove-btn">&times;</button>
                 `;
                 container.appendChild(row);
             });
+            container.addEventListener("click", (e) => {
+              if (e.target.classList.contains("remove-btn")){
+                e.target.closest(".activity-row").remove();
+                reIndexer();
+              }
+            })
         })();
     </script>
 }

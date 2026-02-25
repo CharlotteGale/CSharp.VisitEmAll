@@ -94,7 +94,7 @@ public class HolidaysController : Controller
 
     return View("Details", holiday);
   }
-
+  
   [HttpGet("/holidays/{id:int}/edit")]
   public async Task<IActionResult> EditHoliday(int id)
   {
@@ -144,10 +144,22 @@ public class HolidaysController : Controller
           HolidayId = holiday.Id,
           Name = name!
         });
-    _db.Activities.AddRange(newActivities);    
+    _db.Activities.AddRange(newActivities);
     await _db.SaveChangesAsync();
 
-    return View ("Details", holiday);
+    return View("Details", holiday);
+  }
+
+  [HttpPost("/holidays/{id:int}/delete")]
+  [ValidateAntiForgeryToken]
+  public IActionResult Delete(int id)
+  {
+    var holiday = _db.Holidays.FirstOrDefault(h => h.Id == id);
+    if (holiday == null) return NotFound();
+    _db.Holidays.Remove(holiday);
+    _db.SaveChanges();
+
+    return RedirectToAction("Index", "Home");
   }
 
 }

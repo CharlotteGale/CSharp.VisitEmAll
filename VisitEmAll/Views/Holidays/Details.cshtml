@@ -7,17 +7,29 @@
 
 <h3>Activities</h3>
 <ul>
-  @if(Model.Activities != null && Model.Activities.Any()){
+  @if (Model.Activities != null && Model.Activities.Any())
+  {
     @foreach (Activity activity in Model.Activities)
     {
       <li>@activity.Name</li>
     }
-  } else {
+  }
+  else
+  {
     <p>You did nothing but rest?</p>
   }
 </ul>
 
 <h4>Cost: @Model.Cost</h4>
+<a asp-action="EditHoliday" asp-route-id="@Model.Id" class="btn btn-success">
+  Click here to edit the details for this holiday
+</a>
 
-<a href = "/holidays/@Model.Id/edit">Click here to edit the details for this holiday</a>
-
+</br>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
+  @Html.AntiForgeryToken()
+  <button type="submit" class="btn btn-danger"
+          onclick="return confirm('Are you sure you want to delete this holiday?');">
+    Remove Holiday
+  </button>
+</form>
