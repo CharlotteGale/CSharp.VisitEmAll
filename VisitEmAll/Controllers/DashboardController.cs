@@ -38,7 +38,8 @@ public class DashboardController : Controller
         h.Id,
         h.Title,
         h.ThumbnailUrl,
-        h.StartDate
+        h.StartDate,
+        h.EndDate
     })
     .ToList();
 
@@ -50,7 +51,8 @@ var pastHolidays = userHolidays
         h.Id,
         h.Title,
         h.ThumbnailUrl,
-        h.StartDate
+        h.StartDate,
+        h.EndDate
     })
     .ToList();
 
@@ -64,6 +66,6 @@ var pastHolidays = userHolidays
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
