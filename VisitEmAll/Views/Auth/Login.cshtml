@@ -1,5 +1,12 @@
 @model VisitEmAll.Models.LoginViewModel
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <h2>Login</h2>
 
 <form method="post">

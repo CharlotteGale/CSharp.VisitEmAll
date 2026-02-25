@@ -54,6 +54,12 @@ public class VisitEmAllDbContext : DbContext
   {
     base.OnModelCreating(modelBuilder);
 
+    modelBuilder.Entity<User>()
+        .HasMany(u => u.Holidays)
+        .WithOne(h => h.User)
+        .HasForeignKey(h => h.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+
     modelBuilder.Entity<Holiday>()
         .HasMany(h => h.Activities)
         .WithOne(a => a.Holiday)
