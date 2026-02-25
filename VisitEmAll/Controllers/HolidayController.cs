@@ -83,11 +83,11 @@ public class HolidaysController : Controller
     return RedirectToAction("Index", "Home");
   }
 
-[HttpGet("/holidays/{id:int}")]
-public async Task<IActionResult> GetHoliday(int id)
-{
+  [HttpGet("/holidays/{id:int}")]
+  public async Task<IActionResult> GetHoliday(int id)
+  {
     var holiday = await _db.Holidays
-      .Include(h => h.Activities) 
+      .Include(h => h.Activities)
       .FirstOrDefaultAsync(h => h.Id == id);
 
     if (holiday == null) return NotFound();
@@ -95,5 +95,59 @@ public async Task<IActionResult> GetHoliday(int id)
     return View("Details", holiday);
   }
 
+  [HttpGet("/holidays/{id:int}/edit")]
+  public async Task<IActionResult> EditHoliday(int id)
+  {
+    var holiday = await _db.Holidays
+      .Include(h => h.Activities)
+      .FirstOrDefaultAsync(h => h.Id == id);
+
+    return View("Edit", holiday);
+  }
+
+  [HttpPost("/holidays/{id:int}/update", Name = "UpdateHolidayRoute")]
+  public async Task<IActionResult> UpdateHoliday(CreateHolidayViewModel updatedHoliday, int id)
+  {
+    // var userId = HttpContext.Session.GetInt32("user_id");
+    // if (userId == null) return Redirect("/");
+
+    var holiday = await _db.Holidays
+      .Include(h => h.Activities)
+      .FirstOrDefaultAsync(h => h.Id == id);
+
+    if (updatedHoliday.StartDate > updatedHoliday.EndDate)
+    {
+      ModelState.AddModelError(nameof(updatedHoliday.EndDate),
+      "End date cannot be before start date.");
+    }
+
+    if (!ModelState.IsValid)
+    {
+      return View("Details", holiday);
+    }
+
+    holiday.Title = updatedHoliday.Title;
+    holiday.Location = updatedHoliday.Location;
+    holiday.StartDate = updatedHoliday.StartDate;
+    holiday.EndDate = updatedHoliday.EndDate;
+    holiday.Accommodation = updatedHoliday.Accommodation;
+    holiday.Cost = updatedHoliday.Cost;
+    holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
+
+    _db.Activities.RemoveRange(holiday.Activities);
+
+    var newActivities = (updatedHoliday.Activities ?? new())
+        .Select(a => a.Name?.Trim())
+        .Where(name => !string.IsNullOrWhiteSpace(name))
+        .Select(name => new Activity
+        {
+          HolidayId = holiday.Id,
+          Name = name!
+        });
+    _db.Activities.AddRange(newActivities);    
+    await _db.SaveChangesAsync();
+
+    return View ("Details", holiday);
+  }
 
 }
