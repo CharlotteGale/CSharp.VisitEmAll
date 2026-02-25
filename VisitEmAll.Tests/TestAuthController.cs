@@ -26,7 +26,8 @@ public class TestAuthController
             .Build();
 
         // 3. Pass BOTH required constructor arguments
-        _db = new VisitEmAllDbContext(options, config);
+        _db = new TestDbContext(options, config);
+
 
         // 4. Mock HttpContext for session support
         var httpContext = new DefaultHttpContext();
