@@ -46,7 +46,6 @@ public class HolidaysController : Controller
         }
 
         var userId = HttpContext.Session.GetInt32("user_id");
-        if (userId == null) userId = 1;
 
         var holiday = new Holiday
         {
