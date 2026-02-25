@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VisitEmAll.Models;
@@ -11,9 +12,11 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    partial class VisitEmAllDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260225104243_AddingAllModelsAndBasicSetup")]
+    partial class AddingAllModelsAndBasicSetup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
