@@ -58,7 +58,8 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<VisitEmAllDbContext>();
-    context.Database.Migrate();
+    context.Database.EnsureDeleted();  // Drops all tables
+    context.Database.EnsureCreated(); // Rebuilds schema from the models
     DbSeeder.Seed(context);
 }
 

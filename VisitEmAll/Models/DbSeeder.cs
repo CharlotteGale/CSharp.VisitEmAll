@@ -4,14 +4,6 @@ public static class DbSeeder
 {
     public static void Seed(VisitEmAllDbContext context)
     {
-        // Clear tables
-        context.Users.RemoveRange(context.Users);
-        context.Holidays.RemoveRange(context.Holidays);
-        context.Activities.RemoveRange(context.Activities);
-        
-        context.SaveChanges();
-
-
         // Add Seed data
         // === USERS === \\
         var users = new List<User>
