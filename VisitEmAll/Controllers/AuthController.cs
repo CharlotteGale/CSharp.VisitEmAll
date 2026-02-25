@@ -39,8 +39,7 @@ public class AuthController : Controller
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == model.Email);
 
-        if (user == null) 
-        // || !_hasher.Verify(model.Password, user.Password))
+        if (user == null || !_hasher.Verify(model.Password, user.Password))
         {
             model.ErrorMessage = "Invalid email or password";
             return View(model);
