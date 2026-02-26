@@ -32,7 +32,7 @@ public class HolidaysControllerTests : NUnitTestBase
         _context.Users.Add(_testUser);
         _context.SaveChanges();
 
-        _controller.HttpContext.Session.SetInt32("user_id", _testUser.Id);
+        _controller.HttpContext.Session.SetInt32("User_Id", _testUser.Id);
     }
 
     [TearDown]
@@ -71,9 +71,10 @@ public class HolidaysControllerTests : NUnitTestBase
     [Test]
     public async Task Create_Post_ValidModel_SavesToDbAndRedirects()
     {
+        var uniqueTitle = $"Japan Trip {Guid.NewGuid()}";
         var vm = new CreateHolidayViewModel
         {
-            Title = "Japan Trip",
+            Title = "",
             Location = "Tokyo",
             StartDate = new DateOnly(2026, 5, 1),
             EndDate = new DateOnly(2026, 5, 31),
@@ -84,12 +85,13 @@ public class HolidaysControllerTests : NUnitTestBase
             }
         };
 
+        vm.Title = uniqueTitle;
         var result = await _controller.Create(vm) as RedirectToActionResult;
 
         Assert.That(result?.ActionName, Is.EqualTo("Index"));
-        Assert.That(result?.ControllerName, Is.EqualTo("Home"));
+        Assert.That(result?.ControllerName, Is.EqualTo("Dashboard"));
 
-        var savedHoliday = _context.Holidays.FirstOrDefault(h => h.Title == "Japan Trip");
+        var savedHoliday = _context.Holidays.FirstOrDefault(h => h.Title == uniqueTitle);
         Assert.That(savedHoliday, Is.Not.Null);
         Assert.That(savedHoliday.UserId, Is.EqualTo(_testUser.Id));
 
