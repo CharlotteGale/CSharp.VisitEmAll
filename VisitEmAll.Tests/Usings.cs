@@ -17,3 +17,7 @@ global using System.Text.RegularExpressions;
 global using Microsoft.Extensions.Configuration;
 
 global using VisitEmAll.Models;
+global using VisitEmAll.Controllers;
+global using VisitEmAll.Tests.Base;
+global using VisitEmAll.Tests.Helpers;
+global using VisitEmAll.ViewModels;
