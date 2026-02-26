@@ -1,6 +1,6 @@
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-WORKDIR /app
+WORKDIR /src
 
 COPY ["VisitEmAll/VisitEmAll.csproj", "./VisitEmAll/"]
 RUN dotnet restore "VisitEmAll/VisitEmAll.csproj"
