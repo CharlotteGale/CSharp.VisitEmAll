@@ -54,6 +54,7 @@ public class AuthController : Controller
         TempData["SuccessMessage"] = "Account created successfully! Please log in.";
         return RedirectToAction("Login");
     }
+    
 
     [HttpGet]
     public IActionResult Login()
