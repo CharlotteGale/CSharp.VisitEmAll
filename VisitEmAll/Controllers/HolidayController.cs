@@ -56,8 +56,7 @@ public class HolidaysController : Controller
       Location = vm.Location,
       StartDate = vm.StartDate,
       EndDate = vm.EndDate,
-      Accommodation = vm.Accommodation,
-      Cost = vm.Cost,
+      TotalCost = vm.TotalCost,
       ThumbnailUrl = vm.ThumbnailUrl
     };
 
@@ -69,14 +68,14 @@ public class HolidaysController : Controller
         .Where(name => !string.IsNullOrWhiteSpace(name))
         .ToList();
 
-    foreach (var name in activityNames)
-    {
-      _db.Activities.Add(new Activity
-      {
-        HolidayId = holiday.Id,
-        Name = name!
-      });
-    }
+    // foreach (var name in activityNames)
+    // {
+    //   _db.Activities.Add(new Activity
+    //   {
+    //     HolidayId = holiday.Id,
+    //     Name = name!
+    //   });
+    // }
     await _db.SaveChangesAsync();
 
     TempData["Success"] = "Holiday created successfully!";
@@ -87,7 +86,6 @@ public class HolidaysController : Controller
   public async Task<IActionResult> GetHoliday(int id)
   {
     var holiday = await _db.Holidays
-      .Include(h => h.Activities)
       .FirstOrDefaultAsync(h => h.Id == id);
 
     if (holiday == null) return NotFound();
@@ -100,7 +98,6 @@ public class HolidaysController : Controller
   {
     var userId = HttpContext.Session.GetInt32("User_Id");
     var holiday = await _db.Holidays
-      .Include(h => h.Activities)
       .FirstOrDefaultAsync(h => h.Id == id);
 
     if (holiday == null || holiday.UserId != userId) return NotFound();
@@ -112,13 +109,8 @@ public class HolidaysController : Controller
         Location = holiday.Location,
         StartDate = holiday.StartDate,
         EndDate = holiday.EndDate,
-        Accommodation = holiday.Accommodation,
-        Cost = holiday.Cost,
+        TotalCost = holiday.TotalCost,
         ThumbnailUrl = holiday.ThumbnailUrl,
-        Activities = holiday.Activities.Select(a => new CreateHolidayViewModel.ActivityInput 
-        { 
-            Name = a.Name 
-        }).ToList()
     };
 
     return View("Edit", vm);
@@ -128,7 +120,6 @@ public class HolidaysController : Controller
   public async Task<IActionResult> UpdateHoliday(CreateHolidayViewModel updatedHoliday, int id)
   {
     var holiday = await _db.Holidays
-      .Include(h => h.Activities)
       .FirstOrDefaultAsync(h => h.Id == id);
 
     if (holiday == null) return NotFound();
@@ -150,22 +141,8 @@ public class HolidaysController : Controller
     holiday.Location = updatedHoliday.Location;
     holiday.StartDate = updatedHoliday.StartDate;
     holiday.EndDate = updatedHoliday.EndDate;
-    holiday.Accommodation = updatedHoliday.Accommodation;
-    holiday.Cost = updatedHoliday.Cost;
+    holiday.TotalCost = updatedHoliday.TotalCost;
     holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
-
-    _db.Activities.RemoveRange(holiday.Activities);
-
-    var newActivities = (updatedHoliday.Activities ?? new())
-        .Select(a => a.Name?.Trim())
-        .Where(name => !string.IsNullOrWhiteSpace(name))
-        .Select(name => new Activity
-        {
-          HolidayId = holiday.Id,
-          Name = name!
-        });
-    _db.Activities.AddRange(newActivities);
-    await _db.SaveChangesAsync();
 
     TempData["Success"] = "Holiday updated!";
     return RedirectToAction("GetHoliday", new { id = holiday.Id });
