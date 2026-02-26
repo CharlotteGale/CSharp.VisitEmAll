@@ -8,7 +8,8 @@ public static class DbSeeder
         context.Users.RemoveRange(context.Users);
         context.Holidays.RemoveRange(context.Holidays);
         context.Activities.RemoveRange(context.Activities);
-        
+        context.Friendships.RemoveRange(context.Friendships);
+
         context.SaveChanges();
 
 
@@ -159,6 +160,33 @@ public static class DbSeeder
         };
         context.Activities.AddRange(activities);
         context.SaveChanges();
+
+        // === FRIENDSHIPS === \\
+        var friendships = new List<Friendship>
+        {
+            // 1. Accepted Friendship: Alice and Brian are already friends
+            new Friendship { 
+                RequesterId = users[0].Id, // Alice
+                ReceiverId = users[1].Id,  // Brian
+                Status = FriendshipStatus.Accepted 
+            },
+
+            // 2. Pending Request: Charlie sent Alice a request
+            new Friendship { 
+                RequesterId = users[2].Id, // Charlie
+                ReceiverId = users[0].Id,  // Alice
+                Status = FriendshipStatus.Pending 
+            },
+
+            // 3. Pending Request: Dave sent Alice a request
+            new Friendship { 
+                RequesterId = users[3].Id, // Dave
+                ReceiverId = users[0].Id,  // Alice
+                Status = FriendshipStatus.Pending 
+            }
+        };
+        context.Friendships.AddRange(friendships);
+        context.SaveChanges();  
 
         context.SaveChanges();
     }
