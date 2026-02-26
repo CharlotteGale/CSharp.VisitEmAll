@@ -4,6 +4,7 @@ namespace VisitEmAll.ViewModels;
 
 public class CreateHolidayViewModel
 {
+    public int? Id { get; set; }
     [Required, MaxLength(150)]
     public string Title { get; set; } = string.Empty;
 

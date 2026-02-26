@@ -20,7 +20,7 @@ public class AuthController : Controller
     [HttpGet]
     public IActionResult SignUp()
     {
-        if(HttpContext.Session.GetInt32("UserId") != null)
+        if(HttpContext.Session.GetInt32("User_Id") != null)
         {
             return RedirectToAction("Index", "Home");
         }

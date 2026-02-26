@@ -12,8 +12,8 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    [Migration("20260225124211_IntialCreate")]
-    partial class IntialCreate
+    [Migration("20260226111025_NewMig")]
+    partial class NewMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,11 +41,49 @@ namespace VisitEmAll.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HolidayId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Activities");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.Friendship", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RequesterId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("RequesterId", "ReceiverId")
+                        .IsUnique();
+
+                    b.ToTable("Friendships", (string)null);
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
@@ -73,7 +111,7 @@ namespace VisitEmAll.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<DateOnly?>("StartDate")
+                    b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
                     b.Property<string>("ThumbnailUrl")
@@ -89,6 +127,8 @@ namespace VisitEmAll.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Holidays");
                 });
@@ -132,12 +172,53 @@ namespace VisitEmAll.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("VisitEmAll.Models.User", null)
+                        .WithMany("Activities")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Holiday");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.Friendship", b =>
+                {
+                    b.HasOne("VisitEmAll.Models.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("VisitEmAll.Models.User", "Requester")
+                        .WithMany()
+                        .HasForeignKey("RequesterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Requester");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
+                {
+                    b.HasOne("VisitEmAll.Models.User", "User")
+                        .WithMany("Holidays")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
                 {
                     b.Navigation("Activities");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.User", b =>
+                {
+                    b.Navigation("Activities");
+
+                    b.Navigation("Holidays");
                 });
 #pragma warning restore 612, 618
         }

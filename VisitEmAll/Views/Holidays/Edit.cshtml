@@ -1,0 +1,116 @@
+@model VisitEmAll.ViewModels.CreateHolidayViewModel
+
+
+@{
+    ViewData["Title"] = "Update Holiday";
+}
+
+<h1>Update Holiday</h1>
+
+<form asp-route="UpdateHolidayRoute" asp-route-id="@Model.Id" method="post">
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div>
+        <label asp-for="Location"></label>
+        <input asp-for="Location" />
+        <span asp-validation-for="Location"></span>
+    </div>
+
+    <div>
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" type="date" />
+        <span asp-validation-for="StartDate"></span>
+    </div>
+
+    <div>
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" type="date" />
+        <span asp-validation-for="EndDate"></span>
+    </div>
+
+    <div>
+        <label asp-for="Accommodation"></label>
+        <input asp-for="Accommodation" />
+        <span asp-validation-for="Accommodation"></span>
+    </div>
+
+    <div>
+        <label asp-for="Cost"></label>
+        <input asp-for="Cost" type="number" step="0.01" />
+        <span asp-validation-for="Cost"></span>
+    </div>
+
+    <div>
+        <label asp-for="ThumbnailUrl">Thumbnail (URL or path)</label>
+        <input asp-for="ThumbnailUrl" />
+        <span asp-validation-for="ThumbnailUrl"></span>
+    </div>
+
+    <h3>Activities</h3>
+
+    <div id="activities">
+    @for (var i = 0; i < Model.Activities.Count; i++)
+    {
+        <div class="activity-row">
+            <label>Activity name</label>
+            <input asp-for="Activities[i].Name" />
+            <span asp-validation-for="Activities[i].Name"></span>
+            <button type="button" class="btn btn-danger remove-btn">&times;</button>
+        </div>
+    }
+</div>
+
+    <button type="button" id="add-activity">+ Add another activity</button>
+
+    <div>
+        <button type="submit">Submit</button>
+        <a asp-controller="Dashboard" asp-action="Index">Cancel</a>
+    </div>
+
+    <div asp-validation-summary="All"></div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const container = document.getElementById("activities");
+            const addBtn = document.getElementById("add-activity");
+
+            function reIndexer(){
+              const rows = container.querySelectorAll(".activity-row");
+              rows.forEach((row, index) => {
+                const input = row.querySelector("input");
+                const validation = row.querySelector("span")
+                if (input){
+                  input.name = `Activities[${index}].Name`;
+                }
+              });
+            }
+
+            addBtn.addEventListener("click", () => {
+                const index = container.querySelectorAll(".activity-row").length;
+                const row = document.createElement("div");
+                row.className = "activity-row";
+                row.innerHTML = `
+                    <label>Activity name</label>
+                    <input name="Activities[${index}].Name" placeholder="e.g. Museum visit" />
+                    <button type="button" class="btn btn-danger ms-2 mt-4 remove-btn">&times;</button>
+                `;
+                container.appendChild(row);
+            });
+            container.addEventListener("click", (e) => {
+              if (e.target.classList.contains("remove-btn")){
+                e.target.closest(".activity-row").remove();
+                reIndexer();
+              }
+            })
+        })();
+    </script>
+}

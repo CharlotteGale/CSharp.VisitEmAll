@@ -10,6 +10,7 @@ var configBuilder = new ConfigurationBuilder();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDistributedMemoryCache();
