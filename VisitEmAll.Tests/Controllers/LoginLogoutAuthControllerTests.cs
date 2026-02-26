@@ -69,8 +69,8 @@ public class LoginLogoutAuthControllerTests : NUnitTestBase
 
         var user = new User
         {
-            Name = "Sam",
-            Email = "sam@email.com",
+            Name = "Test",
+            Email = "test@email.com",
             Password = hasher.Hash("Password1!")
         };
 
@@ -79,7 +79,7 @@ public class LoginLogoutAuthControllerTests : NUnitTestBase
 
         var model = new LoginViewModel
         {
-            Email = "sam@email.com",
+            Email = "test@email.com",
             Password = "Password1!"
         };
 
@@ -117,8 +117,8 @@ public class LoginLogoutAuthControllerTests : NUnitTestBase
 
         var user = new User
         {
-            Name = "Sam",
-            Email = "sam@email.com",
+            Name = "Test 2",
+            Email = "test2@email.com",
             Password = hasher.Hash("CorrectPassword1!")
         };
 
@@ -127,7 +127,7 @@ public class LoginLogoutAuthControllerTests : NUnitTestBase
 
         var model = new LoginViewModel
         {
-            Email = "sam@email.com",
+            Email = "test2@email.com",
             Password = "WrongPassword1!"
         };
 
