@@ -11,5 +11,5 @@ public abstract class DayItem
     public TimeOnly? Time { get; set; }
     public string? Location { get; set; }
     public string? Notes { get; set; }
-    public abstract string ItemType { get; }
+    public virtual string ItemType { get; protected set; } = string.Empty;
 }

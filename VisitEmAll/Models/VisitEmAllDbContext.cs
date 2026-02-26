@@ -74,11 +74,15 @@ public class VisitEmAllDbContext : DbContext
         .HasForeignKey(i => i.HolidayDayId)
         .OnDelete(DeleteBehavior.Cascade);
 
-    modelBuilder.Entity<DayItem>()
-        .HasDiscriminator<string>("ItemType")
+    modelBuilder.Entity<DayItem>(entity =>
+    {
+      entity.Ignore(i => i.ItemType);
+
+      entity.HasDiscriminator<string>("Item") 
         .HasValue<DayActivity>("Activity")
         .HasValue<DayRestaurant>("Restaurant")
         .HasValue<DayAccommodation>("Accommodation");
+    });
 
     modelBuilder.Entity<DayActivity>()
         .Property(a => a.Cost)

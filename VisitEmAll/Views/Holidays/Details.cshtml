@@ -6,12 +6,12 @@
 }
 
 <h1>@Model.Title</h1>
-<p>Accomodation: @Model.Accommodation, @Model.Location </br> </p>
+<p>Location: @Model.Location </br> </p>
 
 <h2>From: @Model.StartDate </br> Till: @Model.EndDate</h2>
 
 <h3>Activities</h3>
-<ul>
+@* <ul>
   @if (Model.Activities != null && Model.Activities.Any())
   {
     @foreach (Activity activity in Model.Activities)
@@ -23,9 +23,9 @@
   {
     <p>You did nothing but rest?</p>
   }
-</ul>
+</ul> *@
 
-<h4>Cost: @Model.Cost</h4>
+<h4>Cost: @Model.TotalCost</h4>
 @if (currentUserId != null && currentUserId == Model.UserId)
 {
   <a asp-action="EditHoliday" asp-route-id="@Model.Id" class="btn btn-success">
