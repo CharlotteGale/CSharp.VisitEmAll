@@ -13,7 +13,7 @@ public class HolidaysController : Controller
   {
     _db = db;
   }
-
+  [Route("/holidays/create")]
   [HttpGet]
   public IActionResult Create()
   {
@@ -46,7 +46,7 @@ public class HolidaysController : Controller
       return View(vm);
     }
 
-    var userId = HttpContext.Session.GetInt32("user_id");
+    var userId = HttpContext.Session.GetInt32("User_Id");
     if (userId == null) userId = 1;
 
     var holiday = new Holiday
@@ -80,7 +80,7 @@ public class HolidaysController : Controller
     await _db.SaveChangesAsync();
 
     TempData["Success"] = "Holiday created successfully!";
-    return RedirectToAction("Index", "Home");
+    return RedirectToAction("Index", "Dashboard");
   }
 
   [HttpGet("/holidays/{id:int}")]

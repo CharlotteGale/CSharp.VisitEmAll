@@ -13,7 +13,7 @@ public class Holiday
 
     [MaxLength(200)]
     public string? Location { get; set; }
-
+    [Required]
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
 

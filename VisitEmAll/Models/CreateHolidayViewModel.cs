@@ -10,7 +10,7 @@ public class CreateHolidayViewModel
     [MaxLength(200)]
     public string? Location { get; set; }
 
-    [DataType(DataType.Date)]
+    [Required, DataType(DataType.Date)]
     public DateOnly? StartDate { get; set; }
 
     [DataType(DataType.Date)]
