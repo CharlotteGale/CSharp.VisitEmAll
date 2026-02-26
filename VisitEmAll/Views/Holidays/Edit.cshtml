@@ -1,4 +1,4 @@
-@model Holiday
+@model VisitEmAll.ViewModels.CreateHolidayViewModel
 
 
 @{
@@ -55,17 +55,16 @@
     <h3>Activities</h3>
 
     <div id="activities">
-        @{var activitiesList = Model.Activities.ToList();}
-        @for (var i = 0; i < activitiesList.Count; i++)
-        {
-            <div class="activity-row">
-                <label>Activity name</label>
-                <input asp-for="@activitiesList[i].Name" name="Activities[@i].Name" />
-                <span asp-validation-for="@activitiesList[i].Name"></span>
-                <button type="button" class="btn btn-danger ms-2 mt-4 remove-btn">&times;</button>
-            </div>
-        }
-    </div>
+    @for (var i = 0; i < Model.Activities.Count; i++)
+    {
+        <div class="activity-row">
+            <label>Activity name</label>
+            <input asp-for="Activities[i].Name" />
+            <span asp-validation-for="Activities[i].Name"></span>
+            <button type="button" class="btn btn-danger remove-btn">&times;</button>
+        </div>
+    }
+</div>
 
     <button type="button" id="add-activity">+ Add another activity</button>
 
