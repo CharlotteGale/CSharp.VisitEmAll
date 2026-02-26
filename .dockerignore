@@ -1,0 +1,22 @@
+# Source Control
+.git/
+.gitignore
+
+# IDE folders
+.vscode/
+.idea/
+
+# Build outputs
+bin/
+obj/
+
+# Test Projects (Update to match your actual folder name)
+VisitEmAll.Tests/
+
+# Configuration & Secrets
+.env
+appsettings.Development.json
+
+# Docker specific
+Dockerfile
+.dockerignore

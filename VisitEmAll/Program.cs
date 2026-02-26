@@ -3,9 +3,6 @@
 using VisitEmAll.Models;
 
 
-var configBuilder = new ConfigurationBuilder();
-    configBuilder
-    .AddEnvironmentVariables();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +20,15 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<VisitEmAll.ActionFilters.AuthenticationFilter>();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Could not find a connection string named 'DefaultConnection'. Check your Environment Variables.");
+}
+
 builder.Services.AddDbContext<VisitEmAllDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
@@ -57,9 +61,29 @@ app.MapControllers();
 // === DB SEEDER === \\
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<VisitEmAllDbContext>();
-    context.Database.Migrate();
-    DbSeeder.Seed(context);
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    var context = services.GetRequiredService<VisitEmAllDbContext>();
+
+    try
+    {
+        logger.LogInformation("Attempting to apply database migrations...");
+        context.Database.Migrate();
+        logger.LogInformation("Database migrations applied successfully.");
+
+        if (args.Contains("--seed"))
+        {
+            logger.LogWarning("Seed flag detected. Wiping and reseeding database...");
+            DbSeeder.Seed(context);
+            logger.LogInformation("Database seeding completed successfully.");
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogCritical(ex, "Database initialization failed.");
+
+        throw;
+    }
 }
 
 app.Run();
