@@ -24,6 +24,8 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<VisitEmAll.ActionFilters.AuthenticationFilter>();
 
+builder.Services.AddScoped<VisitEmAll.Services.FriendshipService>();
+
 builder.Services.AddDbContext<VisitEmAllDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
