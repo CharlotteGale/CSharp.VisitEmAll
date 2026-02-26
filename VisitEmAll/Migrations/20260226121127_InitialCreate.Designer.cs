@@ -12,7 +12,7 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    [Migration("20260225115356_InitialCreate")]
+    [Migration("20260226121127_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
