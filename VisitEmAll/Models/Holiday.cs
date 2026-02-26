@@ -8,6 +8,8 @@ public class Holiday
     [Required]
     public int UserId { get; set; }
 
+    public User? User { get; set; }
+
     [Required, MaxLength(150)]
     public string Title { get; set; } = string.Empty;
 
