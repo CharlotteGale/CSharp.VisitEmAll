@@ -1,0 +1,56 @@
+﻿@using VisitEmAll.Models
+@{
+    ViewData["Title"] = "Dashboard";
+    var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
+}
+
+<h1>Dashboard</h1>
+
+<a href="/holidays/create">Add Holiday</a>
+
+<h2>Upcoming Holidays</h2>
+
+@if (!upcomingHolidays.Any())
+{
+    <p>No upcoming holidays.</p>
+}
+else
+{
+    <div class="holiday-grid">
+        @foreach (var holiday in upcomingHolidays)
+        {
+            <a href="/holidays/@holiday.Id">
+                <div class="holiday-card">
+                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                         alt="@holiday.Title" />
+                    <h3>@holiday.Title</h3>
+                    <p>@holiday.StartDate?.Year</p>
+                </div>
+            </a>
+        }
+    </div>
+}
+
+<h2>Past Holidays</h2>
+
+@if (!pastHolidays.Any())
+{
+    <p>No past holidays.</p>
+}
+else
+{
+    <div class="holiday-grid">
+        @foreach (var holiday in pastHolidays)
+        {
+            <a href="/holidays/@holiday.Id">
+                <div class="holiday-card">
+                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                         alt="@holiday.Title" />
+                    <h3>@holiday.Title</h3>
+                    <p>@holiday.StartDate?.Year</p>
+                </div>
+            </a>
+        }
+    </div>
+}

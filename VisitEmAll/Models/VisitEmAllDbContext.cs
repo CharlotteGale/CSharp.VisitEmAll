@@ -10,6 +10,7 @@ public class VisitEmAllDbContext : DbContext
   public DbSet<User> Users => Set<User>();
   public DbSet<Holiday> Holidays => Set<Holiday>();
   public DbSet<Activity> Activities => Set<Activity>();
+  public DbSet<Friendship> Friendships => Set<Friendship>();
 
   public string? DbPath { get; }
 
@@ -54,11 +55,43 @@ public class VisitEmAllDbContext : DbContext
   {
     base.OnModelCreating(modelBuilder);
 
+    modelBuilder.Entity<User>()
+        .HasMany(u => u.Holidays)
+        .WithOne(h => h.User)
+        .HasForeignKey(h => h.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+
     modelBuilder.Entity<Holiday>()
         .HasMany(h => h.Activities)
         .WithOne(a => a.Holiday)
         .HasForeignKey(a => a.HolidayId)
         .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<Friendship>(entity =>
+    {
+        entity.ToTable("Friendships");
+
+        entity.HasKey(f => f.Id);
+
+        entity.Property(f => f.Status)
+              .HasConversion<string>(); 
+            
+        entity.Property(f => f.CreatedAt)
+              .HasDefaultValueSql("NOW()");
+
+        entity.HasOne(f => f.Requester)
+              .WithMany()
+              .HasForeignKey(f => f.RequesterId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+        entity.HasOne(f => f.Receiver)
+              .WithMany()
+              .HasForeignKey(f => f.ReceiverId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+        entity.HasIndex(f => new { f.RequesterId, f.ReceiverId })
+              .IsUnique();
+    });
   }
   // protected override void OnModelCreating(ModelBuilder modelBuilder)
   // {

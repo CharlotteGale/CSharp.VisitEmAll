@@ -13,7 +13,7 @@ public class HolidaysController : Controller
   {
     _db = db;
   }
-
+  [Route("/holidays/create")]
   [HttpGet]
   public IActionResult Create()
   {
@@ -46,8 +46,8 @@ public class HolidaysController : Controller
       return View(vm);
     }
 
-    var userId = HttpContext.Session.GetInt32("user_id");
-    if (userId == null) userId = 1;
+    var userId = HttpContext.Session.GetInt32("User_Id");
+    if (userId == null) return RedirectToAction("Login", "Auth");
 
     var holiday = new Holiday
     {
@@ -80,20 +80,109 @@ public class HolidaysController : Controller
     await _db.SaveChangesAsync();
 
     TempData["Success"] = "Holiday created successfully!";
-    return RedirectToAction("Index", "Home");
+    return RedirectToAction("Index", "Dashboard");
   }
 
-[HttpGet("/holidays/{id:int}")]
-public async Task<IActionResult> GetHoliday(int id)
-{
+  [HttpGet("/holidays/{id:int}")]
+  public async Task<IActionResult> GetHoliday(int id)
+  {
     var holiday = await _db.Holidays
-      .Include(h => h.Activities) 
+      .Include(h => h.Activities)
       .FirstOrDefaultAsync(h => h.Id == id);
 
     if (holiday == null) return NotFound();
 
     return View("Details", holiday);
   }
+  
+  [HttpGet("/holidays/{id:int}/edit")]
+  public async Task<IActionResult> EditHoliday(int id)
+  {
+    var userId = HttpContext.Session.GetInt32("User_Id");
+    var holiday = await _db.Holidays
+      .Include(h => h.Activities)
+      .FirstOrDefaultAsync(h => h.Id == id);
 
+    if (holiday == null || holiday.UserId != userId) return NotFound();
+    
+    var vm = new CreateHolidayViewModel
+    {
+        Id = holiday.Id,
+        Title = holiday.Title,
+        Location = holiday.Location,
+        StartDate = holiday.StartDate,
+        EndDate = holiday.EndDate,
+        Accommodation = holiday.Accommodation,
+        Cost = holiday.Cost,
+        ThumbnailUrl = holiday.ThumbnailUrl,
+        Activities = holiday.Activities.Select(a => new CreateHolidayViewModel.ActivityInput 
+        { 
+            Name = a.Name 
+        }).ToList()
+    };
+
+    return View("Edit", vm);
+  }
+
+  [HttpPost("/holidays/{id:int}/update", Name = "UpdateHolidayRoute")]
+  public async Task<IActionResult> UpdateHoliday(CreateHolidayViewModel updatedHoliday, int id)
+  {
+    var holiday = await _db.Holidays
+      .Include(h => h.Activities)
+      .FirstOrDefaultAsync(h => h.Id == id);
+
+    if (holiday == null) return NotFound();
+    var userId = HttpContext.Session.GetInt32("User_Id");
+    if (userId != holiday.UserId) return Forbid();
+
+    if (updatedHoliday.StartDate > updatedHoliday.EndDate)
+    {
+      ModelState.AddModelError(nameof(updatedHoliday.EndDate),
+      "End date cannot be before start date.");
+    }
+
+    if (!ModelState.IsValid)
+    {
+      return View("Details", updatedHoliday);
+    }
+
+    holiday.Title = updatedHoliday.Title;
+    holiday.Location = updatedHoliday.Location;
+    holiday.StartDate = updatedHoliday.StartDate;
+    holiday.EndDate = updatedHoliday.EndDate;
+    holiday.Accommodation = updatedHoliday.Accommodation;
+    holiday.Cost = updatedHoliday.Cost;
+    holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
+
+    _db.Activities.RemoveRange(holiday.Activities);
+
+    var newActivities = (updatedHoliday.Activities ?? new())
+        .Select(a => a.Name?.Trim())
+        .Where(name => !string.IsNullOrWhiteSpace(name))
+        .Select(name => new Activity
+        {
+          HolidayId = holiday.Id,
+          Name = name!
+        });
+    _db.Activities.AddRange(newActivities);
+    await _db.SaveChangesAsync();
+
+    TempData["Success"] = "Holiday updated!";
+    return RedirectToAction("GetHoliday", new { id = holiday.Id });
+  }
+
+  [HttpPost("/holidays/{id:int}/delete")]
+  [ValidateAntiForgeryToken]
+  public IActionResult Delete(int id)
+  {
+    var holiday = _db.Holidays.FirstOrDefault(h => h.Id == id);
+    if (holiday == null) return NotFound();
+    var userId = HttpContext.Session.GetInt32("User_Id");
+    if (userId == null || userId != holiday?.UserId) return Redirect("/");
+    _db.Holidays.Remove(holiday);
+    _db.SaveChanges();
+
+    return RedirectToAction("Index", "Dashboard");
+  }
 
 }

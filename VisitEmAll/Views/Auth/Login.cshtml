@@ -1,5 +1,12 @@
 @model VisitEmAll.Models.LoginViewModel
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <h2>Login</h2>
 
 <form method="post">
@@ -20,3 +27,7 @@
 
     <button type="submit">Login</button>
 </form>
+
+<p>
+    Don't have an account? <a href="/Auth/SignUp">Sign up here</a>
+</p>

@@ -7,7 +7,7 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        if (HttpContext.Session.GetInt32("UserId") == null)
+        if (HttpContext.Session.GetInt32("User_Id") == null)
         {
             return RedirectToAction("Login", "Auth");
         }

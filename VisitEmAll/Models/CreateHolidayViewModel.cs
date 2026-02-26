@@ -4,13 +4,14 @@ namespace VisitEmAll.ViewModels;
 
 public class CreateHolidayViewModel
 {
+    public int? Id { get; set; }
     [Required, MaxLength(150)]
     public string Title { get; set; } = string.Empty;
 
     [MaxLength(200)]
     public string? Location { get; set; }
 
-    [DataType(DataType.Date)]
+    [Required, DataType(DataType.Date)]
     public DateOnly? StartDate { get; set; }
 
     [DataType(DataType.Date)]

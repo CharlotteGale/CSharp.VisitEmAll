@@ -8,12 +8,14 @@ public class Holiday
     [Required]
     public int UserId { get; set; }
 
+    public User? User { get; set; }
+
     [Required, MaxLength(150)]
     public string Title { get; set; } = string.Empty;
 
     [MaxLength(200)]
     public string? Location { get; set; }
-
+    [Required]
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
 
