@@ -103,4 +103,17 @@ public class FriendsController : Controller
         await _friendshipService.RejectAsync(id, currentUserId.Value);
         return RedirectToAction("Index");
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Remove(int id)
+    {
+        var currentUserId = HttpContext.Session.GetInt32("User_Id");
+        if(!currentUserId.HasValue)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        await _friendshipService.RemoveFriendsAsync(currentUserId.Value, id);
+        return RedirectToAction("Index");        
+    }
 }
