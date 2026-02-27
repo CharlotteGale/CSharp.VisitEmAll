@@ -29,21 +29,21 @@ public class HolidaysController : Controller
   }
 
   [HttpPost]
-  [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Create(CreateHolidayViewModel vm)
-  {
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(CreateHolidayViewModel vm)
+{
     if (vm.StartDate.HasValue && vm.EndDate.HasValue
         && vm.EndDate.Value < vm.StartDate.Value)
     {
-      ModelState.AddModelError(nameof(vm.EndDate),
-          "End date cannot be before start date.");
+        ModelState.AddModelError(nameof(vm.EndDate),
+            "End date cannot be before start date.");
     }
 
     if (!ModelState.IsValid)
     {
-      vm.Activities ??= new();
-      if (vm.Activities.Count == 0) vm.Activities.Add(new());
-      return View(vm);
+        vm.Activities ??= new();
+        if (vm.Activities.Count == 0) vm.Activities.Add(new());
+        return View(vm);
     }
 
     var userId = HttpContext.Session.GetInt32("User_Id");
@@ -51,36 +51,34 @@ public class HolidaysController : Controller
 
     var holiday = new Holiday
     {
-      UserId = userId.Value,
-      Title = vm.Title,
-      Location = vm.Location,
-      StartDate = vm.StartDate,
-      EndDate = vm.EndDate,
-      TotalCost = vm.TotalCost,
-      ThumbnailUrl = vm.ThumbnailUrl
+        UserId = userId.Value,
+        Title = vm.Title,
+        Location = vm.Location,
+        StartDate = vm.StartDate,
+        EndDate = vm.EndDate,
+        TotalCost = vm.TotalCost,
+        ThumbnailUrl = vm.ThumbnailUrl,
+        Days = new List<HolidayDay>()
     };
+
+    if (vm.StartDate.HasValue && vm.EndDate.HasValue)
+    {
+        for (var date = vm.StartDate.Value; date <= vm.EndDate.Value; date = date.AddDays(1))
+        {
+            holiday.Days.Add(new HolidayDay
+            {
+                Date = date
+            });
+        }
+    }
 
     _db.Holidays.Add(holiday);
     await _db.SaveChangesAsync();
 
-    var activityNames = (vm.Activities ?? new())
-        .Select(a => a.Name?.Trim())
-        .Where(name => !string.IsNullOrWhiteSpace(name))
-        .ToList();
-
-    // foreach (var name in activityNames)
-    // {
-    //   _db.Activities.Add(new Activity
-    //   {
-    //     HolidayId = holiday.Id,
-    //     Name = name!
-    //   });
-    // }
-    await _db.SaveChangesAsync();
-
     TempData["Success"] = "Holiday created successfully!";
     return RedirectToAction("Index", "Dashboard");
-  }
+}
+
 
   [HttpGet("/holidays/{id:int}")]
   public async Task<IActionResult> GetHoliday(int id)
