@@ -39,11 +39,13 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark @(currentPath.Contains("/friends") ? "fw-bold border-bottom border-primary" : "")"  
-                                    asp-controller="Friends" asp-action="Index">
+                                    asp-controller="Friends" asp-action="Index" id="friendsNavLink">
                                     Friends
                                     @if (pendingCount > 0)
                                     {
-                                        <span class="badge rounded-pill bg-danger ms-2" style="font-size: 0.75rem;">
+                                        <span class="badge rounded-pill bg-danger ms-2" 
+                                            style="font-size: 0.75rem; cursor: pointer;"
+                                            onclick="navigateToRequests(event)">
                                             @pendingCount
                                         </span>
                                     }
@@ -86,6 +88,15 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        function navigateToRequests(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.location.href = '/friends/requests';
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
