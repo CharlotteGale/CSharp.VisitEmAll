@@ -82,4 +82,10 @@ public class FriendshipService
             await _db.SaveChangesAsync();
         }
     }
+
+    public async Task<int> GetPendingRequestCountAsync(int userId)
+    {
+        return await _db.Friendships
+            .CountAsync(f => f.ReceiverId == userId && f.Status == FriendshipStatus.Pending);
+    }
 }
