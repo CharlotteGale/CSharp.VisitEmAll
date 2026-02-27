@@ -26,5 +26,5 @@ public class SignUpViewModel
     public string? HomeTown { get; set; }
 
     [Display(Name = "Profile Image URL")]
-    public string? ProfileImageUrl { get; set; }
+    public IFormFile? ProfileImg { get; set; }
 }

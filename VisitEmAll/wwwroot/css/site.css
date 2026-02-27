@@ -6,11 +6,16 @@ Cherry Blossom Pink: E4ACB2
 Desert Sand: EABCA8
 Papaya Whip: FAEDCD
 Tea Green: CCD5AE
-Ash Gray: 99BAB9 */
+Ash Gray: 99BAB9 
+Light Neutral: F8F9FA 
+Very Light Pastel Tint: fdf5f6*/
 
 
-html {
-  font-size: 14px;
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #fdf5f6; 
+    color: #333; 
 }
 
 /* ====================== */
@@ -64,7 +69,7 @@ html {
 .auth-brand-title {
   font-size: 4rem;
   font-weight: 700;
-  color: #E4ACB2;
+  color: #99BAB9;
   margin-bottom: 0.5rem;
   text-shadow: 0 0 0.5px #CCD5AE, 0 0 2px #CCD5AE;
   filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
@@ -72,12 +77,12 @@ html {
 
 .auth-brand-tagline {
   font-size: 2rem;
-  color: #EABCA8;
+  color: #aec2d5;
   filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
 }
 
 .auth-card {
-  background: #ffffff;
+  background: #F8F9FA;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -85,12 +90,22 @@ html {
   max-width: 360px;
 }
 
-.auth-form-field {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #ced4da;
-  font-size: 1rem;
+.auth-form-field::file-selector-button {
+  background-color: #E4ACB2;
+  color: white;
+  border: 1px solid #7a9a99;
+  border-radius: 50px;
+  padding: 8px 16px;
+  margin-right: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.auth-form-field::file-selector-button:hover {
+  background-color: #99BAB9;
+  border-color: #99BAB9;
 }
 
 .auth-submit-btn {
@@ -100,7 +115,7 @@ html {
 }
 
 .auth-new-acc-btn {
-  background: white;
+  background: #F8F9FA;
   color: #99BAB9;
   border: solid 2px #99BAB9;
 }

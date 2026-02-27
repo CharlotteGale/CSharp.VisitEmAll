@@ -7,7 +7,7 @@
       <p class="auth-brand-tagline">Explore the world!</p>
     </div>
 
-    <form asp-action="SignUp" method="post" class="auth-card">
+    <form asp-action="SignUp" method="post" class="auth-card" enctype="multipart/form-data">
       <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
       <div class="mb-3">
@@ -37,8 +37,9 @@
       </div>
 
       <div class="mb-3">
-        <input asp-for="ProfileImageUrl" placeholder="Profile Image URL (Optional)" class="auth-form-field" />
-        <span asp-validation-for="ProfileImageUrl" class="text-danger small"></span>
+        <label asp-for="ProfileImg" class="form-label text-muted small">Profile Picture (Optional)</label>
+        <input asp-for="ProfileImg" type="file" class="auth-form-field" accept="image/*" />
+        <span asp-validation-for="ProfileImg" class="text-danger small"></span>
       </div>
 
       <div class="mb-3">
