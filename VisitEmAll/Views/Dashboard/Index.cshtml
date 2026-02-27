@@ -7,17 +7,22 @@
     var currentUser = ViewData["CurrentUser"] as User;
 }
 
-
+<div class="upcoming-holidays-container">
 
     <h1>@currentUser.Name's Holidays</h1>
     <h3>@currentUser.HomeTown</h3>
+    <br />
 
-
-
-<div class="upcoming-holidays-container">
-
-    <h2>@currentUser.Name's Upcoming Holidays</h2>
-    <h4><a href="/holidays/create">Add Holiday</a></h4>
+    <div class="upcoming-holidays-header">
+        <div class="row">
+            <div class="col">
+                <h2>@currentUser.Name's Upcoming Holidays</h2>
+            </div>
+            <div class="col d-flex flex-column justify-content-end align-items-end">
+                <a href="/holidays/create">Add Holiday</a>
+            </div>
+        </div>
+    </div>
     <div class="upcoming-holidays-grid" @if (!upcomingHolidays.Any()) {
     <p>No upcoming holidays.</p>
 }
@@ -28,7 +33,6 @@ else
         @foreach (var holiday in upcomingHolidays)
         {
             <div class="col-sm">
-
                 <div class="upcoming-holidays-card" style="width: 18rem;">
                     <div class="card-body">
                         <a href="/holidays/@holiday.Id">
@@ -50,10 +54,8 @@ else
 
 <div class="past-holidays-container">
 
-<h2>@currentUser.Name's Past Holidays</h2>
-
-    <div class="past-holidays-grid"@if (!pastHolidays.Any())
-{
+    <h2>@currentUser.Name's Past Holidays</h2>
+    <div class="past-holidays-grid" @if (!pastHolidays.Any()) {
     <p>No past holidays.</p>
 }
 else
@@ -63,19 +65,18 @@ else
         {
             <div class="col-sm">
                 <div class="past-holidays-card" style="width: 18rem;">
-                    <a href="/holidays/@holiday.Id">
-                        <div class="card-body">
+                    <div class="card-body">
+                        <a href="/holidays/@holiday.Id">
                             <img class="card-img-top" src="@holiday.ThumbnailUrl" alt="Card image cap"
                                  src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
                                  alt="@holiday.Title" />
                         </a>
                         <h5 class="past-holidays-title">@holiday.Title</h5>
-                        <p class="past-holidays-dates">@holiday.StartDate?.Year</p>
+                        <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
                     </div>
                 </div>
-
-            }
-        </div>
-    }
+            </div>
+        }
+    </div>
+}
 </div>
-
