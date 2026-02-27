@@ -1,12 +1,111 @@
+/* ====================== */
+/* COLOURS */
+/* ====================== */
+/*
+Cherry Blossom Pink: E4ACB2
+Desert Sand: EABCA8
+Papaya Whip: FAEDCD
+Tea Green: CCD5AE
+Ash Gray: 99BAB9 */
+
+
 html {
   font-size: 14px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* ====================== */
+/* DEFAULTS */
+/* ====================== */
+/*Add new classes below with a comma inbetween */
+
+/* BUTTON SHAPE AND SIZE */
+.auth-submit-btn, .auth-new-acc-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
 }
+
+/* FORM FIELDS */
+.auth-form-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+}
+
+/* ====================== */
+/* AUTH PAGES */
+/* ====================== */
+
+.auth-wrapper {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-page {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  padding: 2rem;
+}
+
+.auth-left {
+  max-width: 400px;
+  padding-right: 3rem;
+}
+
+.auth-brand-title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #E4ACB2;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 0.5px #CCD5AE, 0 0 2px #CCD5AE;
+  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+}
+
+.auth-brand-tagline {
+  font-size: 2rem;
+  color: #EABCA8;
+  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+}
+
+.auth-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 360px;
+}
+
+.auth-form-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+}
+
+.auth-submit-btn {
+  background: #CCD5AE;
+  color: white;
+  border: none;
+}
+
+.auth-new-acc-btn {
+  background: white;
+  color: #99BAB9;
+  border: solid 2px #99BAB9;
+}
+
+
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
@@ -28,4 +127,10 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
 }

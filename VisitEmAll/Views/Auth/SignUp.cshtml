@@ -1,51 +1,87 @@
-@using VisitEmAll.ViewModels
+@model VisitEmAll.ViewModels.SignUpViewModel
 
-<h2>Create New Account</h2>
+<div class="auth-wrapper">
+  <div class="auth-page">
+    <div class="auth-left">
+      <h1 class="auth-brand-title">Visit 'Em All</h1>
+      <p class="auth-brand-tagline">Explore the world!</p>
+    </div>
 
-<form asp-action="SignUp" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="SignUp" method="post" class="auth-card">
+      <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-    <div>
-        <label>Full Name: </label>
-        <input type="text" name="Name" value="@Model?.Name" required />
-    </div>
-    <div>
-        <label>Email: </label>
-        <input type="email" name="Email" value="@Model?.Email" required />
-    </div>
-    <div>
-        <label>Password: </label>
-        <input type="password" name="Password" required minLength="8" />
-    </div>
-    <div>
-        <label>Confirm Password: </label>
-        <input type="password" name="ConfirmPassword" required />
-    </div>
-    <div>
-        <label>Home Town (Optional): </label>
-        <input type="text" name="HomeTown" value="@Model?.HomeTown" />
-    </div>
-    <div>
-        <label>Profile Image URL (Optional): </label>
-        <input type="password" name="Password" />
-    </div>
-    
-    @* Validation Errors *@
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div style="color:red">
-            <ul>
-                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-        </div>
+      <div class="mb-3">
+        <input asp-for="Name" placeholder="Full Name" class="auth-form-field" required />
+        <span asp-validation-for="Name" class="text-danger small"></span>
+      </div>
+
+      <div class="mb-3">
+        <input asp-for="Email" placeholder="Email Address" class="auth-form-field" required />
+        <span asp-validation-for="Email" class="text-danger small"></span>
+      </div>
+
+      <div class="mb-3">
+        <input asp-for="Password" type="url" id="Password" type="password" placeholder="Password (Min 8 characters)" class="auth-form-field" required />
+        <div id="password-help" class="text-danger small" style="margin-top: 6px;"></div>
+        <span asp-validation-for="Password" class="text-danger small"></span>
+      </div>
+
+      <div class="mb-3">
+        <input asp-for="ConfirmPassword" type="password" placeholder="Confirm Password" class="auth-form-field" required />
+        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+      </div>
+
+      <div class="mb-3">
+        <input asp-for="HomeTown" placeholder="Home Town (Optional)" class="auth-form-field" />
+        <span asp-validation-for="HomeTown" class="text-danger small"></span>
+      </div>
+
+      <div class="mb-3">
+        <input asp-for="ProfileImageUrl" placeholder="Profile Image URL (Optional)" class="auth-form-field" />
+        <span asp-validation-for="ProfileImageUrl" class="text-danger small"></span>
+      </div>
+
+      <div class="mb-3">
+        <input id="signup-submit" type="submit" value="Create account" class="auth-submit-btn">
+      </div>
+      <button type="button"        
+        onclick="window.location.href='@Url.Action("Login", "Auth")'"    class="auth-new-acc-btn">
+        Log in here
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+    const passwordInput = document.getElementById("Password");
+    const help = document.getElementById("password-help");
+    const form = passwordInput?.closest("form");
+
+    if (!passwordInput || !help || !form) return;
+
+    const msg = "Password must be at least 8 characters and include uppercase, lowercase, a number, and a symbol.";
+
+    function isStrong(pw) {
+        if (!pw) return false;
+        return pw.length >= 8 && 
+              /[a-z]/.test(pw) && 
+              /[A-Z]/.test(pw) && 
+              /[0-9]/.test(pw) && 
+              /[^a-zA-Z0-9]/.test(pw);
     }
 
-    <button type="submit">Create Account</button>
-</form>
+    passwordInput.addEventListener("input", () => {
+        const pw = passwordInput.value;
+        help.textContent = (pw.length > 0 && !isStrong(pw)) ? msg : "";
+    });
 
-<p>
-    Already have an account? <a href="/Auth/Login">Log in here</a>
-</p>
+    form.addEventListener("submit", (e) => {
+        if (!isStrong(passwordInput.value)) {
+            e.preventDefault();
+            help.textContent = msg;
+            passwordInput.focus();
+        }
+    });
+})();
+</script>
