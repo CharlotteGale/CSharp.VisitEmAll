@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VisitEmAll.Models;
 using VisitEmAll.ViewModels;
 
@@ -15,38 +16,40 @@ public class DashboardController : Controller
         _context = context;
         _logger = logger;
     }
-    [Route("/dashboard")]
-    [HttpGet]
-    public IActionResult Index()
-{
-    int? currentUserId = HttpContext.Session.GetInt32("User_Id");
-    if (currentUserId == null) return Redirect("/");
 
-    var currentUser = _context.Users
-        .FirstOrDefault(u => u.Id == currentUserId);
+    [HttpGet("/dashboard/{id?}")]
+    public async Task<IActionResult> Index(int? id)
+    {
+        int? currentUserId = HttpContext.Session.GetInt32("User_Id");
+        if (currentUserId == null) return RedirectToAction("Login", "Auth");
 
-    var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        int targetUserId = id ?? currentUserId.Value;
 
-    var userHolidays = _context.Holidays
-        .Where(h => h.UserId == currentUserId)
-        .ToList();
+        var user = await _context.Users
+            .Include(u => u.Holidays)
+            .FirstOrDefaultAsync(u => u.Id == targetUserId);
 
-    var upcomingHolidays = userHolidays
-    .Where(h => h.StartDate >= today)
-    .OrderBy(h => h.StartDate)
-    .ToList();
+        if (user == null) return NotFound();
 
-var pastHolidays = userHolidays
-    .Where(h => h.StartDate < today)
-    .OrderByDescending(h => h.StartDate)
-    .ToList();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-    ViewData["CurrentUser"] = currentUser;
-    ViewData["UpcomingHolidays"] = upcomingHolidays;
-    ViewData["PastHolidays"] = pastHolidays;
+        var upcomingHolidays = user.Holidays
+            .Where(h => h.StartDate >= today)
+            .OrderBy(h => h.StartDate)
+            .ToList();
 
-    return View();
-}
+        var pastHolidays = user.Holidays
+            .Where(h => h.StartDate < today)
+            .OrderByDescending(h => h.StartDate)
+            .ToList();
+
+        ViewData["CurrentUser"] = user; 
+        ViewData["IsOwnDashboard"] = targetUserId == currentUserId;
+        ViewData["UpcomingHolidays"] = upcomingHolidays;
+        ViewData["PastHolidays"] = pastHolidays;
+
+        return View(user);
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
