@@ -79,17 +79,6 @@ public async Task<IActionResult> Create(CreateHolidayViewModel vm)
     return RedirectToAction("Index", "Dashboard");
 }
 
-
-  [HttpGet("/holidays/{id:int}")]
-  public async Task<IActionResult> GetHoliday(int id)
-  {
-    var holiday = await _db.Holidays
-      .FirstOrDefaultAsync(h => h.Id == id);
-
-    if (holiday == null) return NotFound();
-
-    return View("Details", holiday);
-  }
   
   [HttpGet("/holidays/{id:int}/edit")]
   public async Task<IActionResult> EditHoliday(int id)
@@ -159,5 +148,66 @@ public async Task<IActionResult> Create(CreateHolidayViewModel vm)
 
     return RedirectToAction("Index", "Dashboard");
   }
+
+
+[HttpGet("/holidays/{id:int}")]
+    public async Task<IActionResult> Details(int id)
+  {
+      var holiday = await _db.Holidays
+          .Include(h => h.Days)
+              .ThenInclude(d => d.TimelineItems)
+          .FirstOrDefaultAsync(h => h.Id == id);
+
+      if (holiday == null)
+          return NotFound();
+
+      var vm = new HolidayDetailsViewModel
+      {
+          HolidayId = holiday.Id,
+          Title = holiday.Title,
+          Location = holiday.Location,
+          Days = holiday.Days
+              .OrderBy(d => d.Date)
+              .Select(d => new HolidayDayViewModel
+              {
+                  DayId = d.Id,
+                  Date = d.Date,
+                  Items = MergeAndSortItems(d)
+              })
+              .ToList()
+      };
+
+      return View(vm);
+  }
+
+
+    private List<DayTimelineItemViewModel> MergeAndSortItems(HolidayDay day)
+  {
+      var sorted = day.TimelineItems
+          .OrderBy(i => i.Time.HasValue ? 0 : 1) 
+          .ThenBy(i => i.Time)
+          .ToList();
+
+      return sorted.Select(i => new DayTimelineItemViewModel
+      {
+          Time = i.Time,
+          Name = i.Name,
+          ItemType = GetItemType(i),
+          Location = i.Location,
+          Notes = i.Notes
+      }).ToList();
+  }
+
+      private static string GetItemType(DayItem item)
+    {
+        return item switch
+        {
+            DayActivity => "Activity",
+            DayRestaurant => "Restaurant",
+            DayAccommodation => "Accommodation",
+            _ => "Unknown"
+        };
+    }
+
 
 }
