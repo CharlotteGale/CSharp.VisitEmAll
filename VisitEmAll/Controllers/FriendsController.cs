@@ -128,4 +128,26 @@ public class FriendsController : Controller
         await _friendshipService.RemoveFriendsAsync(currentUserId.Value, id);
         return RedirectToAction("Index");        
     }
+
+    [HttpPost]
+    public async Task<IActionResult> SendRequest(int receiverId)
+    {
+        var currentUserId = HttpContext.Session.GetInt32("User_Id");
+        if (!currentUserId.HasValue) return RedirectToAction("Login", "Auth");
+
+        var exists = await _context.Friendships.AnyAsync(f => 
+            f.RequesterId == currentUserId && f.ReceiverId == receiverId);
+
+        if (!exists)
+        {
+            _context.Friendships.Add(new Friendship {
+                RequesterId = currentUserId.Value,
+                ReceiverId = receiverId,
+                Status = FriendshipStatus.Pending
+            });
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("Index");
+    }
 }
