@@ -61,7 +61,7 @@ public class FriendsController : Controller
         return View(vm);
     }
 
-    [HttpGet("requests")]
+    [HttpGet("/friends/requests")]
     public async Task<IActionResult> Requests()
     {
         var currentUserId = HttpContext.Session.GetInt32("User_Id");
@@ -72,19 +72,15 @@ public class FriendsController : Controller
 
         var vm = new FriendsViewModel
         {
-            AcceptedFriends = await _friendshipService.GetFriendsAsync(currentUserId.Value),
-
             PendingRequests = await _context.Friendships
-                            .Include(f => f.Requester)
-                            .Where(f => f.ReceiverId == currentUserId.Value 
-                                            && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync(),
+                        .Include(f => f.Requester)
+                        .Where(f => f.ReceiverId == currentUserId.Value 
+                                        && f.Status == FriendshipStatus.Pending)
+                        .ToListAsync(),
 
-            SentRequests = await _context.Friendships
-                            .Include(f => f.Receiver)
-                            .Where(f => f.RequesterId == currentUserId.Value 
-                                            && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync()
+            AcceptedFriends = new List<User>(),
+            SentRequests = new List<Friendship>(),
+            AllOtherUsers = new List<User>()
         };
         
         return View(vm);
