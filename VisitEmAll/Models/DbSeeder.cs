@@ -104,6 +104,14 @@ public static class DbSeeder
                 RequesterId = users[3].Id, // Dave
                 ReceiverId = users[0].Id,  // Alice
                 Status = FriendshipStatus.Pending
+            },
+
+            // 4. Sent Request: Alice sent Frank a request
+            new Friendship
+            {
+                RequesterId = users[0].Id, // Alice
+                ReceiverId = users[5].Id, // Frank
+                Status = FriendshipStatus.Pending
             }
         };
         context.Friendships.AddRange(friendships);

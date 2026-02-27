@@ -28,6 +28,7 @@ public class FriendsController : Controller
             return RedirectToAction("Login", "Auth");
         }
 
+        // We pull everything here so the sidebar and the list are both full
         var vm = new FriendsViewModel
         {
             AcceptedFriends = await _friendshipService.GetFriendsAsync(currentUserId.Value),
@@ -36,8 +37,13 @@ public class FriendsController : Controller
                             .Include(f => f.Requester)
                             .Where(f => f.ReceiverId == currentUserId.Value 
                                             && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync()
+                            .ToListAsync(),
 
+            SentRequests = await _context.Friendships
+                            .Include(f => f.Receiver)
+                            .Where(f => f.RequesterId == currentUserId.Value 
+                                            && f.Status == FriendshipStatus.Pending)
+                            .ToListAsync()
         };
 
         return View(vm);
@@ -52,14 +58,24 @@ public class FriendsController : Controller
             return RedirectToAction("Login", "Auth");
         }
 
-        var pendingRequests = await _context.Friendships
+        var vm = new FriendsViewModel
+        {
+            AcceptedFriends = await _friendshipService.GetFriendsAsync(currentUserId.Value),
+
+            PendingRequests = await _context.Friendships
                             .Include(f => f.Requester)
-                            .Where(
-                                f => f.ReceiverId == currentUserId.Value
-                                                && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync();
+                            .Where(f => f.ReceiverId == currentUserId.Value 
+                                            && f.Status == FriendshipStatus.Pending)
+                            .ToListAsync(),
+
+            SentRequests = await _context.Friendships
+                            .Include(f => f.Receiver)
+                            .Where(f => f.RequesterId == currentUserId.Value 
+                                            && f.Status == FriendshipStatus.Pending)
+                            .ToListAsync()
+        };
         
-        return View(pendingRequests);
+        return View(vm);
     }
 
     [HttpPost]
