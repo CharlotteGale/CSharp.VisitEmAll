@@ -1,0 +1,32 @@
+@model IEnumerable<VisitEmAll.Models.User>
+
+@{
+    ViewData["Title"] = "Friends";
+}
+
+<h1>My Friends</h1>
+<div class="friends-list">
+    @if (!Model.Any())
+    {
+        <p>You haven't added any friends yet.</p>
+    }
+    else
+    {
+        @foreach (var friend in Model)
+        {
+            <div>
+                <a asp-controller="Users" asp-action="Profile" asp-route-id="@friend.Id">
+                <img src="@(string.IsNullOrEmpty(friend.ProfileImg) 
+                                ? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(friend.Name)}&background=random"
+                                : friend.ProfileImg)"  
+                    alt="@friend.Name"    
+                    class="rounded-circle me-3"
+                    style="width: 60px; height: 60px; object-fit: cover;" />
+                </a>
+                <a asp-controller="Users" asp-action="Profile" asp-route-id="@friend.Id">
+                    <strong>@friend.Name</strong>
+                </a>
+            </div>
+        }
+    }
+</div>

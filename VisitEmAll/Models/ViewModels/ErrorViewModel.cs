@@ -1,4 +1,4 @@
-namespace VisitEmAll.Models;
+namespace VisitEmAll.ViewModels;
 
 public class ErrorViewModel
 {

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 using VisitEmAll.Models;
-using VisitEmAll.Services;
 using VisitEmAll.ViewModels;
 
 namespace VisitEmAll.Controllers;
@@ -9,12 +10,12 @@ namespace VisitEmAll.Controllers;
 public class AuthController : Controller
 {
     private readonly VisitEmAllDbContext _context;
-    private readonly PasswordHasher _hasher;
+    private readonly PasswordHasher<User> _hasher;
 
     public AuthController(VisitEmAllDbContext context)
     {
         _context = context;
-        _hasher = new PasswordHasher();
+        _hasher = new PasswordHasher<User>();
     }
 
     [HttpGet]
@@ -43,10 +44,13 @@ public class AuthController : Controller
         {
             Name = model.Name,
             Email = model.Email,
-            Password = _hasher.Hash(model.Password),
+            Password = string.Empty,
             HomeTown = model.HomeTown,
             ProfileImg = model.ProfileImg
         };
+
+
+        newUser.Password = _hasher.HashPassword(newUser, model.Password);
         
         _context.Users.Add(newUser);
         await _context.SaveChangesAsync();
@@ -79,14 +83,40 @@ public class AuthController : Controller
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == model.Email);
 
-        if (user == null || !_hasher.Verify(model.Password, user.Password))
+        if (user == null)
         {
             model.ErrorMessage = "Invalid email or password";
             return View(model);
         }
 
-        HttpContext.Session.SetInt32("User_Id", user.Id);
-        return RedirectToAction("Index", "Dashboard");
+        PasswordVerificationResult result;
+        bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        bool isPlainTextPassword = user.Password.Length < 20;
+        if(isDevelopment && isPlainTextPassword)
+        {
+            result = user.Password == model.Password
+                ? PasswordVerificationResult.Success
+                : PasswordVerificationResult.Failed;
+        }
+        else
+        {
+            result = _hasher.VerifyHashedPassword(user, user.Password, model.Password);
+        }
+
+        if(result != PasswordVerificationResult.Failed)
+        {
+            if(result == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                user.Password = _hasher.HashPassword(user, model.Password);
+                await _context.SaveChangesAsync();
+            }
+            HttpContext.Session.SetInt32("User_Id", user.Id);
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+            model.ErrorMessage = "Invalid email or password";
+            return View(model);
+
     }
 
     public IActionResult Logout()

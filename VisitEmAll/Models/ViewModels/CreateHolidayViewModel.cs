@@ -20,7 +20,7 @@ public class CreateHolidayViewModel
     [MaxLength(200)]
     public string? Accommodation { get; set; }
 
-    public decimal? Cost { get; set; }
+    public decimal? TotalCost { get; set; }
 
     public string? ThumbnailUrl { get; set; }
 
