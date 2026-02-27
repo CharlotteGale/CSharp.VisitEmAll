@@ -4,76 +4,78 @@
     ViewData["Title"] = "Dashboard";
     var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
     var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
-    var currentUser = ViewData["CurrentUser"] as User;    
+    var currentUser = ViewData["CurrentUser"] as User;
 }
+
+
+
+    <h1>@currentUser.Name's Holidays</h1>
+    <h3>@currentUser.HomeTown</h3>
+
+
 
 <div class="upcoming-holidays-container">
 
-<h1>@currentUser.Name's homepage</h1>
-<h2>@currentUser.HomeTown</h2>
-
-
-
-<a href="/holidays/create">Add Holiday</a>
-
-<h2>Upcoming Holidays</h2>
-
-
-
-@if (!upcomingHolidays.Any())
-{
+    <h2>@currentUser.Name's Upcoming Holidays</h2>
+    <h4><a href="/holidays/create">Add Holiday</a></h4>
+    <div class="upcoming-holidays-grid" @if (!upcomingHolidays.Any()) {
     <p>No upcoming holidays.</p>
 }
 
 else
 {
-  <div class="row">
+    <div class="row">
         @foreach (var holiday in upcomingHolidays)
         {
-  <div class="col-sm">
-            <a href="/holidays/@holiday.Id">
+            <div class="col-sm">
+
                 <div class="upcoming-holidays-card" style="width: 18rem;">
                     <div class="card-body">
-                    <img class="card-img-top" src="..." alt="Card image cap" src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
-                         alt="@holiday.Title" />
-                    <h5 class="upcoming-holidays-name">@holiday.Title</h5>
-                    <p class="upcoming-holidays-content">@holiday.StartDate?.Year</p>
+                        <a href="/holidays/@holiday.Id">
+                            <img class="card-img-top" src="@holiday.ThumbnailUrl" alt="Card image cap"
+                                 src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                                 alt="@holiday.Title" />
+                        </a>
+                        <h5 class="upcoming-holidays-title">@holiday.Title</h5>
+                        <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+                    </div>
                 </div>
-                </div>
-            </a>
             </div>
         }
-    </div>  
-       
+    </div>
 }
+</div>
+</div>
 
 
+<div class="past-holidays-container">
 
+<h2>@currentUser.Name's Past Holidays</h2>
 
-
-<h2>Past Holidays</h2>
-
-@if (!pastHolidays.Any())
+    <div class="past-holidays-grid"@if (!pastHolidays.Any())
 {
     <p>No past holidays.</p>
 }
 else
 {
-    <div class="grid">
+    <div class="row">
         @foreach (var holiday in pastHolidays)
         {
-            <a href="/holidays/@holiday.Id">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                    <img class="card-img-top" src="..." alt="Card image cap" src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
-                         alt="@holiday.Title" />
-                    <h5 class="card-title">@holiday.Title</h5>
-                    <p class="card-text">@holiday.StartDate?.Year</p>
+            <div class="col-sm">
+                <div class="past-holidays-card" style="width: 18rem;">
+                    <a href="/holidays/@holiday.Id">
+                        <div class="card-body">
+                            <img class="card-img-top" src="@holiday.ThumbnailUrl" alt="Card image cap"
+                                 src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                                 alt="@holiday.Title" />
+                        </a>
+                        <h5 class="past-holidays-title">@holiday.Title</h5>
+                        <p class="past-holidays-dates">@holiday.StartDate?.Year</p>
+                    </div>
                 </div>
-                </div>
-            </a>
-        }
-    </div>
-        }
-    </div>
+
+            }
+        </div>
+    }
 </div>
+

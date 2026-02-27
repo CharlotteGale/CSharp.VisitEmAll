@@ -62,15 +62,62 @@ body {
   overflow: hidden;
 }
 
-.upcoming-holidays-content {
+.upcoming-holidays-dates {
   flex-grow: 1;
-  padding: 15px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
 }
 
-.upcoming-holidays-name {
+.upcoming-holidays-title {
   font-weight: 600;
   font-size: 1.1rem;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.past-holidays-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  overflow: visible;
+}
+
+.past-holidays-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.past-holidays-card {
+  display: flex;
+  align-items: stretch; 
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(189, 189, 189, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  min-height: 120px;
+  overflow: hidden;
+}
+
+.past-holidays-dates {
+  flex-grow: 1;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+}
+
+.past-holidays-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
 }
