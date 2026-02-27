@@ -9,6 +9,7 @@
     <div class=row>
         <div class="col-lg-4 col-md-5 border-end">
             
+            @* // ===== FRIEND REQUESTS ===== \\ *@
             <h4 class="mb-3">Friend Requests (@Model.PendingRequests.Count)</h4>
             @if (!Model.PendingRequests.Any())
             {
@@ -36,6 +37,8 @@
                     </div>
                 </div>
             }
+
+            @* // ===== SENT REQUESTS ===== \\ *@
             <div class="mt-4 pt-3 border-top">
                 <h4 class="mb-3">Sent Requests (@Model.SentRequests.Count)</h4>
                 @if(!Model.SentRequests.Any())
@@ -56,8 +59,33 @@
                     </div>
                 }
             </div>
+
+            @* // ===== POTENTIAL FRIENDS ===== \\ *@
+            <div class="mt-4 pt-3 border-top">
+                <h4 class="mt-4 mb-3">Find New Friends</h4>
+                <div class="d-flex flex-column gap-2">
+                    @foreach(var user in Model.AllOtherUsers)
+                    {
+                        <div class="card border-0 shadow-sm bg-white">
+                            <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center flex-grow-1">
+                                    <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(user.Name)&background=random" 
+                                        class="rounded-circle me-3" width="40">
+                                    <strong>@user.Name</strong>
+                                </div>
+
+                                <form asp-action="SendRequest" method="post" class="m-0">
+                                    <input type="hidden" name="receiverId" value="@user.Id" />
+                                    <button type="submit" class="btn btn-sm btn-primary px-3">Add Friend</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
 
+        @* // ===== ACCEPTED FRIENDS ===== \\ *@
         <div class="col-lg-8 col-md-7 ps-md-4">
             <h4 class="mb-3">My Friends (@Model.AcceptedFriends.Count)</h4>
             <div class="d-flex flex-column gap-2">
