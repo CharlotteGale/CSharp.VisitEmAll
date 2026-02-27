@@ -57,26 +57,37 @@
                 }
             </div>
         </div>
-        
+
         <div class="col-lg-8 col-md-7 ps-md-4">
             <h4 class="mb-3">My Friends (@Model.AcceptedFriends.Count)</h4>
-            <div class="row">
+            <div class="d-flex flex-column gap-2">
                 @if(!Model.AcceptedFriends.Any())
                 {
-                    <div class="col-12">
                         <p class="text-muted">You haven't added any friends yet.</p>
-                    </div>
                 }
+
                 @foreach (var friend in Model.AcceptedFriends)
                 {
-                    <div class="col-sm-6 col-lg-4 mb-3">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-body text-center">
-                                <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(friend.Name)&background=random" class="rounded-circle mb-2" width="60">
+                    <div class="card border-0 shadow-sm bg-light mb-2">
+                        <div class="card-body p-2 d-flex align-items-center justify-content-between">
+
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(friend.Name)&background=random" 
+                                        class="rounded-circle me-3" width="40">
                                 <a asp-controller="Users" asp-action="Profile" asp-route-id="@friend.Id">
                                     <strong>@friend.Name</strong>
                                 </a>
                             </div>
+
+                            <div class="ms-2">
+                                <form asp-action="Remove" method="post" class="m-0">
+                                    <input type="hidden" name="id" value="@friend.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                            onclick="return confirm('Are you sure you want to remove @friend.Name?')">
+                                        Remove    
+                                     </button>
+                                </form>
+                            </div>  
                         </div>
                     </div>
                 }
