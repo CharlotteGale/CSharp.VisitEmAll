@@ -1,36 +1,55 @@
 ﻿@using VisitEmAll.Models
+
 @{
     ViewData["Title"] = "Dashboard";
     var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
     var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var currentUser = ViewData["CurrentUser"] as User;    
 }
 
-<h1>Dashboard</h1>
+<div class="upcoming-holidays-container">
+
+<h1>@currentUser.Name's homepage</h1>
+<h2>@currentUser.HomeTown</h2>
+
+
 
 <a href="/holidays/create">Add Holiday</a>
 
 <h2>Upcoming Holidays</h2>
 
+
+
 @if (!upcomingHolidays.Any())
 {
     <p>No upcoming holidays.</p>
 }
+
 else
 {
-    <div class="holiday-grid">
+  <div class="row">
         @foreach (var holiday in upcomingHolidays)
         {
+  <div class="col-sm">
             <a href="/holidays/@holiday.Id">
-                <div class="holiday-card">
-                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                <div class="upcoming-holidays-card" style="width: 18rem;">
+                    <div class="card-body">
+                    <img class="card-img-top" src="..." alt="Card image cap" src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
                          alt="@holiday.Title" />
-                    <h3>@holiday.Title</h3>
-                    <p>@holiday.StartDate?.Year</p>
+                    <h5 class="upcoming-holidays-name">@holiday.Title</h5>
+                    <p class="upcoming-holidays-content">@holiday.StartDate?.Year</p>
+                </div>
                 </div>
             </a>
+            </div>
         }
-    </div>
+    </div>  
+       
 }
+
+
+
+
 
 <h2>Past Holidays</h2>
 
@@ -40,17 +59,21 @@ else
 }
 else
 {
-    <div class="holiday-grid">
+    <div class="grid">
         @foreach (var holiday in pastHolidays)
         {
             <a href="/holidays/@holiday.Id">
-                <div class="holiday-card">
-                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                    <img class="card-img-top" src="..." alt="Card image cap" src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
                          alt="@holiday.Title" />
-                    <h3>@holiday.Title</h3>
-                    <p>@holiday.StartDate?.Year</p>
+                    <h5 class="card-title">@holiday.Title</h5>
+                    <p class="card-text">@holiday.StartDate?.Year</p>
+                </div>
                 </div>
             </a>
         }
     </div>
-}
+        }
+    </div>
+</div>
