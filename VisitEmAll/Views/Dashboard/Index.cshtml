@@ -1,13 +1,17 @@
 ﻿@using VisitEmAll.Models
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = Model.Name + "'s Dashboard";
     var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
     var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var isOwn = (bool)(ViewData["IsOwnDashboard"] ?? false);
 }
 
-<h1>Dashboard</h1>
+<h1>@(isOwn ? "My Dashboard" : Model.Name + "'s Dashboard")</h1>
 
-<a href="/holidays/create">Add Holiday</a>
+@if(isOwn)
+{
+    <a href="/holidays/create">Add Holiday</a>
+}
 
 <h2>Upcoming Holidays</h2>
 
