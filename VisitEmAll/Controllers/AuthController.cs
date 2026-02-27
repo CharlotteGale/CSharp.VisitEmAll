@@ -11,11 +11,13 @@ public class AuthController : Controller
 {
     private readonly VisitEmAllDbContext _context;
     private readonly PasswordHasher<User> _hasher;
+    private readonly IWebHostEnvironment webHostEnvironment;
 
-    public AuthController(VisitEmAllDbContext context)
+    public AuthController(VisitEmAllDbContext context, IWebHostEnvironment hostEnvironment)
     {
         _context = context;
         _hasher = new PasswordHasher<User>();
+        webHostEnvironment = hostEnvironment;
     }
 
     [HttpGet]
@@ -29,37 +31,49 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> SignUp(User model)
+    public async Task<IActionResult> SignUp(SignUpViewModel model)
     {
-        if (!ModelState.IsValid) return View(model);
+      if (!ModelState.IsValid) return View(model);
 
-        var emailExists = await _context.Users.AnyAsync(u => u.Email == model.Email);
-        if (emailExists)
-        {
-            ModelState.AddModelError("Email", "An account with this email already exists. Please log in to continue.");
-            return View(model);
-        }
+      var emailExists = await _context.Users.AnyAsync(u => u.Email == model.Email);
+      if (emailExists)
+      {
+        ModelState.AddModelError("Email", "An account with this email already exists.");
+        return View(model);
+      }
 
-        var newUser = new User
-        {
-            Name = model.Name,
-            Email = model.Email,
-            Password = string.Empty,
-            HomeTown = model.HomeTown,
-            ProfileImg = model.ProfileImg
-        };
-
-
-        newUser.Password = _hasher.HashPassword(newUser, model.Password);
+      string uniqueFileName = null;
+      if (model.ProfileImg != null)
+      {
+        string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads/profiles");
         
-        _context.Users.Add(newUser);
-        await _context.SaveChangesAsync();
+        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
-        TempData["SuccessMessage"] = "Account created successfully! Please log in.";
-        return RedirectToAction("Login");
+        uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ProfileImg.FileName;
+        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+          await model.ProfileImg.CopyToAsync(fileStream);
+        }
+      }
+      string hashedPw = _hasher.HashPassword(null!, model.Password);
+      var newUser = new User
+      {
+        Name = model.Name,
+        Email = model.Email,
+        HomeTown = model.HomeTown,
+        ProfileImg = uniqueFileName,
+        Password = hashedPw
+      };
+      
+      _context.Users.Add(newUser);
+      await _context.SaveChangesAsync();
+
+      TempData["SuccessMessage"] = "Account created successfully! Please log in.";
+      return RedirectToAction("Login");
     }
     
-
     [HttpGet]
     public IActionResult Login()
     {
