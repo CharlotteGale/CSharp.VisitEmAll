@@ -20,3 +20,4 @@ public class Friendship
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
+
