@@ -67,4 +67,19 @@ public class FriendshipService
 
         return await accepted.Distinct().ToListAsync();
     }
+
+    public async Task RemoveFriendsAsync(int userId, int friendId)
+    {
+        var friendship = await _db.Friendships
+            .FirstOrDefaultAsync(f =>
+                (f.RequesterId == userId && f.ReceiverId == friendId ||
+                f.RequesterId == friendId && f.ReceiverId == userId)
+                && f.Status == FriendshipStatus.Accepted);
+        
+        if(friendship != null)
+        {
+            _db.Friendships.Remove(friendship);
+            await _db.SaveChangesAsync();
+        }
+    }
 }
