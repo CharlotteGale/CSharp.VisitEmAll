@@ -1,32 +1,97 @@
-@model IEnumerable<VisitEmAll.Models.User>
+@model VisitEmAll.Models.ViewModels.FriendsViewModel
 
 @{
     ViewData["Title"] = "Friends";
 }
 
 <h1>My Friends</h1>
-<div class="friends-list">
-    @if (!Model.Any())
-    {
-        <p>You haven't added any friends yet.</p>
-    }
-    else
-    {
-        @foreach (var friend in Model)
-        {
-            <div>
-                <a asp-controller="Users" asp-action="Profile" asp-route-id="@friend.Id">
-                <img src="@(string.IsNullOrEmpty(friend.ProfileImg) 
-                                ? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(friend.Name)}&background=random"
-                                : friend.ProfileImg)"  
-                    alt="@friend.Name"    
-                    class="rounded-circle me-3"
-                    style="width: 60px; height: 60px; object-fit: cover;" />
-                </a>
-                <a asp-controller="Users" asp-action="Profile" asp-route-id="@friend.Id">
-                    <strong>@friend.Name</strong>
-                </a>
+<div class="container mt-4">
+    <div class=row>
+        <div class="col-lg-4 col-md-5 border-end">
+            
+            <h4 class="mb-3">Friend Requests (@Model.PendingRequests.Count)</h4>
+            @if (!Model.PendingRequests.Any())
+            {
+                <p class="text-muted small">No new requests</p>
+            }
+
+            @foreach (var request in Model.PendingRequests)
+            {
+                <div class="card mb-2 bg-light border-0 shadow-sm">
+                    <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center flex-grow-1">
+                            <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(request.Requester.Name)" class="rounded-circle me-2" width="35">
+                            <span class="small fw-bold text-truncate" style="max-width:100 px">@request.Requester.Name</span>
+                        </div>
+                        <div class="d-flex gap-2 ms-2">
+                            <form asp-action="Accept" method="post" class="m-0">
+                                <input type="hidden" name="id" value="@request.Id" />
+                                <button type="submit" class="btn btn-sm btn-primary">Accept</button>
+                            </form>
+                            <form asp-action="Reject" method="post" class="m-0">
+                                <input type="hidden" name="id" value="@request.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Reject</button>
+                               </form>
+                        </div>  
+                    </div>
+                </div>
+            }
+            <div class="mt-4 pt-3 border-top">
+                <h4 class="mb-3">Sent Requests (@Model.SentRequests.Count)</h4>
+                @if(!Model.SentRequests.Any())
+                {
+                    <p class="text-muted small">You have no active requests.</p>
+                }
+
+                @foreach(var request in Model.SentRequests)
+                {
+                    <div class="card mb-2 bg-light border-0 shadow-sm" style="opacity: 0.8;">
+                        <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(request.Receiver.Name)" class="rounded-circle me-2" width="35">
+                                <span class="small fw-bold text-truncate" style="max-width:120 px">@request.Receiver.Name</span>
+                            </div>
+                            <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">Pending</span>
+                        </div>
+                    </div>
+                }
             </div>
-        }
-    }
+        </div>
+
+        <div class="col-lg-8 col-md-7 ps-md-4">
+            <h4 class="mb-3">My Friends (@Model.AcceptedFriends.Count)</h4>
+            <div class="d-flex flex-column gap-2">
+                @if(!Model.AcceptedFriends.Any())
+                {
+                        <p class="text-muted">You haven't added any friends yet.</p>
+                }
+
+                @foreach (var friend in Model.AcceptedFriends)
+                {
+                    <div class="card border-0 shadow-sm bg-light mb-2">
+                        <div class="card-body p-2 d-flex align-items-center justify-content-between">
+
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(friend.Name)&background=random" 
+                                        class="rounded-circle me-3" width="40">
+                                <a asp-controller="Users" asp-action="Dashboard" asp-route-id="@friend.Id">
+                                    <strong>@friend.Name</strong>
+                                </a>
+                            </div>
+
+                            <div class="ms-2">
+                                <form asp-action="Remove" method="post" class="m-0">
+                                    <input type="hidden" name="id" value="@friend.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                            onclick="return confirm('Are you sure you want to remove @friend.Name?')">
+                                        Remove    
+                                     </button>
+                                </form>
+                            </div>  
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
