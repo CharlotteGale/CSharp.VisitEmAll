@@ -35,8 +35,6 @@ public class VisitEmAllDbContext : DbContext
     }
   }
 
-  public VisitEmAllDbContext() { }
-
   public VisitEmAllDbContext(DbContextOptions<VisitEmAllDbContext> options, IConfiguration configuration) : base(options)
   {
     _configuration = configuration;
