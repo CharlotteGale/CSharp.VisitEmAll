@@ -28,7 +28,17 @@ public class FriendsController : Controller
             return RedirectToAction("Login", "Auth");
         }
 
-        // We pull everything here so the sidebar and the list are both full
+        var connectedUserIds = await _context.Friendships
+                            .Where(f => f.RequesterId == currentUserId || f.ReceiverId == currentUserId)
+                            .Select(f => f.RequesterId == currentUserId ? f.ReceiverId : f.RequesterId)
+                            .ToListAsync();
+        
+        connectedUserIds.Add(currentUserId.Value);
+
+        var potentialFriends = await _context.Users
+                            .Where(u => !connectedUserIds.Contains(u.Id))
+                            .ToListAsync();
+        
         var vm = new FriendsViewModel
         {
             AcceptedFriends = await _friendshipService.GetFriendsAsync(currentUserId.Value),
@@ -43,7 +53,9 @@ public class FriendsController : Controller
                             .Include(f => f.Receiver)
                             .Where(f => f.RequesterId == currentUserId.Value 
                                             && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync()
+                            .ToListAsync(),
+
+            AllOtherUsers = potentialFriends
         };
 
         return View(vm);
