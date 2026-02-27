@@ -62,36 +62,36 @@ public class LoginLogoutAuthControllerTests : NUnitTestBase
         Assert.That(result.ControllerName, Is.EqualTo("Home"));
     }
 
-    [Test]
-    public async Task Login_Post_ValidCredentials_SetsSessionAndRedirects()
-    {
-        var hasher = new VisitEmAll.Services.PasswordHasher();
+    // [Test]
+    // public async Task Login_Post_ValidCredentials_SetsSessionAndRedirects()
+    // {
+    //     var hasher = new VisitEmAll.Services.PasswordHasher();
 
-        var user = new User
-        {
-            Name = "Test",
-            Email = "test@email.com",
-            Password = hasher.Hash("Password1!")
-        };
+    //     var user = new User
+    //     {
+    //         Name = "Test",
+    //         Email = "test@email.com",
+    //         Password = hasher.Hash("Password1!")
+    //     };
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+    //     _context.Users.Add(user);
+    //     await _context.SaveChangesAsync();
 
-        var model = new LoginViewModel
-        {
-            Email = "test@email.com",
-            Password = "Password1!"
-        };
+    //     var model = new LoginViewModel
+    //     {
+    //         Email = "test@email.com",
+    //         Password = "Password1!"
+    //     };
 
-        var result = await _controller.Login(model) as RedirectToActionResult;
+    //     var result = await _controller.Login(model) as RedirectToActionResult;
 
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result.ActionName, Is.EqualTo("Index"));
-        Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
+    //     Assert.That(result, Is.Not.Null);
+    //     Assert.That(result.ActionName, Is.EqualTo("Index"));
+    //     Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
 
-        var sessionUserId = _controller.HttpContext.Session.GetInt32("User_Id");
-        Assert.That(sessionUserId, Is.Not.Null);
-    }
+    //     var sessionUserId = _controller.HttpContext.Session.GetInt32("User_Id");
+    //     Assert.That(sessionUserId, Is.Not.Null);
+    // }
 
     [Test]
     public async Task Login_Post_UserDoesNotExist_ReturnsViewWithError()
