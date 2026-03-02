@@ -47,7 +47,47 @@ namespace VisitEmAll.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activity");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.DayItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("HolidayDayId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Item")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<TimeOnly?>("Time")
+                        .HasColumnType("time without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HolidayDayId");
+
+                    b.ToTable("DayItems");
+
+                    b.HasDiscriminator<string>("Item").HasValue("DayItem");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.Friendship", b =>
@@ -91,13 +131,6 @@ namespace VisitEmAll.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Accommodation")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<decimal?>("Cost")
-                        .HasColumnType("numeric");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -108,7 +141,7 @@ namespace VisitEmAll.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<DateOnly>("StartDate")
+                    b.Property<DateOnly?>("StartDate")
                         .HasColumnType("date");
 
                     b.Property<string>("ThumbnailUrl")
@@ -120,6 +153,9 @@ namespace VisitEmAll.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
+                    b.Property<decimal?>("TotalCost")
+                        .HasColumnType("numeric");
+
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
@@ -128,6 +164,27 @@ namespace VisitEmAll.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Holidays");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.HolidayDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<int>("HolidayId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HolidayId");
+
+                    b.ToTable("HolidayDays");
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.User", b =>
@@ -161,10 +218,35 @@ namespace VisitEmAll.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("VisitEmAll.Models.DayAccommodation", b =>
+                {
+                    b.HasBaseType("VisitEmAll.Models.DayItem");
+
+                    b.HasDiscriminator().HasValue("Accommodation");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.DayActivity", b =>
+                {
+                    b.HasBaseType("VisitEmAll.Models.DayItem");
+
+                    b.Property<decimal?>("Cost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.HasDiscriminator().HasValue("Activity");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.DayRestaurant", b =>
+                {
+                    b.HasBaseType("VisitEmAll.Models.DayItem");
+
+                    b.HasDiscriminator().HasValue("Restaurant");
+                });
+
             modelBuilder.Entity("VisitEmAll.Models.Activity", b =>
                 {
                     b.HasOne("VisitEmAll.Models.Holiday", "Holiday")
-                        .WithMany("Activities")
+                        .WithMany()
                         .HasForeignKey("HolidayId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -174,6 +256,17 @@ namespace VisitEmAll.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Holiday");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.DayItem", b =>
+                {
+                    b.HasOne("VisitEmAll.Models.HolidayDay", "HolidayDay")
+                        .WithMany("TimelineItems")
+                        .HasForeignKey("HolidayDayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HolidayDay");
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.Friendship", b =>
@@ -206,9 +299,25 @@ namespace VisitEmAll.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("VisitEmAll.Models.HolidayDay", b =>
+                {
+                    b.HasOne("VisitEmAll.Models.Holiday", "Holiday")
+                        .WithMany("Days")
+                        .HasForeignKey("HolidayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Holiday");
+                });
+
             modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
                 {
-                    b.Navigation("Activities");
+                    b.Navigation("Days");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.HolidayDay", b =>
+                {
+                    b.Navigation("TimelineItems");
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.User", b =>

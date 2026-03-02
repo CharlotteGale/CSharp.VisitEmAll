@@ -20,6 +20,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddScoped<VisitEmAll.ActionFilters.AuthenticationFilter>();
+builder.Services.AddScoped<VisitEmAll.Services.FriendshipService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -27,9 +28,6 @@ if (string.IsNullOrEmpty(connectionString))
 {
     throw new InvalidOperationException("Could not find a connection string named 'DefaultConnection'. Check your Environment Variables.");
 }
-
-builder.Services.AddDbContext<VisitEmAllDbContext>(options =>
-    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 

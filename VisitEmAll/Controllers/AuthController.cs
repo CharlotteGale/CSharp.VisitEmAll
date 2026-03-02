@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 using VisitEmAll.Models;
-using VisitEmAll.Services;
 using VisitEmAll.ViewModels;
 
 namespace VisitEmAll.Controllers;
@@ -9,12 +10,14 @@ namespace VisitEmAll.Controllers;
 public class AuthController : Controller
 {
     private readonly VisitEmAllDbContext _context;
-    private readonly PasswordHasher _hasher;
+    private readonly PasswordHasher<User> _hasher;
+    private readonly IWebHostEnvironment webHostEnvironment;
 
-    public AuthController(VisitEmAllDbContext context)
+    public AuthController(VisitEmAllDbContext context, IWebHostEnvironment hostEnvironment)
     {
         _context = context;
-        _hasher = new PasswordHasher();
+        _hasher = new PasswordHasher<User>();
+        webHostEnvironment = hostEnvironment;
     }
 
     [HttpGet]
@@ -28,34 +31,49 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> SignUp(User model)
+    public async Task<IActionResult> SignUp(SignUpViewModel model)
     {
-        if (!ModelState.IsValid) return View(model);
+      if (!ModelState.IsValid) return View(model);
 
-        var emailExists = await _context.Users.AnyAsync(u => u.Email == model.Email);
-        if (emailExists)
-        {
-            ModelState.AddModelError("Email", "An account with this email already exists. Please log in to continue.");
-            return View(model);
-        }
+      var emailExists = await _context.Users.AnyAsync(u => u.Email == model.Email);
+      if (emailExists)
+      {
+        ModelState.AddModelError("Email", "An account with this email already exists.");
+        return View(model);
+      }
 
-        var newUser = new User
-        {
-            Name = model.Name,
-            Email = model.Email,
-            Password = _hasher.Hash(model.Password),
-            HomeTown = model.HomeTown,
-            ProfileImg = model.ProfileImg
-        };
+      string uniqueFileName = null;
+      if (model.ProfileImg != null)
+      {
+        string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads/profiles");
         
-        _context.Users.Add(newUser);
-        await _context.SaveChangesAsync();
+        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
-        TempData["SuccessMessage"] = "Account created successfully! Please log in.";
-        return RedirectToAction("Login");
+        uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ProfileImg.FileName;
+        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+          await model.ProfileImg.CopyToAsync(fileStream);
+        }
+      }
+      string hashedPw = _hasher.HashPassword(null!, model.Password);
+      var newUser = new User
+      {
+        Name = model.Name,
+        Email = model.Email,
+        HomeTown = model.HomeTown,
+        ProfileImg = uniqueFileName,
+        Password = hashedPw
+      };
+      
+      _context.Users.Add(newUser);
+      await _context.SaveChangesAsync();
+
+      TempData["SuccessMessage"] = "Account created successfully! Please log in.";
+      return RedirectToAction("Login");
     }
     
-
     [HttpGet]
     public IActionResult Login()
     {
@@ -79,14 +97,40 @@ public class AuthController : Controller
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == model.Email);
 
-        if (user == null || !_hasher.Verify(model.Password, user.Password))
+        if (user == null)
         {
             model.ErrorMessage = "Invalid email or password";
             return View(model);
         }
 
-        HttpContext.Session.SetInt32("User_Id", user.Id);
-        return RedirectToAction("Index", "Dashboard");
+        PasswordVerificationResult result;
+        bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        bool isPlainTextPassword = user.Password.Length < 20;
+        if(isDevelopment && isPlainTextPassword)
+        {
+            result = user.Password == model.Password
+                ? PasswordVerificationResult.Success
+                : PasswordVerificationResult.Failed;
+        }
+        else
+        {
+            result = _hasher.VerifyHashedPassword(user, user.Password, model.Password);
+        }
+
+        if(result != PasswordVerificationResult.Failed)
+        {
+            if(result == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                user.Password = _hasher.HashPassword(user, model.Password);
+                await _context.SaveChangesAsync();
+            }
+            HttpContext.Session.SetInt32("User_Id", user.Id);
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+            model.ErrorMessage = "Invalid email or password";
+            return View(model);
+
     }
 
     public IActionResult Logout()

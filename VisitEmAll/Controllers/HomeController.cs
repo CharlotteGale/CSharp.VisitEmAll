@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using VisitEmAll.Models;
+using VisitEmAll.ViewModels;
 
 namespace VisitEmAll.Controllers;
 
