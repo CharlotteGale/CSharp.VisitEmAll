@@ -1,0 +1,142 @@
+/* Page container */
+.details-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Title + location */
+.details-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.details-location {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Generic card styling */
+.summary-card,
+.section-card,
+.map-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.summary-card h2,
+.section-card h2 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+/* ROW 1: Summary + Activities */
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+/* ROW 2: Itinerary Day 1 + Map */
+.row-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+/* ROWS with only one column (Day 2) */
+.full-width {
+    margin-bottom: 30px;
+}
+
+/* Map box */
+.map-placeholder {
+    width: 100%;
+    height: 250px;
+    background: #eaeaea;
+    border-radius: 10px;
+}
+
+/* Activities + Tips lists */
+.activity-list,
+.tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-list li,
+.tips-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Itinerary */
+.day-block {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.day-block h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.timeline-item {
+    margin: 8px 0;
+    padding: 10px 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.time {
+    font-weight: 600;
+    margin-right: 8px;
+    color: #444;
+}
+
+.item-title {
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.item-type {
+    color: #777;
+}
+
+.location {
+    color: #555;
+}
+
+.notes {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Photos */
+.photo-placeholder {
+    width: 100%;
+    height: 200px;
+    background: #eaeaea;
+    border-radius: 10px;
+}
+
+/* Owner buttons */
+.owner-actions {
+    margin-top: 30px;
+}
