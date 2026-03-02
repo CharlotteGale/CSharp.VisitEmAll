@@ -1,5 +1,5 @@
 
-namespace VisitEmAll.Controllers;
+namespace VisitEmAll.Tests.Controllers;
 
 public class HomeControllerTests : NUnitTestBase
 {
@@ -35,5 +35,13 @@ public class HomeControllerTests : NUnitTestBase
         Assert.That(result, Is.Not.Null);
         Assert.That(result.ActionName, Is.EqualTo("Login"));
         Assert.That(result.ControllerName, Is.EqualTo("Auth"));
+    }
+
+    [Test]
+    public void Privacy_ReturnsView()
+    {
+        var result = _controller.Privacy();
+
+        Assert.That(result, Is.TypeOf<ViewResult>());
     }
 }
