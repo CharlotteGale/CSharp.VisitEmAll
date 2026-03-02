@@ -4,65 +4,79 @@
 
 @inject IHttpContextAccessor HttpContextAccessor
 
-  @{
-      var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
-  }
+@{
+    var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
+}
 
-  <h1>@Model.Title</h1>
+<h1>@Model.Title</h1>
 
-  @if (!string.IsNullOrEmpty(Model.Location))
-  {
-      <p>Location: @Model.Location</p>
-  }
+@if (!string.IsNullOrEmpty(Model.Location))
+{
+    <p><strong>Location:</strong> @Model.Location</p>
+}
 
-  @if (Model.Days.Any())
-  {
-      <h2>Itinerary</h2>
+@if (!string.IsNullOrEmpty(Model.Accommodation))
+{
+    <p><strong>Accommodation:</strong> @Model.Accommodation</p>
+}
 
-      @foreach (var day in Model.Days)
-      {
-          <section class="holiday-day">
-              <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
+@if (Model.TotalCost.HasValue)
+{
+    <p><strong>Total Cost:</strong> £@Model.TotalCost.Value.ToString("0.00")</p>
+}
 
-              @if (!day.Items.Any())
-              {
-                  <p>No items planned for this day.</p>
-              }
-              else
-              {
-                  <ul class="timeline">
-                      @foreach (var item in day.Items)
-                      {
-                          <li class="timeline-item">
-                              <span class="time">
-                                  @(item.Time?.ToString("HH:mm") ?? "--:--")
-                              </span>
-                              <strong>@item.Name</strong>
-                              <span class="type">(@item.ItemType)</span>
+<hr />
 
-                              @if (!string.IsNullOrEmpty(item.Location))
-                              {
-                                  <span class="location"> - @item.Location</span>
-                              }
+@if (Model.Days.Any())
+{
+    <h2>Itinerary</h2>
 
-                              @if (!string.IsNullOrEmpty(item.Notes))
-                              {
-                                  <div class="notes">@item.Notes</div>
-                              }
-                          </li>
-                      }
-                  </ul>
-              }
-          </section>
-      }
-  }
-  else
-  {
-      <p>No days found for this holiday.</p>
-  }
+    @foreach (var day in Model.Days)
+    {
+        <section class="holiday-day" style="margin-bottom: 20px;">
+            <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
 
+            @if (!day.Items.Any())
+            {
+                <p>No items planned for this day.</p>
+            }
+            else
+            {
+                <ul class="timeline">
+                    @foreach (var item in day.Items)
+                    {
+                        <li class="timeline-item" style="margin-bottom: 12px;">
+                            <span class="time">
+                                @(item.Time?.ToString("HH:mm") ?? "--:--")
+                            </span>
 
-@if (currentUserId != null)
+                            <strong>@item.Name</strong>
+                            <span class="type">(@item.ItemType)</span>
+
+                            @if (!string.IsNullOrEmpty(item.Location))
+                            {
+                                <span class="location"> - @item.Location</span>
+                            }
+
+                            @if (!string.IsNullOrEmpty(item.Notes))
+                            {
+                                <div class="notes">@item.Notes</div>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    }
+}
+else
+{
+    <p>No days found for this holiday.</p>
+}
+
+<hr />
+
+@if (currentUserId == Model.OwnerUserId)
 {
     <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="btn btn-success">
         Edit Holiday
@@ -76,5 +90,3 @@
         </button>
     </form>
 }
-
-  }

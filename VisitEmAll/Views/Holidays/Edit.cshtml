@@ -84,14 +84,14 @@
             const addBtn = document.getElementById("add-activity");
 
             function reIndexer(){
-              const rows = container.querySelectorAll(".activity-row");
-              rows.forEach((row, index) => {
-                const input = row.querySelector("input");
-                const validation = row.querySelector("span")
-                if (input){
-                  input.name = `Activities[${index}].Name`;
-                }
-              });
+                const rows = container.querySelectorAll(".activity-row");
+                rows.forEach((row, index) => {
+                    const input = row.querySelector("input");
+                    const validation = row.querySelector("span")
+                    if (input){
+                    input.name = `Activities[${index}].Name`;
+                    }
+                });
             }
 
             addBtn.addEventListener("click", () => {
@@ -106,10 +106,10 @@
                 container.appendChild(row);
             });
             container.addEventListener("click", (e) => {
-              if (e.target.classList.contains("remove-btn")){
-                e.target.closest(".activity-row").remove();
-                reIndexer();
-              }
+                if (e.target.classList.contains("remove-btn")){
+                    e.target.closest(".activity-row").remove();
+                    reIndexer();
+                }
             })
         })();
     </script>
