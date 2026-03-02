@@ -1,4 +1,4 @@
-namespace VisitEmAll.Tests.Models;
+namespace VisitEmAll.Tests.Base;
 
 public class TestDbContext : VisitEmAllDbContext
 {
