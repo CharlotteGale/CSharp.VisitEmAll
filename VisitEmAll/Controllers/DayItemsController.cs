@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitEmAll.Models;
-using VisitEmAll.ViewModels;
 
 namespace VisitEmAll.Controllers;
 
@@ -14,77 +13,76 @@ public class DayItemsController : Controller
         _db = db;
     }
 
-//Activities CRUD 
-    [Route("/day-items/{dayId}/activities/create")]
-    [HttpPost]
-    public IActionResult CreateActivity(int dayId)
-        {
-            return RedirectToAction("holidays", "{id:int}");
-        }
-
-    [Route("/day-items/{id}/activities/edit")]
-    [HttpPost]
-    public IActionResult EditActivity(int dayId)
-        {
-            return RedirectToAction("holidays", "{id:int}");
-        }
-
-
-    [Route("/day-items/{id}/activities/delete")]
-    [HttpPost]
-    public IActionResult DeleteActivity(int dayId)
+    //CREATE
+    [HttpPost("/day-items/{dayId:int}/activities/create")]
+    public async Task<IActionResult> CreateActivity(int dayId, DayActivity vm)
     {
-        return RedirectToAction("holidays", "{id:int}");
+        var day = await _db.HolidayDays.FindAsync(dayId);
+        if (day == null) return NotFound();
+
+        vm.HolidayDayId = dayId;
+        _db.DayItems.Add(vm);   
+        await _db.SaveChangesAsync();
+
+        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
     }
 
-//Accomodations CRUD 
-
-    [Route("/day-items/{dayId}/accomodations/create")]
-    [HttpPost]
-    public IActionResult CreateAccomodation(int dayId)
-        {
-            return RedirectToAction("holidays", "{id:int}");
-        }
-
-    [Route("/day-items/{id}/accomodations/edit")]
-    [HttpPost]
-    public IActionResult EditAccomodation(int dayId)
-        {
-            return RedirectToAction("holidays", "{id:int}");
-        }
-
-
-    [Route("/day-items/{id}/accomodationss/delete")]
-    [HttpPost]
-    public IActionResult DeleteAccomodation(int dayId)
+    [HttpPost("/day-items/{dayId:int}/restaurants/create")]
+    public async Task<IActionResult> CreateRestaurant(int dayId, DayRestaurant vm)
     {
-        return RedirectToAction("holidays", "{id:int}");
+        var day = await _db.HolidayDays.FindAsync(dayId);
+        if (day == null) return NotFound();
+
+        vm.HolidayDayId = dayId;
+        _db.DayItems.Add(vm);
+        await _db.SaveChangesAsync();
+
+        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
     }
 
-//Restaurants CRUD 
-
-
-    [Route("/day-items/{dayId}/restaurants/create")]
-    [HttpPost]
-    public IActionResult CreateRestaurant(int dayId)
-        {
-            return RedirectToAction("holidays", "{id:int}");
-        }
-
-    [Route("/day-items/{id}/restaurants/edit")]
-    [HttpPost]
-    public IActionResult EditRestaurant(int dayId)
-        {
-            return RedirectToAction("holidays", "{id:int}");
-        }
-
-
-    [Route("/day-items/{id}/restaurants/delete")]
-    [HttpPost]
-    public IActionResult DeleteRestaurant(int dayId)
+    [HttpPost("/day-items/{dayId:int}/accommodations/create")]
+    public async Task<IActionResult> CreateAccommodation(int dayId, DayAccommodation vm)
     {
-        return RedirectToAction("holidays", "{id:int}");
+        var day = await _db.HolidayDays.FindAsync(dayId);
+        if (day == null) return NotFound();
+
+        vm.HolidayDayId = dayId;
+        _db.DayItems.Add(vm);
+        await _db.SaveChangesAsync();
+
+        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
     }
 
+    //UPDATE
+    [HttpPost("/day-items/{id:int}/update")]
+    public async Task<IActionResult> UpdateItem(int id, DayItem updated)
+    {
+        var item = await _db.DayItems.FirstOrDefaultAsync(i => i.Id == id);
+        if (item == null) return NotFound();
 
+        item.Name = updated.Name;
+        item.Time = updated.Time;
+        item.Location = updated.Location;
+        item.Notes = updated.Notes;
+
+        await _db.SaveChangesAsync();
+
+        var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
+        return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+    }
+
+    //DELETE
+    [HttpPost("/day-items/{id:int}/delete")]
+    public async Task<IActionResult> DeleteItem(int id)
+    {
+        var item = await _db.DayItems.FirstOrDefaultAsync(i => i.Id == id);
+        if (item == null) return NotFound();
+
+        var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
+
+        _db.DayItems.Remove(item);
+        await _db.SaveChangesAsync();
+
+        return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+    }
 }
