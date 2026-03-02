@@ -24,7 +24,7 @@ html, body {
 /*Add new classes below with a comma inbetween */
 
 /* BUTTON SHAPE AND SIZE */
-.auth-submit-btn, .auth-new-acc-btn {
+.auth-submit-btn, .auth-new-acc-btn, .add-holiday-btn {
   width: 100%;
   padding: 0.75rem;
   border-radius: 50px;
@@ -150,7 +150,7 @@ body {
 /* PROFILE - HOLIDAYS */
 /* ========================================================================== */
 
-.upcoming-holidays-container {
+.upcoming-holidays-container, .past-holidays-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
@@ -158,13 +158,21 @@ body {
   overflow: visible;
 }
 
-.upcoming-holidays-header {
+.upcoming-holidays-header, .past-holidays-header {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
 }
 
-.upcoming-holidays-grid {
+.add-holiday-btn {
+  width: auto;
+  background: #CCD5AE;
+  color: white;
+  border: none;
+  text-decoration:none;
+}
+
+.upcoming-holidays-grid, .past-holidays-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
@@ -173,7 +181,7 @@ body {
   z-index: 1;
 }
 
-.upcoming-holidays-card {
+.upcoming-holidays-card, .past-holidays-card {
   display: flex;
   align-items: stretch;
   justify-self: center;
@@ -185,7 +193,7 @@ body {
   overflow: hidden;
 }
 
-.upcoming-holidays-dates {
+.upcoming-holidays-dates, .past-holidays-dates {
   flex-grow: 1;
   padding: 8px;
   display: flex;
@@ -193,56 +201,16 @@ body {
   justify-content: space-between;
 }
 
-.upcoming-holidays-title {
+.upcoming-holidays-title, .past-holidays-title {
   font-weight: 600;
   font-size: 1.1rem;
   padding: 8px;
   display: flex;
   flex-direction: column;
-}
-
-.past-holidays-container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 20px;
-  position: relative;
-  overflow: visible;
 }
 
 .past-holidays-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.past-holidays-card {
-  display: flex;
-  align-items: stretch;
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid rgba(189, 189, 189, 0.3);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  min-height: 120px;
-  overflow: hidden;
-}
-
-.past-holidays-dates {
-  flex-grow: 1;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.past-holidays-title {
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
+  padding-bottom: 60px;
 }
 
 .card-img-top {
