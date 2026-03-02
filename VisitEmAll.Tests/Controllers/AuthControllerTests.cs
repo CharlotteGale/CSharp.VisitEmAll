@@ -141,14 +141,16 @@ public class AuthControllerTests : NUnitTestBase
     [Test]
     public async Task Login_Post_ValidCredentials_SetsSessionAndRedirects()
     {
-        var hasher = new VisitEmAll.Services.PasswordHasher();
+        var hasher = new PasswordHasher<User>();
 
         var user = new User
         {
             Name = "Test",
             Email = "test@email.com",
-            Password = hasher.Hash("Password1!")
+            Password = ""
         };
+        string hashedPassword = hasher.HashPassword(user, "Password1!");
+        user.Password = hashedPassword;
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
@@ -189,14 +191,16 @@ public class AuthControllerTests : NUnitTestBase
     [Test]
     public async Task Login_Post_WrongPassword_ReturnsViewWithError()
     {
-        var hasher = new VisitEmAll.Services.PasswordHasher();
+        var hasher = new PasswordHasher<User>();
 
         var user = new User
         {
             Name = "Test 2",
             Email = "test2@email.com",
-            Password = hasher.Hash("CorrectPassword1!")
+            Password = ""
         };
+        string hashedPassword = hasher.HashPassword(user, "Password1!");
+        user.Password = hashedPassword;
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
