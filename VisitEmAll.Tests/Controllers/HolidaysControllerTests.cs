@@ -101,35 +101,23 @@ public class HolidaysControllerTests : NUnitTestBase
     }
 
     [Test]
-    public async Task Details_Returns_View_With_Holiday_And_Days()
+    public async Task Create_Post_SingleDayTrip_CreatesExactlyOneDay()
     {
-        var holiday = new Holiday
+        var vm = new CreateHolidayViewModel
         {
-            Title = "Test Holiday",
-            UserId = _testUser.Id,
-            StartDate = new DateOnly(2026, 5, 1),
-            EndDate = new DateOnly(2026, 5, 3),
-            Days = new List<HolidayDay>
-            {
-                new HolidayDay { Date = new DateOnly(2026,5,1) },
-                new HolidayDay { Date = new DateOnly(2026,5,2) },
-                new HolidayDay { Date = new DateOnly(2026,5,3) },
-            }
+            Title = "Day Trip",
+            StartDate = new DateOnly(2026, 7, 1),
+            EndDate = new DateOnly(2026, 7, 1) // Same day
         };
-        _context.Holidays.Add(holiday);
-        _context.SaveChanges();
 
-        var result = await _controller.Details(holiday.Id) as ViewResult;
-        var vm = result?.Model as HolidayDetailsViewModel;
+        await _controller.Create(vm);
 
-        Assert.That(result, Is.Not.Null);
-        Assert.That(vm.HolidayId, Is.EqualTo(holiday.Id));
-        Assert.That(vm.Days.Count, Is.EqualTo(3));
+        var saved = _context.Holidays.Include(h => h.Days).First(h => h.Title == "Day Trip");
+        Assert.That(saved.Days.Count, Is.EqualTo(1));
     }
 
-
     [Test]
-    public async Task Edit_Holiday_Get_Returns_Pre_Filled_Form()
+    public async Task EditHoliday_Get_ReturnsPreFilledForm()
     {
         var holiday = new Holiday
         {
@@ -150,7 +138,23 @@ public class HolidaysControllerTests : NUnitTestBase
     }
 
     [Test]
-    public async Task Update_Holiday_Post_Valid_Changes_Saves_And_Redirects()
+    public async Task EditHoliday_Get_ReturnsNotFound_ForDifferentUser()
+    {
+        var someoneElse = new User { Name = "Other", Email = "other@test.com", Password = "Password1!" };
+        _context.Users.Add(someoneElse);
+        _context.SaveChanges();
+
+        var othersHoliday = new Holiday { Title = "Private Trip", UserId = someoneElse.Id };
+        _context.Holidays.Add(othersHoliday);
+        _context.SaveChanges();
+
+        var result = await _controller.EditHoliday(othersHoliday.Id);
+
+        Assert.That(result, Is.InstanceOf<NotFoundResult>());
+    }
+
+    [Test]
+    public async Task UpdateHoliday_Post_ValidChangesSavesAndRedirects()
     {
         var holiday = new Holiday
         {
@@ -180,9 +184,26 @@ public class HolidaysControllerTests : NUnitTestBase
         Assert.That(updatedHoliday.EndDate, Is.EqualTo(new DateOnly(2026,1,3)));
     }
 
+    [Test]
+    public async Task UpdateHoliday_Post_ReturnsForbid_WhenUserMismatched()
+    {
+        var someoneElse = new User { Name = "Other", Email = "other2@test.com", Password = "Password1!" };
+        _context.Users.Add(someoneElse);
+        _context.SaveChanges();
+
+        var othersHoliday = new Holiday { Title = "Secrets", UserId = someoneElse.Id };
+        _context.Holidays.Add(othersHoliday);
+        _context.SaveChanges();
+
+        var updateVm = new CreateHolidayViewModel { Title = "Hacked Title" };
+
+        var result = await _controller.UpdateHoliday(updateVm, othersHoliday.Id);
+
+        Assert.That(result, Is.InstanceOf<ForbidResult>());
+    }
 
     [Test]
-    public void Delete_Removes_Holiday_And_Redirects()
+    public void Delete_RemovesHolidayAndRedirects()
     {
         var holiday = new Holiday
         {
@@ -197,5 +218,53 @@ public class HolidaysControllerTests : NUnitTestBase
         Assert.That(result.ActionName, Is.EqualTo("Index"));
         Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
         Assert.That(_context.Holidays.Any(h => h.Id == holiday.Id), Is.False);
+    }
+
+    [Test]
+    public async Task Details_Get_ReturnsViewWithHolidayAndDays()
+    {
+        var holiday = new Holiday
+        {
+            Title = "Test Holiday",
+            UserId = _testUser.Id,
+            StartDate = new DateOnly(2026, 5, 1),
+            EndDate = new DateOnly(2026, 5, 3),
+            Days = new List<HolidayDay>
+            {
+                new HolidayDay { Date = new DateOnly(2026,5,1) },
+                new HolidayDay { Date = new DateOnly(2026,5,2) },
+                new HolidayDay { Date = new DateOnly(2026,5,3) },
+            }
+        };
+        _context.Holidays.Add(holiday);
+        _context.SaveChanges();
+
+        var result = await _controller.Details(holiday.Id) as ViewResult;
+        var vm = result?.Model as HolidayDetailsViewModel;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(vm.HolidayId, Is.EqualTo(holiday.Id));
+        Assert.That(vm.Days.Count, Is.EqualTo(3));
+    }
+
+    [Test]
+    public async Task Details_ProperlyCategorizesDifferentItemTypes()
+    {
+        var holiday = new Holiday { Title = "Multi-Item Trip", UserId = _testUser.Id };
+        var day = new HolidayDay { Date = new DateOnly(2026, 6, 1) };
+        
+        day.TimelineItems.Add(new DayActivity { Name = "Museum", Time = new TimeOnly(10, 0) });
+        day.TimelineItems.Add(new DayRestaurant { Name = "Pasta Place", Time = new TimeOnly(19, 0) });
+        
+        holiday.Days.Add(day);
+        _context.Holidays.Add(holiday);
+        _context.SaveChanges();
+
+        var result = await _controller.Details(holiday.Id) as ViewResult;
+        var vm = result?.Model as HolidayDetailsViewModel;
+
+        var items = vm.Days.First().Items;
+        Assert.That(items.Any(i => i.ItemType == "Activity"), Is.True);
+        Assert.That(items.Any(i => i.ItemType == "Restaurant"), Is.True);
     }
 }
