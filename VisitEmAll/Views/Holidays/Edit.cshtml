@@ -1,6 +1,5 @@
 @model VisitEmAll.ViewModels.CreateHolidayViewModel
 
-
 @{
     ViewData["Title"] = "Update Holiday";
 }
@@ -52,19 +51,27 @@
         <span asp-validation-for="ThumbnailUrl"></span>
     </div>
 
+    <div>
+        <label asp-for="HeroImageUrl">Hero Image (URL)</label>
+        <input asp-for="HeroImageUrl" />
+        <span asp-validation-for="HeroImageUrl"></span>
+    </div>
+
+        <h3>TEXT</h3>
+
     <h3>Activities</h3>
 
     <div id="activities">
-    @for (var i = 0; i < Model.Activities.Count; i++)
-    {
-        <div class="activity-row">
-            <label>Activity name</label>
-            <input asp-for="Activities[i].Name" />
-            <span asp-validation-for="Activities[i].Name"></span>
-            <button type="button" class="btn btn-danger remove-btn">&times;</button>
-        </div>
-    }
-</div>
+        @for (var i = 0; i < Model.Activities.Count; i++)
+        {
+            <div class="activity-row">
+                <label>Activity name</label>
+                <input asp-for="Activities[i].Name" />
+                <span asp-validation-for="Activities[i].Name"></span>
+                <button type="button" class="btn btn-danger remove-btn">&times;</button>
+            </div>
+        }
+    </div>
 
     <button type="button" id="add-activity">+ Add another activity</button>
 
@@ -83,13 +90,12 @@
             const container = document.getElementById("activities");
             const addBtn = document.getElementById("add-activity");
 
-            function reIndexer(){
+            function reIndexer() {
                 const rows = container.querySelectorAll(".activity-row");
                 rows.forEach((row, index) => {
                     const input = row.querySelector("input");
-                    const validation = row.querySelector("span")
-                    if (input){
-                    input.name = `Activities[${index}].Name`;
+                    if (input) {
+                        input.name = `Activities[${index}].Name`;
                     }
                 });
             }
@@ -105,12 +111,13 @@
                 `;
                 container.appendChild(row);
             });
+
             container.addEventListener("click", (e) => {
-                if (e.target.classList.contains("remove-btn")){
+                if (e.target.classList.contains("remove-btn")) {
                     e.target.closest(".activity-row").remove();
                     reIndexer();
                 }
-            })
+            });
         })();
     </script>
 }

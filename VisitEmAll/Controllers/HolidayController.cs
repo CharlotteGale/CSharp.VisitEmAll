@@ -57,8 +57,10 @@ public class HolidaysController : Controller
             Location = vm.Location,
             StartDate = vm.StartDate,
             EndDate = vm.EndDate,
+            Accommodation = vm.Accommodation,
             TotalCost = vm.TotalCost,
             ThumbnailUrl = vm.ThumbnailUrl,
+            HeroImageUrl = vm.HeroImageUrl,
             Days = new List<HolidayDay>()
         };
 
@@ -99,8 +101,13 @@ public class HolidaysController : Controller
             Location = holiday.Location,
             StartDate = holiday.StartDate,
             EndDate = holiday.EndDate,
+            Accommodation = holiday.Accommodation,
             TotalCost = holiday.TotalCost,
-            ThumbnailUrl = holiday.ThumbnailUrl
+            ThumbnailUrl = holiday.ThumbnailUrl,
+            HeroImageUrl = holiday.HeroImageUrl,
+
+            // Ensure Activities is never null so the edit form doesn't break
+            Activities = new List<CreateHolidayViewModel.ActivityInput>()
         };
 
         return View("Edit", vm);
@@ -137,6 +144,7 @@ public class HolidaysController : Controller
         holiday.Accommodation = updatedHoliday.Accommodation;
         holiday.TotalCost = updatedHoliday.TotalCost;
         holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
+        holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
 
         _db.Update(holiday);
         await _db.SaveChangesAsync();
@@ -187,10 +195,11 @@ public class HolidaysController : Controller
             OwnerUserId = holiday.UserId,
             Title = holiday.Title,
             Location = holiday.Location,
-            Accommodation = holiday.Accommodation,  
+            Accommodation = holiday.Accommodation,
             TotalCost = holiday.TotalCost,
-            StartDate = holiday.StartDate, 
+            StartDate = holiday.StartDate,
             EndDate = holiday.EndDate,
+            HeroImageUrl = holiday.HeroImageUrl,
             Days = holiday.Days
                 .OrderBy(d => d.Date)
                 .Select(d => new HolidayDayViewModel

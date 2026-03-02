@@ -12,6 +12,7 @@ public class HolidayDetailsViewModel
 
     public DateOnly? StartDate { get; set; }  
     public DateOnly? EndDate { get; set; }  
+    public string? HeroImageUrl { get; set; }
 
     public List<HolidayDayViewModel> Days { get; set; } = new();
 }

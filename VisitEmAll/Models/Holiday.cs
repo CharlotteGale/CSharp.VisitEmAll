@@ -19,4 +19,6 @@ public class Holiday
     public string? ThumbnailUrl { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<HolidayDay> Days { get; set; } = new List<HolidayDay>();
+    public string? HeroImageUrl { get; set; }
+
 }

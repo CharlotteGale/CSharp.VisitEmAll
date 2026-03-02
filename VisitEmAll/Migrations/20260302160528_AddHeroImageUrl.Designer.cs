@@ -12,8 +12,8 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    [Migration("20260302133950_AddAccommodationToHoliday")]
-    partial class AddAccommodationToHoliday
+    [Migration("20260302160528_AddHeroImageUrl")]
+    partial class AddHeroImageUrl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,6 +143,9 @@ namespace VisitEmAll.Migrations
 
                     b.Property<DateOnly?>("EndDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("HeroImageUrl")
+                        .HasColumnType("text");
 
                     b.Property<string>("Location")
                         .HasMaxLength(200)

@@ -12,6 +12,13 @@
     var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
 }
 
+@if (!string.IsNullOrEmpty(Model.HeroImageUrl))
+{
+    <div class="hero-image">
+        <img src="@Model.HeroImageUrl" alt="Hero Image" />
+    </div>
+}
+
 <div class="container py-4">
 
     <h1 class="details-title">@Model.Title</h1>
@@ -65,7 +72,7 @@
 
         <!-- Activities -->
         <div class="col-md-6">
-            <div class="section-card card-activities p-4 rounded shadow-sm">
+            <div class="section-card card-activities p-4 rounded">
                 <h2>Activities</h2>
                 <ul class="activity-list">
                     @foreach (var day in Model.Days)
@@ -104,7 +111,7 @@
 
             <!-- Day 1 -->
             <div class="col-md-6">
-                <div class="section-card card-itinerary p-4 rounded shadow-sm">
+                <div class="section-card card-itinerary p-4 rounded">
                     <h3>@day1.Date.ToString("dddd, dd MMM yyyy")</h3>
 
                     @if (!day1.Items.Any())
@@ -139,8 +146,8 @@
 
             <!-- Map -->
             <div class="col-md-6">
-                <div class="map-card p-4 rounded shadow-sm">
-                    <div class="map-placeholder">[INSERT MAP HERE]</div>
+                <div class="map-card p-3 rounded map-placeholder">
+                    <div class="">[INSERT MAP HERE]</div>
                 </div>
             </div>
 
@@ -157,7 +164,7 @@
 
             <!-- Day 2 -->
             <div class="col-md-6">
-                <div class="section-card card-itinerary p-4 rounded shadow-sm">
+                <div class="section-card card-itinerary p-4 rounded">
                     <h3>@day2.Date.ToString("dddd, dd MMM yyyy")</h3>
 
                     @if (!day2.Items.Any())
@@ -192,7 +199,7 @@
 
             <!-- Travel Tips -->
             <div class="col-md-6">
-                <div class="section-card card-travel-tips p-4 rounded shadow-sm">
+                <div class="section-card card-travel-tips p-4 rounded">
                     <h2>Travel Tips</h2>
                     <ul class="tips-list">
                         <li>Lorem ipsum dolor sit amet consectetur adipiscing elit.</li>
@@ -215,7 +222,7 @@
 
         <div class="row mb-4">
             <div class="col-12">
-                <div class="section-card card-itinerary p-4 rounded shadow-sm">
+                <div class="section-card card-itinerary p-4 rounded">
                     <h3>@day3.Date.ToString("dddd, dd MMM yyyy")</h3>
 
                     @if (!day3.Items.Any())
@@ -254,7 +261,7 @@
     <!-- PHOTOS -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="section-card card-itinerary p-4 rounded shadow-sm">
+            <div class="section-card card-itinerary p-4 rounded">
                 <h2>Photos</h2>
                 <div class="photo-placeholder">[INSERT PHOTOS HERE]</div>
             </div>

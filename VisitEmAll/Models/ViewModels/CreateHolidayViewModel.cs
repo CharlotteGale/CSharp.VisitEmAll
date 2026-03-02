@@ -31,4 +31,5 @@ public class CreateHolidayViewModel
         [MaxLength(150)]
         public string? Name { get; set; }
     }
+    public string? HeroImageUrl { get; set; }
 }
