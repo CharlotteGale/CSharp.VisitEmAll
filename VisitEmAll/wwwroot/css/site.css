@@ -14,14 +14,13 @@ Very Light Pastel Tint: fdf5f6*/
 html, body {
     height: 100%;
     margin: 0;
-    background-color: #fdf5f6; 
+    background-color: #F6F4F1; 
     color: #333; 
 }
 
 /* ====================== */
 /* DEFAULTS */
 /* ====================== */
-/*Add new classes below with a comma inbetween */
 
 /* BUTTON SHAPE AND SIZE */
 .auth-submit-btn, .auth-new-acc-btn {
@@ -40,6 +39,57 @@ html, body {
   border-radius: 8px;
   border: 1px solid #ced4da;
   font-size: 1rem;
+}
+
+/* ====================== */
+/* NAVBAR */
+/* ====================== */
+.navbar {
+  background-color: #F6F4F1; 
+  color: #99BAB9;
+
+}
+
+.navbar-brand {
+    color: #99BAB9 !important;
+    font-weight: 800;
+}
+
+.nav-link {
+    color: #99BAB9 !important;
+    font-weight: 500;
+    border: 1.5px solid transparent;
+    padding: 8px 15px;
+}
+
+.nav-link-active {
+    font-weight: 700 !important;
+    background-color: rgba(153, 186, 185, 0.14); 
+    color: #99BAB9 !important;
+    border-radius: 50px;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    transition: all 0.3s ease;
+}
+
+.nav-notification {
+    background-color: #FF6B8B;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    min-width: 1.5rem; 
+    height: 1.2rem;
+    vertical-align: middle;
+}
+
+.nav-link:hover {
+    color: #E4ACB2 !important;
 }
 
 /* ====================== */
@@ -144,7 +194,7 @@ body {
   text-align: start;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   html {
     font-size: 16px;
   }
