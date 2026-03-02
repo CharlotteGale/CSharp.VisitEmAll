@@ -26,16 +26,18 @@ public class DashboardControllerTests : NUnitTestBase
     }
 
     [Test]
-    public void Index_WhenNotLoggedIn_RedirectsToRoot()
+    public async Task Index_WhenNotLoggedIn_RedirectsToRoot()
     {
-        var result = _controller.Index() as RedirectResult;
+        _controller.HttpContext.Session.Remove("User_Id");
+
+        var result = await _controller.Index(null) as RedirectToActionResult;
 
         Assert.That(result, Is.Not.Null);
-        Assert.That(result!.Url, Is.EqualTo("/"));
+        Assert.That(result!.ActionName, Is.EqualTo("Login"));
     }
 
     [Test]
-    public void Index_WhenLoggedIn_SetsViewData_ForCurrentUserAndHolidays()
+    public async Task Index_WhenLoggedIn_SetsViewData_ForCurrentUserAndHolidays()
     {
         var user = new User
         {
@@ -56,7 +58,7 @@ public class DashboardControllerTests : NUnitTestBase
         );
         _context.SaveChanges();
 
-        var result = _controller.Index() as ViewResult;
+        var result = await _controller.Index(null) as ViewResult;
 
         Assert.That(result, Is.Not.Null);
 
@@ -78,7 +80,7 @@ public class DashboardControllerTests : NUnitTestBase
     }
 
     [Test]
-    public void Index_OnlyIncludesCurrentUsersHolidays()
+    public async Task Index_OnlyIncludesCurrentUsersHolidays()
     {
         var u1 = new User { Name="U1", Email=$"u1{Guid.NewGuid()}@x.com", Password="Password1!" };
         var u2 = new User { Name="U2", Email=$"u2{Guid.NewGuid()}@x.com", Password="Password1!" };
@@ -95,7 +97,7 @@ public class DashboardControllerTests : NUnitTestBase
         );
         _context.SaveChanges();
 
-        _controller.Index();
+        await _controller.Index(null);
 
         var upcoming = _controller.ViewData["UpcomingHolidays"] as List<Holiday>;
         Assert.That(upcoming, Is.Not.Null);
