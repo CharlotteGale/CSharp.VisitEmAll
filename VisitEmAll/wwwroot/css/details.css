@@ -39,7 +39,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 25px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 /* ROW 2: Itinerary Day 1 + Map */
@@ -47,12 +47,12 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 25px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 /* ROWS with only one column (Day 2) */
 .full-width {
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 /* Map box */
