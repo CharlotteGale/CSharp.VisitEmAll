@@ -2,32 +2,40 @@
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div>
-        @TempData["SuccessMessage"]
-    </div>
+  <div>
+    @TempData["SuccessMessage"]
+  </div>
 }
 
-<h2>Login</h2>
-
-<form method="post">
-    <div>
-        <label>Email</label>
-        <input type="email" name="Email" value="@Model?.Email" required />
+<div class="auth-wrapper">
+  <div class="auth-page">
+    <div class="auth-left">
+      <h1 class="auth-brand-title">Visit 'Em All</h1>
+      <p class="auth-brand-tagline">Explore the world!</p>
     </div>
 
-    <div>
-        <label>Password</label>
-        <input type="password" name="Password" required />
-    </div>
+    <form method="post" class="auth-card">
+      <div class="mb-3">
+        <input type="text" id="email" name="email" placeholder="Email" value="@Model?.Email" required class="auth-form-field">
+      </div>
 
-    @if (!string.IsNullOrEmpty(Model?.ErrorMessage))
-    {
+      <div class="mb-3">
+        <input type="password" id="password" name="password" placeholder="Password" required class="auth-form-field">
+      </div>
+
+      @if (!string.IsNullOrEmpty(Model?.ErrorMessage))
+      {
         <p style="color:red">@Model.ErrorMessage</p>
-    }
+      }
 
-    <button type="submit">Login</button>
-</form>
+      <div class="mb-3">
+        <input type="submit" value="Log in" class="auth-submit-btn">
+      </div>
+      <button type="button"        
+        onclick="window.location.href='@Url.Action("SignUp", "Auth")'"    class="auth-new-acc-btn">
+        Create new account
+      </button>
 
-<p>
-    Don't have an account? <a href="/Auth/SignUp">Sign up here</a>
-</p>
+    </form>
+  </div>
+</div>

@@ -1,43 +1,80 @@
-@model Holiday
+@using VisitEmAll.ViewModels
+@model HolidayDetailsViewModel
 @using Microsoft.AspNetCore.Http
+
 @inject IHttpContextAccessor HttpContextAccessor
-@{
-  var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
-}
 
-<h1>@Model.Title</h1>
-<p>Location: @Model.Location </br> </p>
+  @{
+      var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
+  }
 
-<h2>From: @Model.StartDate </br> Till: @Model.EndDate</h2>
+  <h1>@Model.Title</h1>
 
-<h3>Activities</h3>
-@* <ul>
-  @if (Model.Activities != null && Model.Activities.Any())
+  @if (!string.IsNullOrEmpty(Model.Location))
   {
-    @foreach (Activity activity in Model.Activities)
-    {
-      <li>@activity.Name</li>
-    }
+      <p>Location: @Model.Location</p>
+  }
+
+  @if (Model.Days.Any())
+  {
+      <h2>Itinerary</h2>
+
+      @foreach (var day in Model.Days)
+      {
+          <section class="holiday-day">
+              <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
+
+              @if (!day.Items.Any())
+              {
+                  <p>No items planned for this day.</p>
+              }
+              else
+              {
+                  <ul class="timeline">
+                      @foreach (var item in day.Items)
+                      {
+                          <li class="timeline-item">
+                              <span class="time">
+                                  @(item.Time?.ToString("HH:mm") ?? "--:--")
+                              </span>
+                              <strong>@item.Name</strong>
+                              <span class="type">(@item.ItemType)</span>
+
+                              @if (!string.IsNullOrEmpty(item.Location))
+                              {
+                                  <span class="location"> - @item.Location</span>
+                              }
+
+                              @if (!string.IsNullOrEmpty(item.Notes))
+                              {
+                                  <div class="notes">@item.Notes</div>
+                              }
+                          </li>
+                      }
+                  </ul>
+              }
+          </section>
+      }
   }
   else
   {
-    <p>You did nothing but rest?</p>
+      <p>No days found for this holiday.</p>
   }
-</ul> *@
 
-<h4>Cost: @Model.TotalCost</h4>
-@if (currentUserId != null && currentUserId == Model.UserId)
+
+@if (currentUserId != null)
 {
-  <a asp-action="EditHoliday" asp-route-id="@Model.Id" class="btn btn-success">
-    Click here to edit the details for this holiday
-  </a>
+    <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="btn btn-success">
+        Edit Holiday
+    </a>
 
-  <br/>
-  <form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to delete this holiday?');">
-      Remove Holiday
-    </button>
-  </form>
+    <form asp-action="Delete" asp-route-id="@Model.HolidayId" method="post" style="display:inline;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger"
+                onclick="return confirm('Are you sure you want to delete this holiday?');">
+            Remove Holiday
+        </button>
+    </form>
 }
+
+  }

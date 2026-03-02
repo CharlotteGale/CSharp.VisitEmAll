@@ -12,8 +12,8 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    [Migration("20260226171340_NewModelStructure")]
-    partial class NewModelStructure
+    [Migration("20260227171157_Phase2_db")]
+    partial class Phase2_db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
