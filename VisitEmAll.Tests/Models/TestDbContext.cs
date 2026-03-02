@@ -1,5 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using VisitEmAll.Models;
+namespace VisitEmAll.Tests.Models;
 
 public class TestDbContext : VisitEmAllDbContext
 {
