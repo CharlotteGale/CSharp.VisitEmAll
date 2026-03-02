@@ -4,12 +4,15 @@ namespace VisitEmAll.Tests.Controllers;
 public class AuthControllerTests : NUnitTestBase
 {
     private AuthController _controller;
-    private readonly IWebHostEnvironment hostEnvironment;
+    private Mock<IWebHostEnvironment> _mockEnv;
 
     [SetUp]
     public void LocalSetUp()
     {
-        _controller = new AuthController(_context, hostEnvironment);
+        _mockEnv = new Mock<IWebHostEnvironment>();
+        _mockEnv.Setup(m => m.WebRootPath).Returns(Path.GetTempPath());
+
+        _controller = new AuthController(_context, _mockEnv.Object);
 
         var httpContext = new DefaultHttpContext();
         httpContext.Session = new MockHttpSession();
@@ -29,6 +32,8 @@ public class AuthControllerTests : NUnitTestBase
     [TearDown]
     public void LocalTearDown()
     {
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
         _controller?.Dispose();
     }
 
@@ -115,6 +120,62 @@ public class AuthControllerTests : NUnitTestBase
 
         Assert.That(result, Is.Not.Null);
         Assert.That(after, Is.EqualTo(before)); 
+    }
+
+    [Test]
+    public async Task SignUp_Post_WithProfileImage_SavesFile()
+    {
+        var content = "fake image content";
+        var fileName = "test.png";
+        var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content));
+        var fileMock = new Mock<IFormFile>();
+        fileMock.Setup(_ => _.FileName).Returns(fileName);
+        fileMock.Setup(_ => _.Length).Returns(stream.Length);
+        fileMock.Setup(_ => _.OpenReadStream()).Returns(stream);
+        fileMock.Setup(_ => _.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                                .Returns(Task.CompletedTask);
+
+        var model = new SignUpViewModel
+        {
+            Name = "Pic User",
+            Email = "pic@test.com",
+            Password = "Password1!",
+            ProfileImg = fileMock.Object
+        };
+
+        await _controller.SignUp(model);
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == "pic@test.com");
+        Assert.That(user!.ProfileImg, Does.Contain("_test.png"));
+    }
+
+    [Test]
+    public async Task SignUp_Get_RedirectsToHome_WhenAlreadyLoggedIn()
+    {
+        _controller.HttpContext.Session.SetInt32("User_Id", 1);
+
+        var result = _controller.SignUp() as RedirectToActionResult;
+
+        Assert.That(result!.ActionName, Is.EqualTo("Index"));
+        Assert.That(result.ControllerName, Is.EqualTo("Home"));
+    }
+
+    [Test]
+    public async Task Login_Post_DevelopmentPlainText_Works()
+    {
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
+
+        var user = new User { Name = "Dev", Email = "dev@test.com", Password = "plainpassword" };
+        _context.Users.Add(user);
+        _context.SaveChanges();
+
+        var model = new LoginViewModel { Email = "dev@test.com", Password = "plainpassword" };
+
+        var result = await _controller.Login(model) as RedirectToActionResult;
+
+        Assert.That(result!.ControllerName, Is.EqualTo("Dashboard"));
+        
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", null);
     }
 
     [Test]

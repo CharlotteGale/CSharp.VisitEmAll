@@ -22,6 +22,8 @@ public class DashboardControllerTests : NUnitTestBase
     [TearDown]
     public void LocalTearDown()
     {
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
         _controller?.Dispose();
     }
 
