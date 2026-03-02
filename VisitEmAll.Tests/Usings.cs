@@ -22,3 +22,5 @@ global using VisitEmAll.Controllers;
 global using VisitEmAll.Tests.Base;
 global using VisitEmAll.Tests.Helpers;
 global using VisitEmAll.ViewModels;
+global using VisitEmAll.Models.ViewModels;
+global using VisitEmAll.Services;
