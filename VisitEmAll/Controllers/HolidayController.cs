@@ -190,6 +190,7 @@ public class HolidaysController : Controller
             Accommodation = holiday.Accommodation,  
             TotalCost = holiday.TotalCost,
             StartDate = holiday.StartDate, 
+            EndDate = holiday.EndDate,
             Days = holiday.Days
                 .OrderBy(d => d.Date)
                 .Select(d => new HolidayDayViewModel

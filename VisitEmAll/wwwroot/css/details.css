@@ -1,8 +1,6 @@
-/* Page container */
-.details-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 20px;
+html, body {
+    background-color: white !important;
+    color: #222 !important;
 }
 
 /* Title + location */
@@ -18,42 +16,28 @@
     margin-bottom: 30px;
 }
 
-/* Generic card styling */
+/* Generic card styling (no shadows) */
 .summary-card,
 .section-card,
 .map-card {
-    background: #fff;
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    
 }
 
-.summary-card h2,
-.section-card h2 {
-    margin-bottom: 15px;
-    font-size: 1.4rem;
+/* Card-specific colours */
+.card-summary, .card-travel-tips{
+    background-color: #fcf2dcdf;
 }
 
-/* ROW 1: Summary + Activities */
-.summary-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    margin-bottom: 28px;
+.card-activities {
+    background-color: #CCDDDC;
 }
 
-/* ROW 2: Itinerary Day 1 + Map */
-.row-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    margin-bottom: 28px;
+.card-itinerary {
+    background-color: #EBF1F1;
 }
 
-/* ROWS with only one column (Day 2) */
-.full-width {
-    margin-bottom: 28px;
-}
 
 /* Map box */
 .map-placeholder {
@@ -71,24 +55,33 @@
     margin: 0;
 }
 
+.activities-item {
+    margin: 8px 0;
+    padding: 10px 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.activity-title {
+    margin-left: 10px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #222;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+
+
+
 .activity-list li,
 .tips-list li {
     padding: 6px 0;
     border-bottom: 1px solid #eee;
 }
 
-/* Itinerary */
-.day-block {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ddd;
-}
-
-.day-block h3 {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-}
-
+/* Itinerary timeline */
 .timeline {
     list-style: none;
     padding: 0;
@@ -102,6 +95,7 @@
     border-radius: 8px;
     border: 1px solid #eee;
 }
+
 
 .time {
     font-weight: 600;
@@ -134,9 +128,4 @@
     height: 200px;
     background: #eaeaea;
     border-radius: 10px;
-}
-
-/* Owner buttons */
-.owner-actions {
-    margin-top: 30px;
 }
