@@ -14,7 +14,7 @@ Very Light Pastel Tint: fdf5f6*/
 html, body {
     height: 100%;
     margin: 0;
-    background-color: #fdf5f6; 
+    background-color: #f6f4f1; 
     color: #333; 
 }
 
@@ -150,11 +150,12 @@ body {
 /* PROFILE - HOLIDAYS */
 /* ========================================================================== */
 
-.upcoming-holidays-container, .past-holidays-container {
+.holiday-container, .upcoming-holidays-container, .past-holidays-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
   position: relative;
+  display: block;
   overflow: visible;
 }
 
@@ -174,6 +175,7 @@ body {
 
 .upcoming-holidays-grid, .past-holidays-grid {
   display: grid;
+  width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
   margin-bottom: 20px;
@@ -222,8 +224,11 @@ body {
 
 
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   html {
     font-size: 16px;
+  }
+  .upcoming-holidays-grid, .past-holidays-grid {
+    grid-template-columns: 1fr;
   }
 }
