@@ -15,6 +15,7 @@ global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.AspNetCore.Routing;
 global using System.Text.RegularExpressions;
 global using Microsoft.Extensions.Configuration;
+global using Microsoft.AspNetCore.Hosting;
 
 global using VisitEmAll.Models;
 global using VisitEmAll.Controllers;
