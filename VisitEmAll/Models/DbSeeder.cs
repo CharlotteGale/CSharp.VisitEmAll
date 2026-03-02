@@ -9,8 +9,8 @@ public static class DbSeeder
         context.DayItems.RemoveRange(context.DayItems);
         context.HolidayDays.RemoveRange(context.HolidayDays);
         context.Holidays.RemoveRange(context.Holidays);
+        context.Friendships.RemoveRange(context.Friendships);
         context.Users.RemoveRange(context.Users);
-        
 
         context.SaveChanges();
 
