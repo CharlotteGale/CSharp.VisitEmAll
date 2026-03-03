@@ -197,7 +197,11 @@ body {
 
 .upcoming-holidays-dates, .past-holidays-dates {
   flex-grow: 1;
-  padding: 8px;
+  font-weight: 450;
+  font-size: 0.9rem;
+  padding: 4px;
+  margin-bottom: 0px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -206,7 +210,9 @@ body {
 .upcoming-holidays-title, .past-holidays-title {
   font-weight: 600;
   font-size: 1.1rem;
-  padding: 8px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
 }
