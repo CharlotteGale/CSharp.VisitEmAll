@@ -9,94 +9,92 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/VisitEmAll.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)   <!-- testing separation of css sheets -->
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">VisitEmAll</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Dashboard" asp-action="Index">PinPals</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
-                    @if (Context.Session.GetInt32("User_Id") != null)
-                    {
-                        var currentUserId = Context.Session.GetInt32("User_Id").Value;
-                        var currentPath = Context.Request.Path.ToString().ToLower();
+          @if (Context.Session.GetInt32("User_Id") != null)
+          {
+            var currentUserId = Context.Session.GetInt32("User_Id").Value;
+            var currentPath = Context.Request.Path.ToString().ToLower();
 
-                        var pendingCount = await FriendshipService.GetPendingRequestCountAsync(currentUserId);
-                        <!-- LEFT SIDE NAV (visible only when logged in) -->
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark @(currentPath.Contains("/friends") ? "fw-bold border-bottom border-primary" : "")"  
-                                    asp-controller="Friends" asp-action="Index" id="friendsNavLink">
-                                    Friends
-                                    @if (pendingCount > 0)
-                                    {
-                                        <span class="badge rounded-pill bg-danger ms-2" 
-                                            style="font-size: 0.75rem; cursor: pointer;"
-                                            onclick="navigateToRequests(event)">
-                                            @pendingCount
-                                        </span>
-                                    }
-                                </a>
-                            </li>
-                        </ul>
+            var pendingCount = await FriendshipService.GetPendingRequestCountAsync(currentUserId);
+            <!-- LEFT SIDE NAV (visible only when logged in) -->
+            <ul class="navbar-nav flex-grow-1">
+              <li class="nav-item">
+                <a class="nav-link @(currentPath.Contains("/dashboard") ? "nav-link-active" : "")" asp-controller="Dashboard" asp-action="Index">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d-inline-flex align-items-center @(currentPath.Contains("/friends") ? "nav-link-active" : "")"
+                  asp-controller="Friends" asp-action="Index" id="friendsNavLink">
+                  Friends
+                  @if (pendingCount > 0)
+                  {
+                    <span class="nav-notification ms-2"                           style="font-size: 0.75rem; cursor: pointer;"
+                          onclick="navigateToRequests(event)">
+                      @pendingCount
+                    </span>
+                  }
+                </a>
+              </li>
+            </ul>
 
-                        <!-- RIGHT SIDE NAV (Logout only when logged in) -->
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
-                            </li>
-                        </ul>
-                    }
-                    else
-                    {
-                        <!-- When logged out, show nothing on the right -->
-                        <ul class="navbar-nav ms-auto"></ul>
-                    }
+            <!-- RIGHT SIDE NAV (Logout only when logged in) -->
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
+              </li>
+            </ul>
+          }
+          else
+          {
+            <!-- When logged out, show nothing on the right -->
+            <ul class="navbar-nav ms-auto"></ul>
+          }
 
-                </div>
-
-            </div>
-        </nav>
-    </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - VisitEmAll -
-            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+      </div>
+    </nav>
+  </header>
 
-    <script>
-        function navigateToRequests(e) {
-            e.preventDefault();
-            e.stopPropagation();
+  <div class="container">
+    <main role="main" class="pb-3">
+      @RenderBody()
+    </main>
+  </div>
 
-            window.location.href = '/friends/requests';
-        }
-    </script>
-    @await RenderSectionAsync("Scripts", required: false)
+  <footer class="border-top footer text-muted">
+    <div class="container">
+      &copy; 2026 - VisitEmAll -
+      <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+  </footer>
+
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="~/js/site.js" asp-append-version="true"></script>
+
+  <script>
+          function navigateToRequests(e) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              window.location.href = '/friends/requests';
+          }
+  </script>
+  @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
