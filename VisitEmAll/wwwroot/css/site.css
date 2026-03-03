@@ -259,6 +259,10 @@ body {
   text-decoration: none;
 }
 
+.add-holiday-btn:hover {
+  color: #E4ACB2 !important;
+}
+
 .upcoming-holidays-grid,
 .past-holidays-grid {
   display: grid;
