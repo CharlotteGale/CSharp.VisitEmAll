@@ -9,6 +9,7 @@ public static class DbSeeder
         context.HolidayDays.RemoveRange(context.HolidayDays);
         context.Holidays.RemoveRange(context.Holidays);
         context.Users.RemoveRange(context.Users);
+        context.Countries.RemoveRange(context.Countries);
 
         context.SaveChanges();
 
@@ -25,7 +26,42 @@ public static class DbSeeder
         };
         context.Users.AddRange(users);
         context.SaveChanges();
+        // === COUNTRIES (MVP seed) ===
+        context.Countries.AddRange(
+            new Country { Name = "United Kingdom", Iso2 = "GB", Continent = "Europe" },
+            new Country { Name = "France", Iso2 = "FR", Continent = "Europe" },
+            new Country { Name = "Spain", Iso2 = "ES", Continent = "Europe" },
+            new Country { Name = "Italy", Iso2 = "IT", Continent = "Europe" },
 
+            new Country { Name = "Japan", Iso2 = "JP", Continent = "Asia" },
+            new Country { Name = "United States", Iso2 = "US", Continent = "North America" },
+
+            // needed for your seeded holidays
+            new Country { Name = "Norway", Iso2 = "NO", Continent = "Europe" },
+            new Country { Name = "Greece", Iso2 = "GR", Continent = "Europe" },
+            new Country { Name = "Andorra", Iso2 = "AD", Continent = "Europe" }
+        );
+        context.SaveChanges();
+
+        var countryIdByIso2 = context.Countries.ToDictionary(c => c.Iso2, c => c.Id);
+
+        int? PickCountryId(string? location)
+        {
+            if (string.IsNullOrWhiteSpace(location)) return null;
+            var s = location.ToLowerInvariant();
+
+            if (s.Contains("italy") || s.Contains("milan") || s.Contains("rome")) return countryIdByIso2["IT"];
+            if (s.Contains("spain") || s.Contains("barcelona")) return countryIdByIso2["ES"];
+            if (s.Contains("france") || s.Contains("chamonix") || s.Contains("paris")) return countryIdByIso2["FR"];
+            if (s.Contains("usa") || s.Contains("united states") || s.Contains("new york") || s.Contains("san francisco")) return countryIdByIso2["US"];
+            if (s.Contains("japan") || s.Contains("tokyo") || s.Contains("sapporo")) return countryIdByIso2["JP"];
+            if (s.Contains("norway") || s.Contains("oslo")) return countryIdByIso2["NO"];
+            if (s.Contains("greece") || s.Contains("santorini")) return countryIdByIso2["GR"];
+            if (s.Contains("andorra")) return countryIdByIso2["AD"];
+            if (s.Contains("scotland") || s.Contains("highlands")) return countryIdByIso2["GB"]; // treat Scotland as UK
+
+            return null;
+        }
         // === HOLIDAYS ===
         var holidays = new List<Holiday>
         {
@@ -56,6 +92,12 @@ public static class DbSeeder
             holidayDays.Add(new HolidayDay { HolidayId = h.Id, Date = start });
             holidayDays.Add(new HolidayDay { HolidayId = h.Id, Date = start.AddDays(1) });
         }
+
+        foreach (var h in holidays)
+            {
+                h.CountryId = PickCountryId(h.Location);
+            }
+            
         context.HolidayDays.AddRange(holidayDays);
         context.SaveChanges();
 
@@ -89,38 +131,6 @@ public static class DbSeeder
         };
 
         context.DayItems.AddRange(items);
-
-        // === COUNTRIES (MVP seed) ===
-        if (!context.Countries.Any())
-        {
-            context.Countries.AddRange(
-                new Country { Name = "United Kingdom", Iso2 = "GB", Continent = "Europe" },
-                new Country { Name = "France", Iso2 = "FR", Continent = "Europe" },
-                new Country { Name = "Spain", Iso2 = "ES", Continent = "Europe" },
-                new Country { Name = "Italy", Iso2 = "IT", Continent = "Europe" },
-                new Country { Name = "Germany", Iso2 = "DE", Continent = "Europe" },
-                new Country { Name = "Netherlands", Iso2 = "NL", Continent = "Europe" },
-                new Country { Name = "Portugal", Iso2 = "PT", Continent = "Europe" },
-
-                new Country { Name = "Japan", Iso2 = "JP", Continent = "Asia" },
-                new Country { Name = "South Korea", Iso2 = "KR", Continent = "Asia" },
-                new Country { Name = "Thailand", Iso2 = "TH", Continent = "Asia" },
-                new Country { Name = "Singapore", Iso2 = "SG", Continent = "Asia" },
-                new Country { Name = "United Arab Emirates", Iso2 = "AE", Continent = "Asia" },
-
-                new Country { Name = "United States", Iso2 = "US", Continent = "North America" },
-                new Country { Name = "Canada", Iso2 = "CA", Continent = "North America" },
-                new Country { Name = "Mexico", Iso2 = "MX", Continent = "North America" },
-
-                new Country { Name = "Brazil", Iso2 = "BR", Continent = "South America" },
-                new Country { Name = "Argentina", Iso2 = "AR", Continent = "South America" },
-
-                new Country { Name = "South Africa", Iso2 = "ZA", Continent = "Africa" },
-                new Country { Name = "Egypt", Iso2 = "EG", Continent = "Africa" },
-
-                new Country { Name = "Australia", Iso2 = "AU", Continent = "Oceania" }
-            );
-        }
 
         // === FRIENDSHIPS ===
         if (!context.Friendships.Any())
