@@ -1,15 +1,6 @@
 ﻿@using VisitEmAll.Models
 
 @{
-  ViewData["Title"] = "Dashboard";
-  var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
-  var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
-  var currentUser = ViewData["CurrentUser"] as User;
-}
-
-<div class="holiday-container">
-
-  <div class="upcoming-holidays-container">
     ViewData["Title"] = Model.Name + "'s Dashboard";
     var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
     var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
@@ -17,24 +8,27 @@
 }
 
 <h1>@(isOwn ? "My Dashboard" : Model.Name + "'s Dashboard")</h1>
+<h3>@Model.HomeTown</h3>
+<br/>
+
+<div class="holiday-container">
+
+  <div class="upcoming-holidays-container">
 
 @if(isOwn)
 {
     <a href="/holidays/create">Add Holiday</a>
 }
 
-    <h1>@currentUser.Name's Holidays</h1>
-    <h3>@currentUser.HomeTown</h3>
-    <br />
-
     <div class="upcoming-holidays-header">
       <div class="row">
         <div class="col">
-          <h2>@currentUser.Name's Upcoming Holidays</h2>
+          <h2>@Model.Name's Upcoming Holidays</h2>
         </div>
+        @if(isOwn){
         <div class="col d-flex flex-column justify-content-end align-items-end">
           <a class="add-holiday-btn" href="/holidays/create">Add Holiday</a>
-        </div>
+        </div>}
       </div>
     </div>
     <div class="upcoming-holidays-grid"> 
@@ -62,7 +56,7 @@
   <div class="past-holidays-container">
 
     <div class="past-holidays-header">
-      <h2>@currentUser.Name's Past Holidays</h2>
+      <h2>@Model.Name's Past Holidays</h2>
     </div>
     <div class="past-holidays-grid"> @if (!pastHolidays.Any()) {
       <p>No past holidays.</p>
