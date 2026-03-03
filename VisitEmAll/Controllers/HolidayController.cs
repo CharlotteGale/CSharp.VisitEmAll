@@ -59,7 +59,7 @@ public class HolidaysController : Controller
             EndDate = vm.EndDate,
             TotalCost = vm.TotalCost,
             ThumbnailUrl = vm.ThumbnailUrl,
-            // HeroImageUrl = vm.HeroImageUrl,
+            HeroImageUrl = vm.HeroImageUrl,
             Days = new List<HolidayDay>()
         };
 
@@ -102,7 +102,7 @@ public class HolidaysController : Controller
             EndDate = holiday.EndDate,
             TotalCost = holiday.TotalCost,
             ThumbnailUrl = holiday.ThumbnailUrl,
-            // HeroImageUrl = holiday.HeroImageUrl,
+            HeroImageUrl = holiday.HeroImageUrl,
 
             // Ensure Activities is never null so the edit form doesn't break
             Activities = new List<CreateHolidayViewModel.ActivityInput>()
@@ -141,7 +141,7 @@ public class HolidaysController : Controller
         holiday.EndDate = updatedHoliday.EndDate;
         holiday.TotalCost = updatedHoliday.TotalCost;
         holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
-        // holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
+        holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
 
         _db.Update(holiday);
         await _db.SaveChangesAsync();
@@ -195,7 +195,7 @@ public class HolidaysController : Controller
             TotalCost = holiday.TotalCost,
             StartDate = holiday.StartDate,
             EndDate = holiday.EndDate,
-            /* HeroImageUrl = holiday.HeroImageUrl, */
+            HeroImageUrl = holiday.HeroImageUrl,
             Days = holiday.Days
                 .OrderBy(d => d.Date)
                 .Select(d => new HolidayDayViewModel

@@ -53,23 +53,29 @@ public class DayItemsController : Controller
         return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
     }
 
-    //UPDATE
+    //UPDATE/EDIT
     [HttpPost("/day-items/{id:int}/update")]
-    public async Task<IActionResult> UpdateItem(int id, DayItem updated)
+    public async Task<IActionResult> UpdateItem(
+        int id,
+        string name,
+        TimeOnly? time,
+        string? location,
+        string? notes)
     {
         var item = await _db.DayItems.FirstOrDefaultAsync(i => i.Id == id);
         if (item == null) return NotFound();
 
-        item.Name = updated.Name;
-        item.Time = updated.Time;
-        item.Location = updated.Location;
-        item.Notes = updated.Notes;
+        item.Name = name;
+        item.Time = time;
+        item.Location = location;
+        item.Notes = notes;
 
         await _db.SaveChangesAsync();
 
         var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
         return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
     }
+
 
     //DELETE
     [HttpPost("/day-items/{id:int}/delete")]

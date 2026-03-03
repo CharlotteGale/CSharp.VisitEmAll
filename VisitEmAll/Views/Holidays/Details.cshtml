@@ -56,11 +56,6 @@
                     </p>
                 }
 
-@*                 @if (!string.IsNullOrEmpty(Model.DayAccommodation))
-                {
-                    <p><strong>Accommodation:</strong> @Model.DayAccommodation</p>
-                } *@
-
                 @if (Model.TotalCost.HasValue)
                 {
                     <p><strong>Total Cost:</strong> £@Model.TotalCost.Value.ToString("0.00")</p>
@@ -114,6 +109,24 @@
                 <div class="section-card card-itinerary p-4 rounded">
                     <h3>@day1.Date.ToString("dddd, dd MMM yyyy")</h3>
 
+                    <!-- ADD BUTTONS FOR DAY 1 -->
+                    @if (currentUserId == Model.OwnerUserId)
+                    {
+                        <div class="mb-3">
+                            <form asp-controller="DayItems" asp-action="CreateActivity" asp-route-dayId="@day1.DayId" method="post" class="d-inline">
+                                <button class="btn btn-primary btn-sm">Add Activity</button>
+                            </form>
+
+                            <form asp-controller="DayItems" asp-action="CreateRestaurant" asp-route-dayId="@day1.DayId" method="post" class="d-inline">
+                                <button class="btn btn-secondary btn-sm">Add Restaurant</button>
+                            </form>
+
+                            <form asp-controller="DayItems" asp-action="CreateAccommodation" asp-route-dayId="@day1.DayId" method="post" class="d-inline">
+                                <button class="btn btn-info btn-sm">Add Accommodation</button>
+                            </form>
+                        </div>
+                    }
+
                     @if (!day1.Items.Any())
                     {
                         <p>No items planned for this day.</p>
@@ -136,6 +149,41 @@
                                     @if (!string.IsNullOrEmpty(item.Notes))
                                     {
                                         <div class="notes">@item.Notes</div>
+                                    }
+
+                                    <!-- EDIT + DELETE BUTTONS -->
+                                    @if (currentUserId == Model.OwnerUserId)
+                                    {
+                                        <div class="item-actions mt-2">
+
+                                            <!-- EDIT -->
+                                            <form asp-controller="DayItems"
+                                                  asp-action="UpdateItem"
+                                                  asp-route-id="@item.Id"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                <input type="hidden" name="name" value="@item.Name" />
+                                                <input type="hidden" name="time" value="@item.Time" />
+                                                <input type="hidden" name="location" value="@item.Location" />
+                                                <input type="hidden" name="notes" value="@item.Notes" />
+
+                                                <button class="btn btn-warning btn-sm">Edit</button>
+                                            </form>
+
+                                            <!-- DELETE -->
+                                            <form asp-controller="DayItems"
+                                                  asp-action="DeleteItem"
+                                                  asp-route-id="@item.Id"
+                                                  method="post"
+                                                  class="d-inline">
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Delete this item?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+
+                                        </div>
                                     }
                                 </li>
                             }
@@ -167,6 +215,24 @@
                 <div class="section-card card-itinerary p-4 rounded">
                     <h3>@day2.Date.ToString("dddd, dd MMM yyyy")</h3>
 
+                    <!-- ADD BUTTONS FOR DAY 2 -->
+                    @if (currentUserId == Model.OwnerUserId)
+                    {
+                        <div class="mb-3">
+                            <form asp-controller="DayItems" asp-action="CreateActivity" asp-route-dayId="@day2.DayId" method="post" class="d-inline">
+                                <button class="btn btn-primary btn-sm">Add Activity</button>
+                            </form>
+
+                            <form asp-controller="DayItems" asp-action="CreateRestaurant" asp-route-dayId="@day2.DayId" method="post" class="d-inline">
+                                <button class="btn btn-secondary btn-sm">Add Restaurant</button>
+                            </form>
+
+                            <form asp-controller="DayItems" asp-action="CreateAccommodation" asp-route-dayId="@day2.DayId" method="post" class="d-inline">
+                                <button class="btn btn-info btn-sm">Add Accommodation</button>
+                            </form>
+                        </div>
+                    }
+
                     @if (!day2.Items.Any())
                     {
                         <p>No items planned for this day.</p>
@@ -189,6 +255,39 @@
                                     @if (!string.IsNullOrEmpty(item.Notes))
                                     {
                                         <div class="notes">@item.Notes</div>
+                                    }
+
+                                    <!-- EDIT + DELETE -->
+                                    @if (currentUserId == Model.OwnerUserId)
+                                    {
+                                        <div class="item-actions mt-2">
+
+                                            <form asp-controller="DayItems"
+                                                  asp-action="UpdateItem"
+                                                  asp-route-id="@item.Id"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                <input type="hidden" name="name" value="@item.Name" />
+                                                <input type="hidden" name="time" value="@item.Time" />
+                                                <input type="hidden" name="location" value="@item.Location" />
+                                                <input type="hidden" name="notes" value="@item.Notes" />
+
+                                                <button class="btn btn-warning btn-sm">Edit</button>
+                                            </form>
+
+                                            <form asp-controller="DayItems"
+                                                    asp-action="DeleteItem"
+                                                    asp-route-id="@item.Id"
+                                                    method="post"
+                                                    class="d-inline">
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Delete this item?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+
+                                        </div>
                                     }
                                 </li>
                             }
@@ -225,6 +324,24 @@
                 <div class="section-card card-itinerary p-4 rounded">
                     <h3>@day3.Date.ToString("dddd, dd MMM yyyy")</h3>
 
+                    <!-- ADD BUTTONS FOR DAY 3 -->
+                    @if (currentUserId == Model.OwnerUserId)
+                    {
+                        <div class="mb-3">
+                            <form asp-controller="DayItems" asp-action="CreateActivity" asp-route-dayId="@day3.DayId" method="post" class="d-inline">
+                                <button class="btn btn-primary btn-sm">Add Activity</button>
+                            </form>
+
+                            <form asp-controller="DayItems" asp-action="CreateRestaurant" asp-route-dayId="@day3.DayId" method="post" class="d-inline">
+                                <button class="btn btn-secondary btn-sm">Add Restaurant</button>
+                            </form>
+
+                            <form asp-controller="DayItems" asp-action="CreateAccommodation" asp-route-dayId="@day3.DayId" method="post" class="d-inline">
+                                <button class="btn btn-info btn-sm">Add Accommodation</button>
+                            </form>
+                        </div>
+                    }
+
                     @if (!day3.Items.Any())
                     {
                         <p>No items planned for this day.</p>
@@ -247,6 +364,39 @@
                                     @if (!string.IsNullOrEmpty(item.Notes))
                                     {
                                         <div class="notes">@item.Notes</div>
+                                    }
+
+                                    <!-- EDIT + DELETE -->
+                                    @if (currentUserId == Model.OwnerUserId)
+                                    {
+                                        <div class="item-actions mt-2">
+
+                                            <form asp-controller="DayItems"
+                                                    asp-action="UpdateItem"
+                                                    asp-route-id="@item.Id"
+                                                    method="post"
+                                                    class="d-inline">
+
+                                                <input type="hidden" name="name" value="@item.Name" />
+                                                <input type="hidden" name="time" value="@item.Time" />
+                                                <input type="hidden" name="location" value="@item.Location" />
+                                                <input type="hidden" name="notes" value="@item.Notes" />
+
+                                                <button class="btn btn-warning btn-sm">Edit</button>
+                                            </form>
+
+                                            <form asp-controller="DayItems"
+                                                    asp-action="DeleteItem"
+                                                    asp-route-id="@item.Id"
+                                                    method="post"
+                                                    class="d-inline">
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Delete this item?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+
+                                        </div>
                                     }
                                 </li>
                             }
