@@ -1,9 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using NUnit.Framework;
-using VisitEmAll.Models;
-using VisitEmAll.Services;
-
 namespace VisitEmAll.Tests.Services;
 
 public class FriendshipServiceTests
