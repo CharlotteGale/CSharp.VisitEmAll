@@ -43,10 +43,18 @@ public class DashboardController : Controller
             .OrderByDescending(h => h.StartDate)
             .ToList();
 
+
+        var likedHolidays = await _context.UserLikedHolidays
+            .Where(x => x.UserId == currentUserId)
+            .Select(x => x.Holiday)
+            .Include(h => h.User)
+            .ToListAsync();
+
         ViewData["CurrentUser"] = user; 
         ViewData["IsOwnDashboard"] = targetUserId == currentUserId;
         ViewData["UpcomingHolidays"] = upcomingHolidays;
         ViewData["PastHolidays"] = pastHolidays;
+        ViewData["LikedHolidays"] = likedHolidays;
 
         return View(user);
     }

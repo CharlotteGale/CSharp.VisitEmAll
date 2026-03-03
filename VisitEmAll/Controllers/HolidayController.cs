@@ -276,12 +276,12 @@ public class HolidaysController : Controller
             var userId = HttpContext.Session.GetInt32("User_Id");
             if (userId == null) return Unauthorized();
 
-            var like = await _db.UserLikedHoliday
+            var like = await _db.UserLikedHolidays
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.HolidayId == id);
 
             if (like != null)
             {
-                _db.UserLikedHoliday.Remove(like);
+                _db.UserLikedHolidays.Remove(like);
                 await _db.SaveChangesAsync();
             }
 

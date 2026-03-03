@@ -72,6 +72,29 @@
         </div>
       }
     }
+
+      <div class="liked-holidays-container">
+      <h2>Holiday Inspo</h2>
+
+      @if (!likedHolidays.Any())
+      {
+          <p>No favourites yet.</p>
+      }
+      else
+      {
+          foreach (var holiday in likedHolidays)
+          {
+              <div class="holiday-card">
+                  <a href="/holidays/@holiday.Id">
+                      <img src="@holiday.ThumbnailUrl" />
+                  </a>
+                  <h5>@holiday.Title</h5>
+                  <p>by @holiday.User.Name</p>
+              </div>
+          }
+      }
+  </div>
+
     </div>
   </div>
 </div>

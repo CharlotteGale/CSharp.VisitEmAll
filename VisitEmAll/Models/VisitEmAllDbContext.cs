@@ -13,6 +13,9 @@ public class VisitEmAllDbContext : DbContext
   public DbSet<DayItem> DayItems => Set<DayItem>();
   public DbSet<Friendship> Friendships => Set<Friendship>();
 
+  public DbSet<UserLikedHoliday> UserLikedHolidays { get; set; }
+
+
   public string? DbPath { get; }
 
   public string? GetDatabaseName()
