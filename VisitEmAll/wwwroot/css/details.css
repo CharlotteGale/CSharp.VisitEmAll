@@ -1,0 +1,135 @@
+html, body {
+    background-color: white !important;
+    color: #222 !important;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+/* Title + location */
+.details-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.details-location {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Generic card styling (no shadows) */
+.summary-card,
+.section-card,
+.map-card {
+    padding: 25px;
+    border-radius: 12px;
+    
+}
+
+/* Card-specific colours */
+.card-summary, .card-travel-tips{
+    background-color: #fcf2dcdf;
+}
+
+.card-activities {
+    background-color: #CCDDDC;
+}
+
+.card-itinerary {
+    background-color: #EBF1F1;
+}
+
+
+/* Map box */
+.map-placeholder {
+    width: 100%;
+    height: 250px;
+    background: #eaeaea;
+    border-radius: 10px;
+}
+
+/* Activities + Tips lists */
+.activity-list,
+.tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activities-item {
+    margin: 8px 0;
+    padding: 10px 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    
+}
+
+.activity-title {
+    margin-left: 10px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+
+.tips-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid #5b5b5b;
+}
+
+/* Itinerary timeline */
+.timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.timeline-item {
+    margin: 8px 0;
+    padding: 10px 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    
+}
+
+
+.time {
+    font-weight: 600;
+    margin-right: 8px;
+    color: #444;
+}
+
+.item-title {
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.item-type {
+    color: #777;
+}
+
+.location {
+    color: #555;
+}
+
+.notes {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Photos */
+.photo-placeholder {
+    width: 100%;
+    height: 200px;
+    background: #eaeaea;
+    border-radius: 10px;
+}
