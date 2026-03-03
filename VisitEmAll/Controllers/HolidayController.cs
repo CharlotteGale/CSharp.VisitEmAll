@@ -91,7 +91,6 @@ public class HolidaysController : Controller
         TempData["Success"] = "Holiday created successfully!";
         return RedirectToAction("Index", "Dashboard");
     }
-
     // ---------------------------
     // EDIT HOLIDAY (GET)
     // ---------------------------
@@ -105,6 +104,7 @@ public class HolidaysController : Controller
 
         var holiday = await _db.Holidays
             .Include(h => h.Country)
+            .Include(h => h.Days)
             .FirstOrDefaultAsync(h => h.Id == id);
 
         if (holiday == null || holiday.UserId != userId)
@@ -120,13 +120,13 @@ public class HolidaysController : Controller
             TotalCost = holiday.TotalCost,
             ThumbnailUrl = holiday.ThumbnailUrl,
             HeroImageUrl = holiday.HeroImageUrl,
-
-            // Ensure Activities is never null so edit form doesn't break (main)
+            CountryId = holiday.CountryId,
             Activities = new List<CreateHolidayViewModel.ActivityInput>()
         };
 
         return View("Edit", vm);
     }
+
 
     // ---------------------------
     // EDIT HOLIDAY (POST)
@@ -136,13 +136,18 @@ public class HolidaysController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateHoliday(CreateHolidayViewModel updatedHoliday, int id)
     {
-        var holiday = await _db.Holidays.FirstOrDefaultAsync(h => h.Id == id);
-        if (holiday == null) return NotFound();
+        var holiday = await _db.Holidays
+            .Include(h => h.Days)
+            .FirstOrDefaultAsync(h => h.Id == id);
+
+        if (holiday == null)
+            return NotFound();
 
         var userId = HttpContext.Session.GetInt32("User_Id");
-        if (userId != holiday.UserId) return Forbid();
+        if (userId != holiday.UserId)
+            return Forbid();
 
-        // Date validation (main)
+        // Date validation
         if (updatedHoliday.StartDate.HasValue && updatedHoliday.EndDate.HasValue &&
             updatedHoliday.EndDate.Value < updatedHoliday.StartDate.Value)
         {
@@ -150,7 +155,7 @@ public class HolidaysController : Controller
                 "End date cannot be before start date.");
         }
 
-        // Country validation (your feature)
+        // Country validation
         if (updatedHoliday.CountryId == null)
         {
             ModelState.AddModelError(nameof(updatedHoliday.CountryId), "Please select a country.");
@@ -165,6 +170,7 @@ public class HolidaysController : Controller
         if (!ModelState.IsValid)
             return View("Edit", updatedHoliday);
 
+        // Update fields
         holiday.Title = updatedHoliday.Title;
         holiday.Location = updatedHoliday.Location;
         holiday.StartDate = updatedHoliday.StartDate;
@@ -172,34 +178,58 @@ public class HolidaysController : Controller
         holiday.TotalCost = updatedHoliday.TotalCost;
         holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
         holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
+        holiday.CountryId = updatedHoliday.CountryId;
 
-        _db.Update(holiday);
         await _db.SaveChangesAsync();
+
+        // 🔥 Automatically regenerate the correct number of days
+        await SyncHolidayDays(holiday);
 
         TempData["Success"] = "Holiday updated!";
         return Redirect($"/holidays/{holiday.Id}");
     }
 
+
     // ---------------------------
-    // DELETE HOLIDAY
+    // SYNC HOLIDAY DAYS (HELPER)
     // ---------------------------
 
-    [HttpPost("/holidays/{id:int}/delete")]
-    [ValidateAntiForgeryToken]
-    public IActionResult Delete(int id)
+    private async Task SyncHolidayDays(Holiday holiday)
     {
-        var holiday = _db.Holidays.FirstOrDefault(h => h.Id == id);
-        if (holiday == null) return NotFound();
+        if (!holiday.StartDate.HasValue || !holiday.EndDate.HasValue)
+            return;
 
-        var userId = HttpContext.Session.GetInt32("User_Id");
-        if (userId == null || userId != holiday.UserId)
-            return Redirect("/");
+        // DateOnly already contains only a date — no .Date needed
+        var start = holiday.StartDate.Value;
+        var end = holiday.EndDate.Value;
 
-        _db.Holidays.Remove(holiday);
-        _db.SaveChanges();
+        var existingDays = holiday.Days.ToList();
 
-        return RedirectToAction("Index", "Dashboard");
+        // Add missing days
+        for (var date = start; date <= end; date = date.AddDays(1))
+        {
+            if (!existingDays.Any(d => d.Date == date))
+            {
+                _db.HolidayDays.Add(new HolidayDay
+                {
+                    HolidayId = holiday.Id,
+                    Date = date
+                });
+            }
+        }
+
+        // Remove days outside the new range
+        foreach (var day in existingDays)
+        {
+            if (day.Date < start || day.Date > end)
+            {
+                _db.HolidayDays.Remove(day);
+            }
+        }
+
+        await _db.SaveChangesAsync();
     }
+
 
     // ---------------------------
     // DETAILS (READ-ONLY)
