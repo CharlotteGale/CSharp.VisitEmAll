@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="~/css/Travel-Bento.css" />
 
 @{
+  var sessionUserId = Context.Session.GetInt32("User_Id");
   var tripsUrl = "/holidays";
   var addTripUrl = "/holidays/create";
 
@@ -54,9 +55,46 @@
     .Take(3)
     .ToList();
 
-  // Milestone target (countries)
-  var milestoneTarget = 10;
-  var milestoneProgress = (int)Math.Clamp((Model.CountriesVisited / (double)milestoneTarget) * 100.0, 0, 100);
+// Personality (simple: title + emoji + tint)
+var trips = Model.TripsCount;
+var countries = Model.CountriesVisited;
+var continents = Model.ContinentsVisited;
+
+string personaTitle;
+string personaEmoji;
+string personaClass;
+
+// Simple logic ladder
+if (continents >= 4 && countries >= 12)
+{
+  personaTitle = "Continent Collector";
+  personaEmoji = "🌍";
+  personaClass = "persona--collector";
+}
+else if (trips >= 10 && countries < 8)
+{
+  personaTitle = "Repeat Favourite";
+  personaEmoji = "💛";
+  personaClass = "persona--favourite";
+}
+else if (countries >= 8)
+{
+  personaTitle = "City Hopper";
+  personaEmoji = "🏙️";
+  personaClass = "persona--hopper";
+}
+else if (trips >= 3)
+{
+  personaTitle = "Weekend Warrior";
+  personaEmoji = "⚡";
+  personaClass = "persona--warrior";
+}
+else
+{
+  personaTitle = "Dream Planner";
+  personaEmoji = "✨";
+  personaClass = "persona--planner";
+}
 }
 
 <section class="bento">
@@ -281,27 +319,16 @@
           </div>
         </section>
 
-        <a class="bento__tile bento__tile--sideBottom bento__tileLink" href="/achievements" aria-label="Milestone">
-          <div class="bento__tileInner">
-            <p class="bento__kicker bento__kicker--onAccent">Milestone</p>
+ <a class="bento__tile bento__tile--sideBottom bento__tileLink @personaClass" href="/insights" aria-label="Travel personality">
+  <div class="bento__tileInner bento__personaSimple">
+    <p class="bento__kicker bento__kicker--onAccent">Personality</p>
 
-            <div class="bento__big">
-              @(Model.CountriesVisited >= milestoneTarget ? $"{milestoneTarget} countries ✅" : $"Next: {milestoneTarget} countries")
-            </div>
-
-            <div class="bento__small">
-              You’re <span class="countup" data-count="@Model.CountriesVisited"> &nbsp; </span>/@milestoneTarget.
-            </div>
-
-            <div class="bento__progress bento__mt" title="Milestone progress" style="background: rgba(255,255,255,.25); border-color: rgba(255,255,255,.20);">
-              <div class="bento__progressFill" style="width:@milestoneProgress%; background: rgba(255,255,255,.85);"></div>
-            </div>
-
-            <div class="bento__small" style="opacity:.75; margin-top:10px;">
-              (Stretch goal: achievement feed + scoreboards)
-            </div>
-          </div>
-        </a>
+    <div class="bento__personaCenter">
+      <div class="bento__personaEmoji" aria-hidden="true">@personaEmoji</div>
+      <div class="bento__personaTitle">@personaTitle</div>
+    </div>
+  </div>
+</a>
 
       </div>
 

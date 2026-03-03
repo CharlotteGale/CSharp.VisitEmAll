@@ -550,60 +550,66 @@ body{
   text-align:center;
 }
 
-/* === Travel Personality tile (Option B) === */
+/* --- Personality tile (simple) --- */
+.bento__personaSimple{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  height: 100%;
+}
+
+.bento__personaEmoji{
+  font-size: 48px;
+  line-height: 1;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 10px 18px rgba(12,24,28,.10));
+}
+
 .bento__personaTitle{
   font-weight: 950;
-  font-size: 26px;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  margin-top: 6px;
-}
-
-.bento__personaDesc{
-  margin-top: 10px;
-  font-weight: 700;
-  font-size: 13px;
-  opacity: .88;
-  max-width: 30ch;
-}
-
-.bento__personaTraits{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-
-.bento__personaPill{
-  display:inline-flex;
-  align-items:center;
-  padding: 9px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.22);
-  border: 1px solid rgba(255,255,255,.20);
-  font-weight: 900;
-  font-size: 13px;
+  font-size: 20px;
+  letter-spacing: -0.01em;
   color: rgba(14,43,47,.92);
 }
 
-.bento__personaMeta{
-  margin-top: 14px;
-  font-weight: 800;
-  font-size: 13px;
-  opacity: .85;
+/* --- Personality tile (centered, emoji is hero) --- */
+.bento__personaSimple{
   display:flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  height: 100%;
 }
 
-.bento__personaCta{
-  margin-top: 12px;
-  display:inline-flex;
+.bento__personaSimple .bento__kicker{
+  margin-bottom: 14px;
+}
+
+.bento__personaCenter{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
+  width: 100%;
+}
+
+.bento__personaEmoji{
+  font-size: 72px;           /* BIG */
+  line-height: 1;
+  margin: 0;
+  transform: translateY(-2px);
+  filter: drop-shadow(0 12px 20px rgba(12,24,28,.12));
+}
+
+.bento__personaTitle{
   font-weight: 950;
-  font-size: 13px;
-  opacity: .95;
-  background: rgba(255,255,255,.26);
-  border: 1px solid rgba(255,255,255,.22);
-  padding: 10px 12px;
-  border-radius: 999px;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: rgba(14,43,47,.92);
+  max-width: 22ch;
 }
