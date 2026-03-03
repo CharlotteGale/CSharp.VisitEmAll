@@ -108,31 +108,34 @@
                     <!-- ADD BUTTONS -->
                     @if (currentUserId == Model.OwnerUserId)
                     {
-                        <div class="mb-3">
+                    <div class="mb-3">
 
-                            <a asp-action="Details"
-                                asp-route-id="@Model.HolidayId"
-                                asp-route-addType="Activity"
-                                asp-route-dayId="@day.DayId"
-                                class="btn btn-primary btn-sm">
-                                Add Activity
-                            </a>
+                    <a asp-action="Details"
+                    asp-route-id="@Model.HolidayId"
+                    asp-route-addType="Activity"
+                    asp-route-dayId="@day.DayId"
+                    class="btn btn-sm btn-add-activity">
+                        Add Activity
+                    </a>
 
-                            <a asp-action="Details"
-                                asp-route-id="@Model.HolidayId"
-                                asp-route-addType="Restaurant"
-                                asp-route-dayId="@day.DayId"
-                                class="btn btn-secondary btn-sm">
-                                Add Restaurant
-                            </a>
+                    <a asp-action="Details"
+                    asp-route-id="@Model.HolidayId"
+                    asp-route-addType="Restaurant"
+                    asp-route-dayId="@day.DayId"
+                    class="btn btn-sm btn-add-restaurant">
+                        Add Restaurant
+                    </a>
 
-                            <a asp-action="Details"
-                                asp-route-id="@Model.HolidayId"
-                                asp-route-addType="Accommodation"
-                                asp-route-dayId="@day.DayId"
-                                class="btn btn-info btn-sm">
-                                Add Accommodation
-                            </a>
+                    <a asp-action="Details"
+                    asp-route-id="@Model.HolidayId"
+                    asp-route-addType="Accommodation"
+                    asp-route-dayId="@day.DayId"
+                    class="btn btn-sm btn-add-accommodation">
+                        Add Accommodation
+                    </a>
+
+
+
 
                         </div>
                     }
