@@ -1,15 +1,13 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitEmAll.Models;
-using VisitEmAll.ViewModels;
 
 namespace VisitEmAll.Controllers;
 
 public class DashboardController : Controller
 {
     private readonly VisitEmAllDbContext _context;
-    private readonly ILogger<Controller> _logger;
+    private readonly ILogger<DashboardController> _logger;
 
     public DashboardController(VisitEmAllDbContext context, ILogger<DashboardController> logger)
     {
@@ -20,10 +18,10 @@ public class DashboardController : Controller
     [HttpGet("/dashboard/{id?}")]
     public async Task<IActionResult> Index(int? id)
     {
-        int? currentUserId = HttpContext.Session.GetInt32("User_Id");
+        var currentUserId = HttpContext.Session.GetInt32("User_Id");
         if (currentUserId == null) return RedirectToAction("Login", "Auth");
 
-        int targetUserId = id ?? currentUserId.Value;
+        var targetUserId = id ?? currentUserId.Value;
 
         var user = await _context.Users
             .Include(u => u.Holidays)
@@ -43,7 +41,7 @@ public class DashboardController : Controller
             .OrderByDescending(h => h.StartDate)
             .ToList();
 
-        ViewData["CurrentUser"] = user; 
+        ViewData["CurrentUser"] = user;
         ViewData["IsOwnDashboard"] = targetUserId == currentUserId;
         ViewData["UpcomingHolidays"] = upcomingHolidays;
         ViewData["PastHolidays"] = pastHolidays;
@@ -54,6 +52,6 @@ public class DashboardController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View();
     }
 }

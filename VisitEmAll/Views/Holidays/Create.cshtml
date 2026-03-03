@@ -1,3 +1,4 @@
+@using System.Linq
 @model VisitEmAll.ViewModels.CreateHolidayViewModel
 
 @{
@@ -19,6 +20,33 @@
         <label asp-for="Location"></label>
         <input asp-for="Location" />
         <span asp-validation-for="Location"></span>
+    </div>
+
+    <!-- Country (typeahead + hidden CountryId) -->
+    <div>
+        <label for="country-search">Country</label>
+
+        <input id="country-search"
+               type="text"
+               autocomplete="off"
+               placeholder="Start typing a country… (e.g. Japan)"
+               value="@(Model.CountryName ?? "")" />
+
+        <input asp-for="CountryId" type="hidden" id="CountryId" />
+        <span asp-validation-for="CountryId"></span>
+
+        <!-- Results dropdown (absolute so it doesn't push layout) -->
+        <div style="position:relative;">
+            <div id="country-results"
+                 style="display:none; position:absolute; left:0; right:0; z-index:50;
+                        border:1px solid #ddd; border-radius:10px; margin-top:6px;
+                        overflow:hidden; background:white; max-height:240px; overflow-y:auto;">
+            </div>
+        </div>
+
+        <small style="display:block; margin-top:6px; color:#666;">
+            Pick a real country from the list so your travel stats + map can update automatically.
+        </small>
     </div>
 
     <div>
@@ -71,7 +99,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
     <script>
+        // Add activity rows dynamically (server validation still applies; client-side validation for new rows is not wired by default)
         (function () {
             const container = document.getElementById("activities");
             const addBtn = document.getElementById("add-activity");
@@ -86,6 +116,133 @@
                 `;
                 container.appendChild(row);
             });
+        })();
+    </script>
+
+    <script>
+        // Country typeahead -> sets hidden CountryId from /countries/search?q=
+        (function () {
+            const input = document.getElementById("country-search");
+            const hidden = document.getElementById("CountryId");
+            const results = document.getElementById("country-results");
+
+            if (!input || !hidden || !results) return;
+
+            let abortController = null;
+            let selectedName = (input.value || "").trim();
+
+            function show() { results.style.display = "block"; }
+            function hide() { results.style.display = "none"; }
+            function clearResults() { results.innerHTML = ""; }
+
+            function escapeHtml(str) {
+                return String(str).replace(/[&<>"']/g, m => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                }[m]));
+            }
+
+            function clearSelectionIfUserTyped() {
+                // If user edits the text after selecting, invalidate the hidden id
+                if ((input.value || "").trim() !== selectedName) {
+                    hidden.value = "";
+                }
+            }
+
+            function renderItems(items) {
+                clearResults();
+
+                if (!items || items.length === 0) {
+                    results.innerHTML = `<div style="padding:10px; color:#666;">No matches</div>`;
+                    show();
+                    return;
+                }
+
+                for (const c of items) {
+                    const row = document.createElement("button");
+                    row.type = "button";
+                    row.style.cssText =
+                        "width:100%; text-align:left; padding:10px 12px; border:0; background:white; cursor:pointer;";
+
+                    row.onmouseenter = () => row.style.background = "#f6f6f6";
+                    row.onmouseleave = () => row.style.background = "white";
+
+                    row.innerHTML = `
+                        <div style="font-weight:600;">${escapeHtml(c.name)}</div>
+                        <div style="font-size:12px; color:#666;">
+                            ${escapeHtml(c.continent ?? "")}${c.iso2 ? " • " + escapeHtml(c.iso2) : ""}
+                        </div>
+                    `;
+
+                    row.addEventListener("click", () => {
+                        input.value = c.name;
+                        selectedName = c.name;
+                        hidden.value = c.id;
+                        hide();
+                    });
+
+                    results.appendChild(row);
+                }
+
+                show();
+            }
+
+            async function search(q) {
+                if (abortController) abortController.abort();
+                abortController = new AbortController();
+
+                const res = await fetch(`/countries/search?q=${encodeURIComponent(q)}`, {
+                    signal: abortController.signal,
+                    headers: { "Accept": "application/json" }
+                });
+
+                if (!res.ok) return [];
+                return await res.json();
+            }
+
+            let timer = null;
+
+            input.addEventListener("input", () => {
+                clearSelectionIfUserTyped();
+
+                const q = (input.value || "").trim();
+
+                if (timer) clearTimeout(timer);
+
+                if (q.length === 0) {
+                    hidden.value = "";
+                    selectedName = "";
+                    hide();
+                    clearResults();
+                    return;
+                }
+
+                timer = setTimeout(async () => {
+                    try {
+                        const items = await search(q);
+                        renderItems(items);
+                    } catch (e) {
+                        // fetch aborted = ignore
+                    }
+                }, 120);
+            });
+
+            input.addEventListener("focus", () => {
+                // if there's content already, show current results container (if populated)
+                if (results.innerHTML.trim() !== "") show();
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!results.contains(e.target) && e.target !== input) hide();
+            });
+
+            // If already selected (useful for Edit), preserve selection
+            if (hidden.value && selectedName.length > 0) {
+                // keep as-is
+            }
         })();
     </script>
 }
