@@ -4,34 +4,33 @@ namespace VisitEmAll.Models;
 
 public class Holiday
 {
-  public int Id { get; set; }
+    public int Id { get; set; }
 
-  [Required]
-  public int UserId { get; set; }
-  public User? User { get; set; }
+    [Required]
+    public int UserId { get; set; }
+    public User? User { get; set; }
 
-  [Required, MaxLength(150)]
-  public string Title { get; set; } = string.Empty;
+    [Required, MaxLength(150)]
+    public string Title { get; set; } = string.Empty;
 
-  [MaxLength(200)]
-  public string? Location { get; set; }
+    [MaxLength(200)]
+    public string? Location { get; set; }
 
-  // Country selection (new)
-  public int? CountryId { get; set; }
-  public Country? Country { get; set; }
+    // Country selection (new)
+    public int? CountryId { get; set; }
+    public Country? Country { get; set; }
 
-  public DateOnly? StartDate { get; set; }
-  public DateOnly? EndDate { get; set; }
+    public DateOnly? StartDate { get; set; }
+    public DateOnly? EndDate { get; set; }
 
-  public decimal? TotalCost { get; set; } // Maybe compute at a later stage?
+    public decimal? TotalCost { get; set; } // Maybe compute at a later stage?
 
-  [MaxLength(500)]
-  public string? ThumbnailUrl { get; set; }
+    [MaxLength(500)]
+    public string? ThumbnailUrl { get; set; }
 
-  // From main
-  public string? HeroImageUrl { get; set; }
+    public string? HeroImageUrl { get; set; }
 
-  public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-  public ICollection<HolidayDay> Days { get; set; } = new List<HolidayDay>();
+    public ICollection<HolidayDay> Days { get; set; } = new List<HolidayDay>();
 }
