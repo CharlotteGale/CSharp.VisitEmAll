@@ -28,7 +28,17 @@ public class FriendsController : Controller
             return RedirectToAction("Login", "Auth");
         }
 
-        // We pull everything here so the sidebar and the list are both full
+        var connectedUserIds = await _context.Friendships
+                            .Where(f => f.RequesterId == currentUserId || f.ReceiverId == currentUserId)
+                            .Select(f => f.RequesterId == currentUserId ? f.ReceiverId : f.RequesterId)
+                            .ToListAsync();
+        
+        connectedUserIds.Add(currentUserId.Value);
+
+        var potentialFriends = await _context.Users
+                            .Where(u => !connectedUserIds.Contains(u.Id))
+                            .ToListAsync();
+        
         var vm = new FriendsViewModel
         {
             AcceptedFriends = await _friendshipService.GetFriendsAsync(currentUserId.Value),
@@ -43,13 +53,15 @@ public class FriendsController : Controller
                             .Include(f => f.Receiver)
                             .Where(f => f.RequesterId == currentUserId.Value 
                                             && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync()
+                            .ToListAsync(),
+
+            AllOtherUsers = potentialFriends
         };
 
         return View(vm);
     }
 
-    [HttpGet("requests")]
+    [HttpGet("/friends/requests")]
     public async Task<IActionResult> Requests()
     {
         var currentUserId = HttpContext.Session.GetInt32("User_Id");
@@ -60,19 +72,15 @@ public class FriendsController : Controller
 
         var vm = new FriendsViewModel
         {
-            AcceptedFriends = await _friendshipService.GetFriendsAsync(currentUserId.Value),
-
             PendingRequests = await _context.Friendships
-                            .Include(f => f.Requester)
-                            .Where(f => f.ReceiverId == currentUserId.Value 
-                                            && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync(),
+                        .Include(f => f.Requester)
+                        .Where(f => f.ReceiverId == currentUserId.Value 
+                                        && f.Status == FriendshipStatus.Pending)
+                        .ToListAsync(),
 
-            SentRequests = await _context.Friendships
-                            .Include(f => f.Receiver)
-                            .Where(f => f.RequesterId == currentUserId.Value 
-                                            && f.Status == FriendshipStatus.Pending)
-                            .ToListAsync()
+            AcceptedFriends = new List<User>(),
+            SentRequests = new List<Friendship>(),
+            AllOtherUsers = new List<User>()
         };
         
         return View(vm);
@@ -115,5 +123,27 @@ public class FriendsController : Controller
 
         await _friendshipService.RemoveFriendsAsync(currentUserId.Value, id);
         return RedirectToAction("Index");        
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SendRequest(int receiverId)
+    {
+        var currentUserId = HttpContext.Session.GetInt32("User_Id");
+        if (!currentUserId.HasValue) return RedirectToAction("Login", "Auth");
+
+        var exists = await _context.Friendships.AnyAsync(f => 
+            f.RequesterId == currentUserId && f.ReceiverId == receiverId);
+
+        if (!exists)
+        {
+            _context.Friendships.Add(new Friendship {
+                RequesterId = currentUserId.Value,
+                ReceiverId = receiverId,
+                Status = FriendshipStatus.Pending
+            });
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("Index");
     }
 }

@@ -2,8 +2,10 @@
 
 @{
     ViewData["Title"] = Model.Name + "'s Dashboard";
+    ViewData["Title"] = Model.Name + "'s Dashboard";
     var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
     var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var isOwn = (bool)(ViewData["IsOwnDashboard"] ?? false);
     var isOwn = (bool)(ViewData["IsOwnDashboard"] ?? false);
 }
 
