@@ -1,12 +1,176 @@
-html {
-  font-size: 14px;
+/* ====================== */
+/* COLOURS */
+/* ====================== */
+/*
+Cherry Blossom Pink: E4ACB2
+Desert Sand: EABCA8
+Papaya Whip: FAEDCD
+Tea Green: CCD5AE
+Ash Gray: 99BAB9 
+Light Neutral: F8F9FA 
+Very Light Pastel Tint: fdf5f6*/
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #F6F4F1; 
+    color: #333; 
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* ====================== */
+/* DEFAULTS */
+/* ====================== */
+
+/* BUTTON SHAPE AND SIZE */
+.auth-submit-btn, .auth-new-acc-btn, .add-holiday-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
 }
+
+/* FORM FIELDS */
+.auth-form-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+}
+
+/* ====================== */
+/* NAVBAR */
+/* ====================== */
+.navbar {
+  background-color: #F6F4F1; 
+  color: #99BAB9;
+
+}
+
+.navbar-brand {
+    color: #99BAB9 !important;
+    font-weight: 800;
+}
+
+.nav-link {
+    color: #99BAB9 !important;
+    font-weight: 500;
+    border: 1.5px solid transparent;
+    padding: 8px 15px;
+}
+
+.nav-link-active {
+    font-weight: 700 !important;
+    background-color: rgba(153, 186, 185, 0.14); 
+    color: #99BAB9 !important;
+    border-radius: 50px;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    transition: all 0.3s ease;
+}
+
+.nav-notification {
+    background-color: #FF6B8B;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    min-width: 1.5rem; 
+    height: 1.2rem;
+    vertical-align: middle;
+}
+
+.nav-link:hover {
+    color: #E4ACB2 !important;
+}
+
+/* ====================== */
+/* AUTH PAGES */
+/* ====================== */
+
+.auth-wrapper {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-page {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  padding: 2rem;
+}
+
+.auth-left {
+  max-width: 400px;
+  padding-right: 3rem;
+}
+
+.auth-brand-title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #99BAB9;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 0.5px #CCD5AE, 0 0 2px #CCD5AE;
+  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+}
+
+.auth-brand-tagline {
+  font-size: 2rem;
+  color: #aec2d5;
+  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+}
+
+.auth-card {
+  background: #F8F9FA;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 360px;
+}
+
+.auth-form-field::file-selector-button {
+  background-color: #E4ACB2;
+  color: white;
+  border: 1px solid #7a9a99;
+  border-radius: 50px;
+  padding: 8px 16px;
+  margin-right: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.auth-form-field::file-selector-button:hover {
+  background-color: #99BAB9;
+  border-color: #99BAB9;
+}
+
+.auth-submit-btn {
+  background: #CCD5AE;
+  color: white;
+  border: none;
+}
+
+.auth-new-acc-btn {
+  background: #F8F9FA;
+  color: #99BAB9;
+  border: solid 2px #99BAB9;
+}
+
+
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
@@ -21,11 +185,100 @@ body {
   margin-bottom: 60px;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+.form-floating>.form-control-plaintext::placeholder,
+.form-floating>.form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+.form-floating>.form-control-plaintext:focus::placeholder,
+.form-floating>.form-control:focus::placeholder {
   text-align: start;
+}
+
+/* ========================================================================== */
+/* PROFILE - HOLIDAYS */
+/* ========================================================================== */
+
+.holiday-container, .upcoming-holidays-container, .past-holidays-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  display: block;
+  overflow: visible;
+}
+
+.upcoming-holidays-header, .past-holidays-header {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.add-holiday-btn {
+  width: auto;
+  background: #CCD5AE;
+  color: white;
+  border: none;
+  text-decoration:none;
+}
+
+.upcoming-holidays-grid, .past-holidays-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.upcoming-holidays-card, .past-holidays-card {
+  display: flex;
+  align-items: stretch;
+  justify-self: center;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(189, 189, 189, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  min-height: 120px;
+  overflow: hidden;
+}
+
+.upcoming-holidays-dates, .past-holidays-dates {
+  flex-grow: 1;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.upcoming-holidays-title, .past-holidays-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.past-holidays-grid {
+  padding-bottom: 60px;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 12vw;
+  object-fit: cover;
+}
+
+
+
+
+@media (max-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+  .upcoming-holidays-grid, .past-holidays-grid {
+    grid-template-columns: 1fr;
+  }
 }

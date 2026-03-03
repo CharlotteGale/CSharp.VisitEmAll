@@ -1,56 +1,77 @@
 ﻿@using VisitEmAll.Models
+
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = Model.Name + "'s Dashboard";
     var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
     var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var isOwn = (bool)(ViewData["IsOwnDashboard"] ?? false);
 }
 
-<h1>Dashboard</h1>
+<h1>@(isOwn ? "My Dashboard" : Model.Name + "'s Dashboard")</h1>
+<h3>@Model.HomeTown</h3>
+<br/>
 
-<a href="/holidays/create">Add Holiday</a>
+<div class="holiday-container">
 
-<h2>Upcoming Holidays</h2>
+  <div class="upcoming-holidays-container">
 
-@if (!upcomingHolidays.Any())
-{
-    <p>No upcoming holidays.</p>
-}
-else
-{
-    <div class="holiday-grid">
-        @foreach (var holiday in upcomingHolidays)
-        {
-            <a href="/holidays/@holiday.Id">
-                <div class="holiday-card">
-                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
-                         alt="@holiday.Title" />
-                    <h3>@holiday.Title</h3>
-                    <p>@holiday.StartDate?.Year</p>
-                </div>
-            </a>
-        }
+    <div class="upcoming-holidays-header">
+      <div class="row">
+        <div class="col">
+          <h2>@Model.Name's Upcoming Holidays</h2>
+        </div>
+        @if(isOwn){
+        <div class="col d-flex flex-column justify-content-end align-items-end">
+          <a class="add-holiday-btn" href="/holidays/create">Add Holiday</a>
+        </div>}
+      </div>
     </div>
-}
-
-<h2>Past Holidays</h2>
-
-@if (!pastHolidays.Any())
-{
-    <p>No past holidays.</p>
-}
-else
-{
-    <div class="holiday-grid">
-        @foreach (var holiday in pastHolidays)
-        {
+    <div class="upcoming-holidays-grid"> 
+      @if (!upcomingHolidays.Any()) {
+      <p>No upcoming holidays.</p>
+    } else
+    {
+      @foreach (var holiday in upcomingHolidays)
+      {
+        <div class="upcoming-holidays-card" style="width: 18rem;">
+          <div class="card-body">
             <a href="/holidays/@holiday.Id">
-                <div class="holiday-card">
-                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
-                         alt="@holiday.Title" />
-                    <h3>@holiday.Title</h3>
-                    <p>@holiday.StartDate?.Year</p>
-                </div>
+              <img class="card-img-top" src="@holiday.ThumbnailUrl" alt="Card image cap"
+                   src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                   alt="@holiday.Title" />
             </a>
-        }
+            <h5 class="upcoming-holidays-title">@holiday.Title</h5>
+            <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+          </div>
+        </div>
+      }
+    }
     </div>
-}
+  </div>
+  <div class="past-holidays-container">
+
+    <div class="past-holidays-header">
+      <h2>@Model.Name's Past Holidays</h2>
+    </div>
+    <div class="past-holidays-grid"> @if (!pastHolidays.Any()) {
+      <p>No past holidays.</p>
+    } else
+    {
+      @foreach (var holiday in pastHolidays)
+      {
+        <div class="past-holidays-card" style="width: 18rem;">
+          <div class="card-body">
+            <a href="/holidays/@holiday.Id">
+              <img class="card-img-top" src="@holiday.ThumbnailUrl" alt="Card image cap"
+                  src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
+                  alt="@holiday.Title" />
+            </a>
+            <h5 class="past-holidays-title">@holiday.Title</h5>
+            <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+          </div>
+        </div>
+      }
+    }
+    </div>
+  </div>
+</div>

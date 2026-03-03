@@ -137,6 +137,9 @@ namespace VisitEmAll.Migrations
                     b.Property<DateOnly?>("EndDate")
                         .HasColumnType("date");
 
+                    b.Property<string>("HeroImageUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("Location")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
