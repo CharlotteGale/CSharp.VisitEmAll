@@ -125,7 +125,7 @@ public class AuthController : Controller
                 await _context.SaveChangesAsync();
             }
             HttpContext.Session.SetInt32("User_Id", user.Id);
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction("Index", "Home");
         }
 
             model.ErrorMessage = "Invalid email or password";
