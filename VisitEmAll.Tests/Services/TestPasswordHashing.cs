@@ -1,5 +1,7 @@
 using VisitEmAll.Services;
 
+namespace VisitEmAll.Tests.Services;
+
 public class TestPasswordHashing
 {
     [Test]
