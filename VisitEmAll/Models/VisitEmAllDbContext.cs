@@ -12,6 +12,7 @@ public class VisitEmAllDbContext : DbContext
   public DbSet<HolidayDay> HolidayDays => Set<HolidayDay>();
   public DbSet<DayItem> DayItems => Set<DayItem>();
   public DbSet<Friendship> Friendships => Set<Friendship>();
+  public DbSet<Country> Countries => Set<Country>();
 
   public DbSet<UserLikedHoliday> UserLikedHolidays { get; set; }
 

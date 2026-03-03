@@ -10,6 +10,8 @@ public class CreateHolidayViewModel
 
     [MaxLength(200)]
     public string? Location { get; set; }
+    public int? CountryId { get; set; }
+    public string? CountryName { get; set; }
 
     [Required, DataType(DataType.Date)]
     public DateOnly? StartDate { get; set; }

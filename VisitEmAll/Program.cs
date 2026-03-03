@@ -63,7 +63,6 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<VisitEmAllDbContext>();
 
     context.Database.EnsureDeleted(); // Attempt stop the Migration weirdness.
-
     context.Database.Migrate();
     DbSeeder.Seed(context);
 }

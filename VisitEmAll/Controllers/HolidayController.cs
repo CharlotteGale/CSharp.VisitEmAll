@@ -33,11 +33,24 @@ public class HolidaysController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateHolidayViewModel vm)
     {
+        // Date validation (main)
         if (vm.StartDate.HasValue && vm.EndDate.HasValue &&
             vm.EndDate.Value < vm.StartDate.Value)
         {
             ModelState.AddModelError(nameof(vm.EndDate),
                 "End date cannot be before start date.");
+        }
+
+        // Country validation (your feature)
+        if (vm.CountryId == null)
+        {
+            ModelState.AddModelError(nameof(vm.CountryId), "Please select a country.");
+        }
+        else
+        {
+            var exists = await _db.Countries.AnyAsync(c => c.Id == vm.CountryId.Value);
+            if (!exists)
+                ModelState.AddModelError(nameof(vm.CountryId), "Please select a valid country.");
         }
 
         if (!ModelState.IsValid)
@@ -60,9 +73,11 @@ public class HolidaysController : Controller
             TotalCost = vm.TotalCost,
             ThumbnailUrl = vm.ThumbnailUrl,
             // HeroImageUrl = vm.HeroImageUrl,
+            CountryId = vm.CountryId,
             Days = new List<HolidayDay>()
         };
 
+        // Create HolidayDays if dates provided (main)
         if (vm.StartDate.HasValue && vm.EndDate.HasValue)
         {
             for (var date = vm.StartDate.Value; date <= vm.EndDate.Value; date = date.AddDays(1))
@@ -89,7 +104,10 @@ public class HolidaysController : Controller
         if (userId == null)
             return RedirectToAction("Login", "Auth");
 
-        var holiday = await _db.Holidays.FirstOrDefaultAsync(h => h.Id == id);
+        var holiday = await _db.Holidays
+            .Include(h => h.Country)
+            .FirstOrDefaultAsync(h => h.Id == id);
+
         if (holiday == null || holiday.UserId != userId)
             return NotFound();
 
@@ -103,8 +121,10 @@ public class HolidaysController : Controller
             TotalCost = holiday.TotalCost,
             ThumbnailUrl = holiday.ThumbnailUrl,
             // HeroImageUrl = holiday.HeroImageUrl,
+            CountryId = holiday.CountryId,
+            CountryName = holiday.Country?.Name,
 
-            // Ensure Activities is never null so the edit form doesn't break
+            // Ensure Activities is never null so edit form doesn't break (main)
             Activities = new List<CreateHolidayViewModel.ActivityInput>()
         };
 
@@ -125,11 +145,24 @@ public class HolidaysController : Controller
         var userId = HttpContext.Session.GetInt32("User_Id");
         if (userId != holiday.UserId) return Forbid();
 
+        // Date validation (main)
         if (updatedHoliday.StartDate.HasValue && updatedHoliday.EndDate.HasValue &&
             updatedHoliday.EndDate.Value < updatedHoliday.StartDate.Value)
         {
             ModelState.AddModelError(nameof(updatedHoliday.EndDate),
                 "End date cannot be before start date.");
+        }
+
+        // Country validation (your feature)
+        if (updatedHoliday.CountryId == null)
+        {
+            ModelState.AddModelError(nameof(updatedHoliday.CountryId), "Please select a country.");
+        }
+        else
+        {
+            var exists = await _db.Countries.AnyAsync(c => c.Id == updatedHoliday.CountryId.Value);
+            if (!exists)
+                ModelState.AddModelError(nameof(updatedHoliday.CountryId), "Please select a valid country.");
         }
 
         if (!ModelState.IsValid)
@@ -142,6 +175,7 @@ public class HolidaysController : Controller
         holiday.TotalCost = updatedHoliday.TotalCost;
         holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
         // holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
+        holiday.CountryId = updatedHoliday.CountryId;
 
         _db.Update(holiday);
         await _db.SaveChangesAsync();
@@ -179,6 +213,7 @@ public class HolidaysController : Controller
     public async Task<IActionResult> Details(int id)
     {
         var holiday = await _db.Holidays
+            .Include(h => h.Country)
             .Include(h => h.Days)
                 .ThenInclude(d => d.TimelineItems)
             .FirstOrDefaultAsync(h => h.Id == id);
