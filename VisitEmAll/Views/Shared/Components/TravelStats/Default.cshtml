@@ -1,0 +1,27 @@
+@model VisitEmAll.ViewModels.TravelStatsCardViewModel
+
+<section class="bento__tile bento__tile--hero" aria-label="Travel snapshot">
+  <div class="bento__heroBadge">
+    This year: <span class="countup" data-count="@Model.TripsThisYear" aria-label="@Model.TripsThisYear"> &nbsp; </span> trips
+  </div>
+
+  <div class="bento__tileInner">
+    <h2 class="bento__heroTitle">Your travel snapshot</h2>
+    <p class="bento__heroSub">A clean recap of where you’ve been — and what’s next.</p>
+
+    <div class="bento__chips bento__mt">
+      <span class="bento__chip">🌍 <span class="countup" data-count="@Model.CountriesVisited" aria-label="@Model.CountriesVisited"> &nbsp; </span> countries</span>
+      <span class="bento__chip">🧭 <span class="countup" data-count="@Model.ContinentsVisited" aria-label="@Model.ContinentsVisited"> &nbsp; </span> continents</span>
+      <span class="bento__chip">✈️ <span class="countup" data-count="@Model.TripsCount" aria-label="@Model.TripsCount"> &nbsp; </span> trips</span>
+      <span class="bento__chip">📅 <span class="countup" data-count="@Model.TotalTravelDays" aria-label="@Model.TotalTravelDays"> &nbsp; </span> travel days</span>
+    </div>
+  </div>
+
+  <div class="bento__heroOrb" aria-hidden="true"></div>
+</section>
+
+<section class="bento__tile bento__tile--sticker" aria-label="World progress">
+  <div class="bento__stickerText">
+    <span class="countup" data-count="@Model.WorldPercent" data-decimals="1" aria-label="@Model.WorldPercent"> &nbsp; </span>% of world
+  </div>
+</section>

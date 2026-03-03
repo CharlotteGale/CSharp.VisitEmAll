@@ -10,12 +10,17 @@ Ash Gray: 99BAB9
 Light Neutral: F8F9FA 
 Very Light Pastel Tint: fdf5f6*/
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: #F6F4F1;
+  color: #333;
+}
 
-html, body {
-    height: 100%;
-    margin: 0;
-    background-color: #F6F4F1; 
-    color: #333; 
+body {
+  padding-top: 5rem;
+  overflow-x: visible;
 }
 
 /* ====================== */
@@ -23,7 +28,9 @@ html, body {
 /* ====================== */
 
 /* BUTTON SHAPE AND SIZE */
-.auth-submit-btn, .auth-new-acc-btn, .add-holiday-btn {
+.auth-submit-btn,
+.auth-new-acc-btn,
+.add-holiday-btn {
   width: 100%;
   padding: 0.75rem;
   border-radius: 50px;
@@ -44,52 +51,74 @@ html, body {
 /* ====================== */
 /* NAVBAR */
 /* ====================== */
-.navbar {
-  background-color: #F6F4F1; 
-  color: #99BAB9;
+header.fixed-top {
+  background-color: #F6F4F1;
+  border-bottom: none !important;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 8px rgba(0, 0, 0, 0.03),
+    0 12px 24px rgba(0, 0, 0, 0.03);
+  z-index: 1030;
+}
 
+header.fixed-top::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to bottom,
+      #F6F4F1 0%,
+      rgba(246, 244, 241, 0) 100%);
+  pointer-events: none;
+}
+
+.navbar {
+  background-color: #f6f4f1;
+  color: #99BAB9;
 }
 
 .navbar-brand {
-    color: #99BAB9 !important;
-    font-weight: 800;
+  color: #99BAB9 !important;
+  font-weight: 800;
 }
 
 .nav-link {
-    color: #99BAB9 !important;
-    font-weight: 500;
-    border: 1.5px solid transparent;
-    padding: 8px 15px;
+  color: #99BAB9 !important;
+  font-weight: 500;
+  border: 1.5px solid transparent;
+  padding: 8px 15px;
 }
 
 .nav-link-active {
-    font-weight: 700 !important;
-    background-color: rgba(153, 186, 185, 0.14); 
-    color: #99BAB9 !important;
-    border-radius: 50px;
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-    transition: all 0.3s ease;
+  font-weight: 700 !important;
+  background-color: rgba(153, 186, 185, 0.14);
+  color: #99BAB9 !important;
+  border-radius: 50px;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  transition: all 0.3s ease;
 }
 
 .nav-notification {
-    background-color: #FF6B8B;
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 50px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    min-width: 1.5rem; 
-    height: 1.2rem;
-    vertical-align: middle;
+  background-color: #FF6B8B;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  min-width: 1.5rem;
+  height: 1.2rem;
+  vertical-align: middle;
 }
 
 .nav-link:hover {
-    color: #E4ACB2 !important;
+  color: #E4ACB2 !important;
 }
 
 /* ====================== */
@@ -122,13 +151,13 @@ html, body {
   color: #99BAB9;
   margin-bottom: 0.5rem;
   text-shadow: 0 0 0.5px #CCD5AE, 0 0 2px #CCD5AE;
-  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.1));
 }
 
 .auth-brand-tagline {
   font-size: 2rem;
   color: #aec2d5;
-  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.1));
 }
 
 .auth-card {
@@ -172,7 +201,11 @@ html, body {
 
 
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -200,7 +233,9 @@ body {
 /* PROFILE - HOLIDAYS */
 /* ========================================================================== */
 
-.holiday-container, .upcoming-holidays-container, .past-holidays-container {
+.holiday-container,
+.upcoming-holidays-container,
+.past-holidays-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
@@ -209,7 +244,8 @@ body {
   overflow: visible;
 }
 
-.upcoming-holidays-header, .past-holidays-header {
+.upcoming-holidays-header,
+.past-holidays-header {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
@@ -220,10 +256,11 @@ body {
   background: #CCD5AE;
   color: white;
   border: none;
-  text-decoration:none;
+  text-decoration: none;
 }
 
-.upcoming-holidays-grid, .past-holidays-grid {
+.upcoming-holidays-grid,
+.past-holidays-grid {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -233,7 +270,8 @@ body {
   z-index: 1;
 }
 
-.upcoming-holidays-card, .past-holidays-card {
+.upcoming-holidays-card,
+.past-holidays-card {
   display: flex;
   align-items: stretch;
   justify-self: center;
@@ -245,7 +283,8 @@ body {
   overflow: hidden;
 }
 
-.upcoming-holidays-dates, .past-holidays-dates {
+.upcoming-holidays-dates,
+.past-holidays-dates {
   flex-grow: 1;
   padding: 8px;
   display: flex;
@@ -253,7 +292,8 @@ body {
   justify-content: space-between;
 }
 
-.upcoming-holidays-title, .past-holidays-title {
+.upcoming-holidays-title,
+.past-holidays-title {
   font-weight: 600;
   font-size: 1.1rem;
   padding: 8px;
@@ -272,13 +312,13 @@ body {
 }
 
 
-
-
 @media (max-width: 768px) {
   html {
     font-size: 16px;
   }
-  .upcoming-holidays-grid, .past-holidays-grid {
+
+  .upcoming-holidays-grid,
+  .past-holidays-grid {
     grid-template-columns: 1fr;
   }
 }

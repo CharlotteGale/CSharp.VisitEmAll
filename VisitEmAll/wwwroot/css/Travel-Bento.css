@@ -1,0 +1,451 @@
+:root{
+  --bg: #F6F4F1;
+  --card: #FFFFFF;
+  --ink: #0E2B2F;
+  --muted: rgba(14,43,47,.65);
+  --line: rgba(14,43,47,.10);
+
+  --radius: 26px;
+  --radius-lg: 32px;
+
+  --hero: #072B30;
+
+  --pink: #E4ACB2;
+  --sand: #EABCA8;
+  --cream: #FAEDCD;
+  --green: #CCD5AE;
+  --mist: #99BAB9;
+
+  --borderSoft: rgba(14,43,47,0.06);
+  --shadowSoft: 0 22px 55px rgba(14,43,47,0.08);
+  --highlight: inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+/* Count-up polish */
+.countup{ font-variant-numeric: tabular-nums; }
+
+/* ===== Bento shell ===== */
+.bento{ width:100%; }
+.bento__wrap{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 18px 60px;
+}
+
+.bento__topbar{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.bento__actions{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+}
+
+.bento__subhead{
+  text-align:center;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===== Buttons ===== */
+.bento__btn{
+  border:1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  box-shadow: 0 10px 18px rgba(12, 24, 28, 0.06);
+  transition: transform .12s ease;
+}
+.bento__btn:hover{ transform: translateY(-1px); }
+
+.bento__btn--primary{
+  background: var(--cream);
+  border-color: rgba(14,43,47,.12);
+}
+
+/* ===== Grid ===== */
+.bento__grid{
+  display:grid;
+  gap: 18px;
+  grid-template-columns: repeat(12, 1fr);
+  margin-top: 26px;
+}
+
+@media (max-width: 980px){
+  .bento__grid{ grid-template-columns: 1fr; }
+  .bento__tile{ grid-column: 1 / -1 !important; }
+}
+
+/* ===== Base tile ===== */
+.bento__tile{
+  border-radius: var(--radius);
+  overflow:hidden;
+  position:relative;
+  background: var(--card);
+  border: 1px solid var(--borderSoft);
+  box-shadow: var(--shadowSoft), var(--highlight);
+  min-height: 170px;
+
+  /* subtle premium interaction */
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1),
+              box-shadow 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+.bento__tile:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 26px 70px rgba(14,43,47,.12), inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+.bento__tile:active{
+  transform: translateY(-2px) scale(0.995);
+}
+
+.bento__tileInner{
+  padding: 26px;
+  height: 100%;
+}
+
+/* ===== Tile placement (position-based) ===== */
+.bento__tile--leftInfo{
+  background: linear-gradient(180deg, rgba(250,237,205,0.55), #fff 60%);
+  grid-column: 1 / span 4;
+  min-height: 220px;
+}
+
+.bento__tile--centerFeature{
+  grid-column: 5 / span 4;
+  min-height: 220px;
+}
+
+.bento__tile--sideTop{
+  grid-column: 9 / -1;
+  min-height: 220px;
+  background: linear-gradient(180deg, rgba(204,213,174,0.85), rgba(204,213,174,0.55));
+  color: rgba(14,43,47,0.85);
+  border: none;
+}
+
+.bento__tile--mainMap{
+  grid-column: 1 / span 8;
+  min-height: 260px;
+}
+
+.bento__tile--sideList{
+  grid-column: 9 / -1;
+  min-height: 260px;
+}
+
+.bento__tile--sideBottom{
+  grid-column: 9 / -1;
+  min-height: 180px;
+  background: linear-gradient(180deg, rgba(234,188,168,0.95), rgba(228,172,178,0.75));
+  color: rgba(14,43,47,0.88);
+  border: none;
+}
+
+/* ===== Typography helpers ===== */
+.bento__kicker{
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.bento__kicker--onTint{ color: rgba(14,43,47,.70); }
+.bento__kicker--onAccent{ color: rgba(255,239,243,.80); }
+
+.bento__big{
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing:-0.02em;
+  margin: 6px 0 0;
+}
+
+.bento__small{
+  margin-top: 8px;
+  opacity: .88;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.bento__mt{ margin-top: 12px; }
+
+/* ===== Highlights tile ===== */
+.bento__highlights{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  height: 100%;
+}
+
+.bento__headline{
+  font-weight: 900;
+  font-size: 28px;
+  margin: 10px 0;
+  letter-spacing: -0.02em;
+}
+
+.bento__headline--muted{
+  opacity: .75;
+  font-weight: 800;
+}
+
+/* ===== Center feature (cover) ===== */
+.bento__cover{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,.35)),
+    radial-gradient(circle at 60% 30%, rgba(250,237,205,.40), transparent 55%),
+    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=60');
+  background-size: cover;
+  background-position: center;
+}
+
+.bento__coverCaption{
+  position:absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 18px;
+  color: white;
+}
+
+.bento__coverTitle{
+  font-size: 26px;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing:-0.02em;
+}
+
+.bento__coverSub{
+  margin: 4px 0 0;
+  opacity:.85;
+  font-weight: 700;
+}
+
+/* ===== Side top: progress ===== */
+.bento__progress{
+  margin-top: 18px;
+  background: rgba(14,43,47,0.12);
+  border: 1px solid rgba(14,43,47,0.12);
+  border-radius: 999px;
+  height: 12px;
+  overflow:hidden;
+}
+
+.bento__progressFill{
+  height: 100%;
+  background: rgba(255,255,255,.85);
+  border-radius: 999px;
+}
+
+/* ===== Map tile ===== */
+.bento__statRow{
+  display:flex;
+  align-items:baseline;
+  gap: 10px;
+}
+
+.bento__statNum{
+  font-size: 44px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.bento__statLbl{
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.bento__chips{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.bento__chip{
+  border: 1px solid rgba(14,43,47,.10);
+  background: rgba(255,255,255,.70);
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+  color: rgba(14,43,47,.80);
+}
+
+.bento__mapFrame{
+  margin-top: 14px;
+  height: 170px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(250,237,205,.60), transparent 55%),
+    radial-gradient(circle at 70% 10%, rgba(230,244,241,.75), transparent 55%),
+    linear-gradient(180deg, #fff, #FBFAF7);
+  border: 1px dashed rgba(14,43,47,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color: rgba(14,43,47,.65);
+  font-weight: 700;
+  text-align:center;
+  padding: 18px;
+}
+
+/* ===== Upcoming list ===== */
+.bento__listHeader{ margin-bottom: 10px; }
+
+.bento__listTitle{
+  margin: 0;
+  font-size: 18px;
+  letter-spacing:-0.01em;
+}
+
+.bento__listHint{
+  margin-top: 6px;
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 13px;
+}
+
+.bento__list{
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+}
+
+.bento__card{
+  border-radius: 18px;
+  border: 1px solid rgba(14,43,47,.10);
+  padding: 12px 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 12px;
+  background: rgba(255,255,255,.85);
+  text-decoration:none;
+  color: inherit;
+  transition: transform 180ms cubic-bezier(.2,.8,.2,1),
+              box-shadow 180ms cubic-bezier(.2,.8,.2,1);
+}
+
+.bento__card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(14,43,47,.10);
+}
+
+.bento__cardText{ min-width: 0; }
+
+.bento__cardTitle{ font-weight: 900; }
+
+.bento__cardSub{
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.bento__thumb{
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(14,43,47,.10);
+  object-fit: cover;
+  background: #F1F1EE;
+  flex: 0 0 auto;
+}
+
+/* ===== TravelStats tiles (bento classes) ===== */
+.bento__tile--hero{
+  grid-column: 1 / span 8;
+  min-height: 180px;
+  background: var(--hero);
+  color: white;
+  border: none;
+  box-shadow: var(--shadowSoft);
+  border-radius: var(--radius-lg);
+}
+
+.bento__heroTitle{
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.bento__heroSub{
+  margin: 8px 0 0;
+  opacity: .78;
+  font-weight: 600;
+}
+
+.bento__heroBadge{
+  position:absolute;
+  right: 16px;
+  top: 16px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.bento__heroOrb{
+  position:absolute;
+  right: -24px;
+  bottom: -36px;
+  width: 190px;
+  height: 190px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(250,237,205,0.65), rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 70% 70%, rgba(153,186,185,0.40), rgba(255,255,255,0) 60%);
+  opacity: .95;
+  transform: rotate(-10deg);
+}
+
+.bento__tile--sticker{
+  grid-column: 9 / -1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height: 180px;
+  background: linear-gradient(180deg, #fff, rgba(250,237,205,0.35));
+}
+
+.bento__stickerText{
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  transform: rotate(-6deg);
+  color: rgba(14,43,47,0.9);
+  text-shadow: 0 8px 18px rgba(12,24,28,.06);
+  text-align:center;
+}
