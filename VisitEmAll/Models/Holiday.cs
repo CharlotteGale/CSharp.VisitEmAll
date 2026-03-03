@@ -33,4 +33,6 @@ public class Holiday
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<HolidayDay> Days { get; set; } = new List<HolidayDay>();
+    public ICollection<UserLikedHoliday> LikedByUsers { get; set; } = new List<UserLikedHoliday>();
+
 }

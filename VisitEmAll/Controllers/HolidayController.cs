@@ -274,4 +274,54 @@ public class HolidaysController : Controller
             _ => "Unknown"
         };
     }
+        [HttpPost("/holidays/{id:int}/like")]
+        public async Task<IActionResult> Like(int id)
+        {
+            var userId = HttpContext.Session.GetInt32("User_Id");
+            if (userId == null) return Unauthorized();
+
+            var holiday = await _db.Holidays
+                .Include(h => h.User)
+                .FirstOrDefaultAsync(h => h.Id == id);
+
+            if (holiday == null) return NotFound();
+
+            // Cannot like your own holiday
+            if (holiday.UserId == userId) return BadRequest("You cannot like your own holiday.");
+
+            bool alreadyLiked = await _db.UserLikedHolidays
+                .AnyAsync(x => x.UserId == userId && x.HolidayId == id);
+
+            if (!alreadyLiked)
+            {
+                _db.UserLikedHolidays.Add(new UserLikedHoliday
+                {
+                    UserId = userId.Value,
+                    HolidayId = id
+                });
+                await _db.SaveChangesAsync();
+            }
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        [HttpPost("/holidays/{id:int}/unlike")]
+        public async Task<IActionResult> Unlike(int id)
+        {
+            var userId = HttpContext.Session.GetInt32("User_Id");
+            if (userId == null) return Unauthorized();
+
+            var like = await _db.UserLikedHolidays
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.HolidayId == id);
+
+            if (like != null)
+            {
+                _db.UserLikedHolidays.Remove(like);
+                await _db.SaveChangesAsync();
+            }
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+
 }
