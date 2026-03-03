@@ -7,7 +7,6 @@ public class HolidayDetailsViewModel
 
     public string Title { get; set; } = string.Empty;
     public string? Location { get; set; }
-    public string? Accommodation { get; set; }
     public decimal? TotalCost { get; set; }
 
     public DateOnly? StartDate { get; set; }  

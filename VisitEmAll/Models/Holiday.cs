@@ -14,11 +14,8 @@ public class Holiday
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public decimal? TotalCost { get; set; } //Maybe compute at a later stage?
-    [MaxLength(500)]
-    public string? Accommodation { get; set; } 
     public string? ThumbnailUrl { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<HolidayDay> Days { get; set; } = new List<HolidayDay>();
-    public string? HeroImageUrl { get; set; }
 
 }
