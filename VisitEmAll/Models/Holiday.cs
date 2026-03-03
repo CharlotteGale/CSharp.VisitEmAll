@@ -11,6 +11,8 @@ public class Holiday
     public string Title { get; set; } = string.Empty;
     [MaxLength(200)]
     public string? Location { get; set; }
+    public int? CountryId { get; set; }
+    public Country? Country {get; set;}
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public decimal? TotalCost { get; set; } //Maybe compute at a later stage?

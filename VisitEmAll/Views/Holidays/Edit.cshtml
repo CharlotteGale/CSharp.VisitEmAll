@@ -1,5 +1,5 @@
+@using System.Linq
 @model VisitEmAll.ViewModels.CreateHolidayViewModel
-
 
 @{
     ViewData["Title"] = "Update Holiday";
@@ -20,6 +20,32 @@
         <label asp-for="Location"></label>
         <input asp-for="Location" />
         <span asp-validation-for="Location"></span>
+    </div>
+
+    <!-- Country (typeahead + hidden CountryId) -->
+    <div>
+        <label for="country-search">Country</label>
+
+        <input id="country-search"
+               type="text"
+               autocomplete="off"
+               placeholder="Start typing a country… (e.g. Japan)"
+               value="@(Model.CountryName ?? "")" />
+
+        <input asp-for="CountryId" type="hidden" id="CountryId" />
+        <span asp-validation-for="CountryId"></span>
+
+        <div style="position:relative;">
+            <div id="country-results"
+                 style="display:none; position:absolute; left:0; right:0; z-index:50;
+                        border:1px solid #ddd; border-radius:10px; margin-top:6px;
+                        overflow:hidden; background:white; max-height:240px; overflow-y:auto;">
+            </div>
+        </div>
+
+        <small style="display:block; margin-top:6px; color:#666;">
+            Choose a real country from the list so stats + map stay accurate.
+        </small>
     </div>
 
     <div>
@@ -55,16 +81,16 @@
     <h3>Activities</h3>
 
     <div id="activities">
-    @for (var i = 0; i < Model.Activities.Count; i++)
-    {
-        <div class="activity-row">
-            <label>Activity name</label>
-            <input asp-for="Activities[i].Name" />
-            <span asp-validation-for="Activities[i].Name"></span>
-            <button type="button" class="btn btn-danger remove-btn">&times;</button>
-        </div>
-    }
-</div>
+        @for (var i = 0; i < (Model.Activities?.Count ?? 0); i++)
+        {
+            <div class="activity-row">
+                <label>Activity name</label>
+                <input asp-for="Activities[i].Name" />
+                <span asp-validation-for="Activities[i].Name"></span>
+                <button type="button" class="btn btn-danger remove-btn">&times;</button>
+            </div>
+        }
+    </div>
 
     <button type="button" id="add-activity">+ Add another activity</button>
 
@@ -78,20 +104,19 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
     <script>
+        // Activities add/remove + reindex
         (function () {
             const container = document.getElementById("activities");
             const addBtn = document.getElementById("add-activity");
 
-            function reIndexer(){
-              const rows = container.querySelectorAll(".activity-row");
-              rows.forEach((row, index) => {
-                const input = row.querySelector("input");
-                const validation = row.querySelector("span")
-                if (input){
-                  input.name = `Activities[${index}].Name`;
-                }
-              });
+            function reIndexer() {
+                const rows = container.querySelectorAll(".activity-row");
+                rows.forEach((row, index) => {
+                    const input = row.querySelector("input");
+                    if (input) input.name = `Activities[${index}].Name`;
+                });
             }
 
             addBtn.addEventListener("click", () => {
@@ -105,12 +130,138 @@
                 `;
                 container.appendChild(row);
             });
+
             container.addEventListener("click", (e) => {
-              if (e.target.classList.contains("remove-btn")){
-                e.target.closest(".activity-row").remove();
-                reIndexer();
-              }
-            })
+                if (e.target.classList.contains("remove-btn")) {
+                    e.target.closest(".activity-row").remove();
+                    reIndexer();
+                }
+            });
+        })();
+    </script>
+
+    <script>
+        // Country typeahead -> sets hidden CountryId from /countries/search?q=
+        (function () {
+            const input = document.getElementById("country-search");
+            const hidden = document.getElementById("CountryId");
+            const results = document.getElementById("country-results");
+
+            if (!input || !hidden || !results) return;
+
+            let abortController = null;
+            let selectedName = (input.value || "").trim();
+
+            function show() { results.style.display = "block"; }
+            function hide() { results.style.display = "none"; }
+            function clearResults() { results.innerHTML = ""; }
+
+            function escapeHtml(str) {
+                return String(str).replace(/[&<>"']/g, m => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                }[m]));
+            }
+
+            function clearSelectionIfUserTyped() {
+                if ((input.value || "").trim() !== selectedName) {
+                    hidden.value = "";
+                }
+            }
+
+            function renderItems(items) {
+                clearResults();
+
+                if (!items || items.length === 0) {
+                    results.innerHTML = `<div style="padding:10px; color:#666;">No matches</div>`;
+                    show();
+                    return;
+                }
+
+                for (const c of items) {
+                    const row = document.createElement("button");
+                    row.type = "button";
+                    row.style.cssText =
+                        "width:100%; text-align:left; padding:10px 12px; border:0; background:white; cursor:pointer;";
+
+                    row.onmouseenter = () => row.style.background = "#f6f6f6";
+                    row.onmouseleave = () => row.style.background = "white";
+
+                    row.innerHTML = `
+                        <div style="font-weight:600;">${escapeHtml(c.name)}</div>
+                        <div style="font-size:12px; color:#666;">
+                            ${escapeHtml(c.continent ?? "")}${c.iso2 ? " • " + escapeHtml(c.iso2) : ""}
+                        </div>
+                    `;
+
+                    row.addEventListener("click", () => {
+                        input.value = c.name;
+                        selectedName = c.name;
+                        hidden.value = c.id;
+                        hide();
+                    });
+
+                    results.appendChild(row);
+                }
+
+                show();
+            }
+
+            async function search(q) {
+                if (abortController) abortController.abort();
+                abortController = new AbortController();
+
+                const res = await fetch(`/countries/search?q=${encodeURIComponent(q)}`, {
+                    signal: abortController.signal,
+                    headers: { "Accept": "application/json" }
+                });
+
+                if (!res.ok) return [];
+                return await res.json();
+            }
+
+            let timer = null;
+
+            input.addEventListener("input", () => {
+                clearSelectionIfUserTyped();
+
+                const q = (input.value || "").trim();
+
+                if (timer) clearTimeout(timer);
+
+                if (q.length === 0) {
+                    hidden.value = "";
+                    selectedName = "";
+                    hide();
+                    clearResults();
+                    return;
+                }
+
+                timer = setTimeout(async () => {
+                    try {
+                        const items = await search(q);
+                        renderItems(items);
+                    } catch (e) {
+                        // aborted fetch is fine
+                    }
+                }, 120);
+            });
+
+            input.addEventListener("focus", () => {
+                if (results.innerHTML.trim() !== "") show();
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!results.contains(e.target) && e.target !== input) hide();
+            });
+
+            // Preserve selection if already set (Edit scenario)
+            if (hidden.value && selectedName.length > 0) {
+                // keep as-is
+            }
         })();
     </script>
 }

@@ -17,6 +17,11 @@ public class HolidaysController : Controller
   [HttpGet]
   public IActionResult Create()
   {
+      ViewBag.Countries = _db.Countries
+      .OrderBy(c => c.Name)
+      .Select(c => new { c.Id, c.Name })
+      .ToList();
+
     var vm = new CreateHolidayViewModel
     {
       Activities = new List<CreateHolidayViewModel.ActivityInput>
@@ -39,10 +44,28 @@ public class HolidaysController : Controller
           "End date cannot be before start date.");
     }
 
+    // Country must be selected and valid (real country only)
+    if (vm.CountryId == null)
+    {
+      ModelState.AddModelError(nameof(vm.CountryId), "Please select a country.");
+    }
+    else
+    {
+      var exists = await _db.Countries.AnyAsync(c => c.Id == vm.CountryId.Value);
+      if (!exists)
+        ModelState.AddModelError(nameof(vm.CountryId), "Please select a valid country.");
+    }
+
     if (!ModelState.IsValid)
     {
       vm.Activities ??= new();
       if (vm.Activities.Count == 0) vm.Activities.Add(new());
+
+      ViewBag.Countries = _db.Countries
+      .OrderBy(c => c.Name)
+      .Select(c => new { c.Id, c.Name })
+      .ToList();
+
       return View(vm);
     }
 
@@ -57,7 +80,8 @@ public class HolidaysController : Controller
       StartDate = vm.StartDate,
       EndDate = vm.EndDate,
       TotalCost = vm.TotalCost,
-      ThumbnailUrl = vm.ThumbnailUrl
+      ThumbnailUrl = vm.ThumbnailUrl,
+      CountryId = vm.CountryId
     };
 
     _db.Holidays.Add(holiday);
@@ -98,7 +122,8 @@ public class HolidaysController : Controller
   {
     var userId = HttpContext.Session.GetInt32("User_Id");
     var holiday = await _db.Holidays
-      .FirstOrDefaultAsync(h => h.Id == id);
+    .Include(h => h.Country)
+    .FirstOrDefaultAsync(h => h.Id == id);
 
     if (holiday == null || holiday.UserId != userId) return NotFound();
     
@@ -111,7 +136,14 @@ public class HolidaysController : Controller
         EndDate = holiday.EndDate,
         TotalCost = holiday.TotalCost,
         ThumbnailUrl = holiday.ThumbnailUrl,
+        CountryId = holiday.CountryId,
+        CountryName = holiday.Country?.Name
     };
+    
+    ViewBag.Countries = _db.Countries
+    .OrderBy(c => c.Name)
+    .Select(c => new { c.Id, c.Name })
+    .ToList();
 
     return View("Edit", vm);
   }
@@ -132,9 +164,25 @@ public class HolidaysController : Controller
       "End date cannot be before start date.");
     }
 
+    if (updatedHoliday.CountryId == null)
+    {
+      ModelState.AddModelError(nameof(updatedHoliday.CountryId), "Please select a country.");
+    }
+    else
+    {
+      var exists = await _db.Countries.AnyAsync(c => c.Id == updatedHoliday.CountryId.Value);
+      if (!exists)
+        ModelState.AddModelError(nameof(updatedHoliday.CountryId), "Please select a valid country.");
+    }
+
     if (!ModelState.IsValid)
     {
-      return View("Details", updatedHoliday);
+      ViewBag.Countries = _db.Countries
+      .OrderBy(c => c.Name)
+      .Select(c => new { c.Id, c.Name })
+      .ToList();
+
+      return View("Edit", updatedHoliday);
     }
 
     holiday.Title = updatedHoliday.Title;
@@ -143,7 +191,9 @@ public class HolidaysController : Controller
     holiday.EndDate = updatedHoliday.EndDate;
     holiday.TotalCost = updatedHoliday.TotalCost;
     holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
+    holiday.CountryId = updatedHoliday.CountryId;
 
+    await _db.SaveChangesAsync();
     TempData["Success"] = "Holiday updated!";
     return RedirectToAction("GetHoliday", new { id = holiday.Id });
   }

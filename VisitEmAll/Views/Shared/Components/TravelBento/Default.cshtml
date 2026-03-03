@@ -1,0 +1,215 @@
+@model VisitEmAll.ViewModels.DashboardViewModel
+
+<link rel="stylesheet" href="~/css/Travel-Bento.css" />
+
+<section class="bento">
+  <div class="bento__wrap">
+
+    <!-- Topbar -->
+    <div class="bento__topbar">
+      <div class="bento__actions">
+        <a class="bento__btn bento__btn--primary" href="/holidays/create">+ Add trip</a>
+      </div>
+    </div>
+
+    <!-- Subhead -->
+    <p class="bento__subhead">
+      @Model.CountriesVisited countries • @Model.ContinentsVisited continents • @Model.WorldPercent% of the world
+    </p>
+
+    <!-- Grid -->
+    <div class="bento__grid">
+
+      <!-- Row 1: Hero + Sticker (small reusable component) -->
+      @await Component.InvokeAsync("TravelStats", new { dashboard = Model })
+
+      <!-- Left column: Highlights -->
+      <section class="bento__tile bento__tile--leftInfo" aria-label="Highlights">
+        <div class="bento__tileInner">
+          <p class="bento__kicker">Highlights</p>
+
+          <div class="bento__highlights">
+            <div class="bento__headline">Your Memories</div>
+            <div class="bento__headline bento__headline--muted">Your Friends</div>
+            <div class="bento__headline bento__headline--muted">Your Next Trip</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Middle: Discover -->
+      <section class="bento__tile bento__tile--centerFeature" aria-label="Discover">
+        <div class="bento__cover" aria-hidden="true"></div>
+
+        <div class="bento__coverCaption">
+          <p class="bento__coverTitle">Discover</p>
+          <p class="bento__coverSub">Find your next holiday inspiration</p>
+        </div>
+      </section>
+
+      <!-- Right: Stat tile (Longest trip / progress) -->
+      <section class="bento__tile bento__tile--sideTop" aria-label="Longest trip">
+        <div class="bento__tileInner">
+          <p class="bento__kicker bento__kicker--onTint">Longest trip</p>
+
+          <div class="bento__big">@Model.LongestTripDays days</div>
+          <div class="bento__small">your longest holiday so far</div>
+
+          <div class="bento__progress" title="World progress">
+            <div class="bento__progressFill" style="width:@(Math.Clamp(Model.WorldPercent, 0, 100))%"></div>
+          </div>
+
+          <div class="bento__small bento__mt">
+            World progress: @Model.CountriesVisited / 195
+          </div>
+        </div>
+      </section>
+
+      <!-- Left wide: Map -->
+      <section class="bento__tile bento__tile--mainMap" aria-label="Map">
+        <div class="bento__tileInner">
+          <p class="bento__kicker">Visited countries</p>
+
+          <div class="bento__statRow">
+            <div class="bento__statNum">@Model.CountriesVisited</div>
+            <div class="bento__statLbl">countries highlighted on your map</div>
+          </div>
+
+          <div class="bento__chips">
+            <span class="bento__chip">@Model.ContinentsVisited continents</span>
+            <span class="bento__chip">@Model.TripsThisYear trips this year</span>
+            <span class="bento__chip">Longest: @Model.LongestTripDays days</span>
+          </div>
+
+          <div class="bento__mapFrame">
+            @* SVG map goes here later *@
+          </div>
+        </div>
+      </section>
+
+      <!-- Right tall: Upcoming -->
+      <section class="bento__tile bento__tile--sideList" aria-label="Upcoming trips">
+        <div class="bento__tileInner">
+          <div class="bento__listHeader">
+            <h3 class="bento__listTitle">Upcoming</h3>
+            <p class="bento__listHint">
+              @(Model.DaysUntilNextTrip == null ? "No upcoming trips yet." : $"{Model.DaysUntilNextTrip} days until your next trip.")
+            </p>
+          </div>
+
+          <div class="bento__list">
+            @if (Model.UpcomingTrips == null || Model.UpcomingTrips.Count == 0)
+            {
+              <div class="bento__card bento__mt">
+                <div class="bento__cardText">
+                  <div class="bento__cardTitle">Add your next trip</div>
+                  <div class="bento__cardSub">Pick a country and dates — we’ll handle the stats.</div>
+                </div>
+                <div class="bento__thumb" aria-hidden="true"></div>
+              </div>
+            }
+            else
+            {
+              foreach (var t in Model.UpcomingTrips.Take(3))
+              {
+                <a class="bento__card" href="/holidays/@t.Id">
+                  <div class="bento__cardText">
+                    <div class="bento__cardTitle">@t.Title</div>
+                    <div class="bento__cardSub">@t.Location</div>
+                  </div>
+
+                  @if (!string.IsNullOrWhiteSpace(t.ThumbnailUrl))
+                  {
+                    <img class="bento__thumb" src="@t.ThumbnailUrl" alt="" />
+                  }
+                  else
+                  {
+                    <div class="bento__thumb" aria-hidden="true"></div>
+                  }
+                </a>
+              }
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom right: Next trip -->
+      <section class="bento__tile bento__tile--sideBottom" aria-label="Next trip">
+        <div class="bento__tileInner">
+          <p class="bento__kicker bento__kicker--onAccent">Next trip</p>
+
+          @if (Model.DaysUntilNextTrip == null)
+          {
+            <div class="bento__big">Nothing planned</div>
+            <div class="bento__small">Add your next trip and we’ll start the countdown.</div>
+          }
+          else
+          {
+            <div class="bento__big">@Model.DaysUntilNextTrip days</div>
+            <div class="bento__small">until your next trip starts.</div>
+          }
+
+          @if (!string.IsNullOrWhiteSpace(Model.MostVisitedCountryCode))
+          {
+            <div class="bento__small bento__mt">
+              Most visited: @Model.MostVisitedCountryCode
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    // prevent double-binding if component appears twice
+    if (window.__travelBentoCountupBound) return;
+    window.__travelBentoCountupBound = true;
+
+    function runCountup() {
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const nodes = document.querySelectorAll('.countup[data-count]');
+      nodes.forEach(node => {
+        if (node.dataset.done) return;
+        node.dataset.done = "1";
+
+        const raw = node.getAttribute('data-count') || "0";
+        let target = Number(raw);
+        const decimals = Number(node.getAttribute('data-decimals') || "0");
+
+        if (!isFinite(target)) {
+          node.textContent = raw;
+          return;
+        }
+
+        // If it's already blank/space, keep; otherwise ensure we start at 0 display
+        node.textContent = (0).toFixed(decimals);
+
+        if (reduce) {
+          node.textContent = target.toFixed(decimals);
+          return;
+        }
+
+        const duration = 750;
+        const t0 = performance.now();
+
+        function step(t) {
+          const p = Math.min((t - t0) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const val = target * eased;
+          node.textContent = val.toFixed(decimals);
+          if (p < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", runCountup, { once: true });
+    } else {
+      runCountup();
+    }
+  })();
+</script>

@@ -80,6 +80,37 @@ public static class DbSeeder
     };
 
     context.DayItems.AddRange(items);
+
+    if (!context.Countries.Any())
+  {
+    context.Countries.AddRange(
+        new Country { Name = "United Kingdom", Iso2 = "GB", Continent = "Europe" },
+        new Country { Name = "France", Iso2 = "FR", Continent = "Europe" },
+        new Country { Name = "Spain", Iso2 = "ES", Continent = "Europe" },
+        new Country { Name = "Italy", Iso2 = "IT", Continent = "Europe" },
+        new Country { Name = "Germany", Iso2 = "DE", Continent = "Europe" },
+        new Country { Name = "Netherlands", Iso2 = "NL", Continent = "Europe" },
+        new Country { Name = "Portugal", Iso2 = "PT", Continent = "Europe" },
+
+        new Country { Name = "Japan", Iso2 = "JP", Continent = "Asia" },
+        new Country { Name = "South Korea", Iso2 = "KR", Continent = "Asia" },
+        new Country { Name = "Thailand", Iso2 = "TH", Continent = "Asia" },
+        new Country { Name = "Singapore", Iso2 = "SG", Continent = "Asia" },
+        new Country { Name = "United Arab Emirates", Iso2 = "AE", Continent = "Asia" },
+
+        new Country { Name = "United States", Iso2 = "US", Continent = "North America" },
+        new Country { Name = "Canada", Iso2 = "CA", Continent = "North America" },
+        new Country { Name = "Mexico", Iso2 = "MX", Continent = "North America" },
+
+        new Country { Name = "Brazil", Iso2 = "BR", Continent = "South America" },
+        new Country { Name = "Argentina", Iso2 = "AR", Continent = "South America" },
+
+        new Country { Name = "South Africa", Iso2 = "ZA", Continent = "Africa" },
+        new Country { Name = "Egypt", Iso2 = "EG", Continent = "Africa" },
+
+        new Country { Name = "Australia", Iso2 = "AU", Continent = "Oceania" }
+    );
+  }
     context.SaveChanges();
   }
 }
