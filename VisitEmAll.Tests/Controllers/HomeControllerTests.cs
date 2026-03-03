@@ -40,6 +40,17 @@ public class HomeControllerTests : NUnitTestBase
     }
 
     [Test]
+    public void Index_WhenLoggedIn_RedirectsToDashboard()
+    {
+        _controller.HttpContext.Session.SetInt32("User_Id", 1);
+
+        var result = _controller.Index() as RedirectToActionResult;
+
+        Assert.That(result!.ActionName, Is.EqualTo("Index"));
+        Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
+    }
+
+    [Test]
     public void Privacy_ReturnsView()
     {
         var result = _controller.Privacy();
