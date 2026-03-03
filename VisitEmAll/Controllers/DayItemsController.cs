@@ -13,7 +13,9 @@ public class DayItemsController : Controller
         _db = db;
     }
 
-    //CREATE
+    // -------------------------------------
+    // CREATE ACTIVITY / RESTURANT / ACCOM
+    // -------------------------------------
     [HttpPost("/day-items/{dayId:int}/activities/create")]
     public async Task<IActionResult> CreateActivity(int dayId, DayActivity vm)
     {
@@ -52,8 +54,9 @@ public class DayItemsController : Controller
 
         return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
     }
-
-    //UPDATE/EDIT
+    // -------------------------------------
+    // UPDATE ACTIVITY / RESTURANT / ACCOM - NOT WORKING
+    // -------------------------------------
     [HttpPost("/day-items/{id:int}/update")]
     public async Task<IActionResult> UpdateItem(
         int id,
@@ -76,8 +79,10 @@ public class DayItemsController : Controller
         return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
     }
 
+    // -------------------------------------
+    // DELETE ACTIVITY / RESTURANT / ACCOM
+    // -------------------------------------
 
-    //DELETE
     [HttpPost("/day-items/{id:int}/delete")]
     public async Task<IActionResult> DeleteItem(int id)
     {
@@ -91,4 +96,6 @@ public class DayItemsController : Controller
 
         return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
     }
+
+
 }

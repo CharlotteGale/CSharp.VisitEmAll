@@ -175,8 +175,8 @@ public class HolidaysController : Controller
     // DETAILS (READ-ONLY)
     // ---------------------------
 
-    [HttpGet("/holidays/{id:int}")]
-    public async Task<IActionResult> Details(int id)
+[HttpGet("/holidays/{id:int}")]
+    public async Task<IActionResult> Details(int id, string? addType = null, int? dayId = null)
     {
         var holiday = await _db.Holidays
             .Include(h => h.Days)
@@ -196,6 +196,7 @@ public class HolidaysController : Controller
             StartDate = holiday.StartDate,
             EndDate = holiday.EndDate,
             HeroImageUrl = holiday.HeroImageUrl,
+
             Days = holiday.Days
                 .OrderBy(d => d.Date)
                 .Select(d => new HolidayDayViewModel
@@ -204,11 +205,15 @@ public class HolidaysController : Controller
                     Date = d.Date,
                     Items = MergeAndSortItems(d)
                 })
-                .ToList()
+                .ToList(),
+
+            // NEW — tells the view which inline form to show
+            AddType = addType,
+            AddDayId = dayId
         };
 
-        return View(vm);
-    }
+    return View(vm);
+}
 
     private List<DayTimelineItemViewModel> MergeAndSortItems(HolidayDay day)
     {
