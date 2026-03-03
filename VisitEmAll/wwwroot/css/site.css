@@ -319,8 +319,6 @@ header.fixed-top::after {
 }
 
 
-
-
 @media (max-width: 768px) {
   html {
     font-size: 16px;
