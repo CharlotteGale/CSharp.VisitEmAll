@@ -21,7 +21,14 @@ body {
 body {
   padding-top: 5rem;
   overflow-x: visible;
+  margin-bottom: 60px;
 }
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 
 /* ====================== */
 /* DEFAULTS */
@@ -209,15 +216,6 @@ header.fixed-top::after {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}
-
 .form-floating>.form-control-plaintext::placeholder,
 .form-floating>.form-control::placeholder {
   color: var(--bs-secondary-color);
@@ -275,7 +273,7 @@ body {
   display: flex;
   align-items: stretch;
   justify-self: center;
-  background: #fff;
+  background: #F8F9FA;
   border-radius: 12px;
   border: 1px solid rgba(189, 189, 189, 0.3);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -305,10 +303,19 @@ body {
   padding-bottom: 60px;
 }
 
-.card-img-top {
-  width: 100%;
-  height: 12vw;
-  object-fit: cover;
+.holiday-card-img-top.img-cover, 
+.holiday-card-img-top.img-default {
+    width: 100%;
+    height: 12rem !important;
+    max-height: 12rem;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.holiday-card-img-top.img-default {
+    object-fit: contain;
+    background-color: #F8F9FA;
+    padding: 1.5rem;
 }
 
 
