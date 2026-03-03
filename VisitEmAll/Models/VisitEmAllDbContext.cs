@@ -72,6 +72,20 @@ public class VisitEmAllDbContext : DbContext
         .HasForeignKey(i => i.HolidayDayId)
         .OnDelete(DeleteBehavior.Cascade);
 
+    modelBuilder.Entity<UserLikedHoliday>()
+        .HasKey(x => new { x.UserId, x.HolidayId });
+
+    modelBuilder.Entity<UserLikedHoliday>()
+        .HasOne(x => x.User)
+        .WithMany(u => u.LikedHolidays)
+        .HasForeignKey(x => x.UserId);
+
+    modelBuilder.Entity<UserLikedHoliday>()
+        .HasOne(x => x.Holiday)
+        .WithMany(h => h.LikedByUsers)
+        .HasForeignKey(x => x.HolidayId);
+
+
     modelBuilder.Entity<DayItem>(entity =>
     {
       entity.Ignore(i => i.ItemType);
