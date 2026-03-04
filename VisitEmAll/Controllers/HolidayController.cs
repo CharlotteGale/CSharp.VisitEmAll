@@ -85,6 +85,8 @@ public class HolidaysController : Controller
             {
             await vm.HeroImageFile.CopyToAsync(fileStream);
             }
+
+            uniqueFileName = "/uploads/heros/" + uniqueFileName;
         }
 
         var holiday = new Holiday
@@ -211,6 +213,8 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
             {
                 await updatedHoliday.HeroImageFile.CopyToAsync(fileStream);
             }
+            
+            uniqueFileName = "/uploads/heros/" + uniqueFileName;
 
             if (!string.IsNullOrEmpty(holiday.HeroImageUrl))
             {
@@ -337,7 +341,6 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
                 })
                 .ToList(),
 
-            // NEW — tells the view which inline form to show
             AddType = addType,
             AddDayId = dayId
         };

@@ -19,8 +19,6 @@ public class CreateHolidayViewModel
     [DataType(DataType.Date)]
     public DateOnly? EndDate { get; set; }
 
-    [MaxLength(200)]
-
     public decimal? TotalCost { get; set; }
 
     public string? ThumbnailUrl { get; set; }
