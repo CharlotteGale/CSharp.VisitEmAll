@@ -68,6 +68,7 @@ public class HolidaysController : Controller
             UserId = userId.Value,
             Title = vm.Title,
             Location = vm.Location,
+            CountryId = vm.CountryId,
             StartDate = vm.StartDate,
             EndDate = vm.EndDate,
             TotalCost = vm.TotalCost,
@@ -353,6 +354,5 @@ public class HolidaysController : Controller
 
             return Redirect(Request.Headers["Referer"].ToString());
         }
-
 
 }
