@@ -13,6 +13,8 @@ public class HolidayDetailsViewModel
 
     public List<HolidayDayViewModel> Days { get; set; } = new();
 
+    public List<IFormFile> ImageFiles { get; set; } = new();
+
     // NEW — tells the view which inline form to show
     public string? AddType { get; set; }
     public int? AddDayId { get; set; }
