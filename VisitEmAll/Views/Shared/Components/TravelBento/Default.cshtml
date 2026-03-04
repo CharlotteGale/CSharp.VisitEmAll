@@ -1,4 +1,6 @@
 @model VisitEmAll.ViewModels.DashboardViewModel
+@using Microsoft.EntityFrameworkCore
+@inject VisitEmAll.Models.VisitEmAllDbContext Db
 
 <link rel="stylesheet" href="~/css/Travel-Bento.css" />
 
@@ -6,6 +8,7 @@
   var sessionUserId = Context.Session.GetInt32("User_Id");
   var tripsUrl = "/dashboard";
   var addTripUrl = "/holidays/create";
+  var friendsUrl = "/friends";
 
   // Spotlight trip = first upcoming
   var nextTrip = Model.UpcomingTrips?.FirstOrDefault();
@@ -28,7 +31,7 @@
     daysUntil == 1 ? "1 day to go" :
     $"{daysUntil} days to go";
 
-  // Achievements: dynamic tiers based on trips count
+  // Achievements tiers based on trips count
   var t = Model.TripsCount;
 
   var tiers = new[]
@@ -39,7 +42,7 @@
     new { Min = 5,  Name = "Explorer",           Emoji = "🧭", Desc = "You’re so woke.",                      NextAt = 10 },
     new { Min = 10, Name = "Globetrotter",       Emoji = "🌍", Desc = "10+ trips logged. Love to see it!",    NextAt = 20 },
     new { Min = 20, Name = "Legend",             Emoji = "🏆", Desc = "20+ trips. It's giving digital nomad", NextAt = 25 },
-    new { Min = 25, Name = "Mythic",             Emoji = "✨", Desc = "You're the gandalf of holidays.",                   NextAt = 25 }
+    new { Min = 25, Name = "Mythic",             Emoji = "✨", Desc = "You're the gandalf of holidays.",      NextAt = 25 }
   };
 
   var tier = tiers.Last(x => t >= x.Min);
@@ -55,46 +58,92 @@
     .Take(3)
     .ToList();
 
-// Personality
-var trips = Model.TripsCount;
-var countries = Model.CountriesVisited;
-var continents = Model.ContinentsVisited;
+  // Personality
+  var trips = Model.TripsCount;
+  var countries = Model.CountriesVisited;
+  var continents = Model.ContinentsVisited;
 
-string personaTitle;
-string personaEmoji;
-string personaClass;
+  string personaTitle;
+  string personaEmoji;
+  string personaClass;
 
-// Simple logic ladder
-if (continents >= 4 && countries >= 12)
-{
-  personaTitle = "Continent Collector";
-  personaEmoji = "🌍";
-  personaClass = "persona--collector";
-}
-else if (trips >= 10 && countries < 8)
-{
-  personaTitle = "Repeat Favourite";
-  personaEmoji = "💛";
-  personaClass = "persona--favourite";
-}
-else if (countries >= 8)
-{
-  personaTitle = "City Hopper";
-  personaEmoji = "🏙️";
-  personaClass = "persona--hopper";
-}
-else if (trips >= 3)
-{
-  personaTitle = "Weekend Warrior";
-  personaEmoji = "⚡";
-  personaClass = "persona--warrior";
-}
-else
-{
-  personaTitle = "Dream Planner";
-  personaEmoji = "✨";
-  personaClass = "persona--planner";
-}
+  if (continents >= 4 && countries >= 12)
+  {
+    personaTitle = "Continent Collector";
+    personaEmoji = "🌍";
+    personaClass = "persona--collector";
+  }
+  else if (trips >= 10 && countries < 8)
+  {
+    personaTitle = "Repeat Favourite";
+    personaEmoji = "💛";
+    personaClass = "persona--favourite";
+  }
+  else if (countries >= 8)
+  {
+    personaTitle = "City Hopper";
+    personaEmoji = "🏙️";
+    personaClass = "persona--hopper";
+  }
+  else if (trips >= 3)
+  {
+    personaTitle = "Weekend Warrior";
+    personaEmoji = "⚡";
+    personaClass = "persona--warrior";
+  }
+  else
+  {
+    personaTitle = "Dream Planner";
+    personaEmoji = "✨";
+    personaClass = "persona--planner";
+  }
+
+  // Visited ISO2 list from model (what highlights the map)
+  var visitedIso2 = (Model.VisitedCountryCodes ?? new HashSet<string>())
+    .Where(c => !string.IsNullOrWhiteSpace(c))
+    .Select(c => c.Trim().ToUpperInvariant())
+    .Distinct()
+    .ToArray();
+
+  var visitedJson = System.Text.Json.JsonSerializer.Serialize(visitedIso2);
+
+  // Unique ids per session user
+  var mapObjectId = $"world-svg-{(sessionUserId ?? 0)}";
+  var tooltipId = $"map-tip-{(sessionUserId ?? 0)}";
+
+  // ---- Build SAFE name -> iso2 map from DB (dedupe by name, ignore duplicates like "Congo") ----
+  var rows = await Db.Countries
+    .AsNoTracking()
+    .Where(c => c.Name != null && c.Iso2 != null)
+    .Select(c => new { Name = c.Name!, Iso2 = c.Iso2! })
+    .ToListAsync();
+
+  var safeNameToIso2 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+  foreach (var r in rows)
+  {
+    var key = r.Name.Trim();
+    if (!safeNameToIso2.ContainsKey(key))
+      safeNameToIso2[key] = r.Iso2.Trim().ToUpperInvariant();
+  }
+
+  var nameToIso2Json = System.Text.Json.JsonSerializer.Serialize(safeNameToIso2);
+
+    // ISO2 -> Name map (safe, deduped)
+  var countryRows = await Db.Countries
+    .AsNoTracking()
+    .Where(c => c.Iso2 != null && c.Name != null)
+    .Select(c => new { Iso2 = c.Iso2!, Name = c.Name! })
+    .ToListAsync();
+
+  var iso2ToName = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+  foreach (var r in countryRows)
+  {
+    var key = r.Iso2.Trim().ToUpperInvariant();
+    if (!iso2ToName.ContainsKey(key))
+      iso2ToName[key] = r.Name.Trim();
+  }
+
+  var iso2ToNameJson = System.Text.Json.JsonSerializer.Serialize(iso2ToName);
 }
 
 <section class="bento">
@@ -113,7 +162,7 @@ else
 
     <div class="bento__grid">
 
-      <!-- Row 1: Travel snapshot (hero + sticker micro component) -->
+      <!-- Row 1 -->
       @await Component.InvokeAsync("TravelStats", new { dashboard = Model })
 
       <!-- Row 2 Left: Achievements -->
@@ -130,22 +179,16 @@ else
           </div>
 
           <div class="bento__achievementMeta">
-            <div class="bento__chip">✈️ <span class="countup" data-count="@Model.TripsCount"> &nbsp; </span> trips</div>
-            <div class="bento__chip">🌍 <span class="countup" data-count="@Model.CountriesVisited"> &nbsp; </span> countries</div>
+            <div class="bento__chip">✈️ <span class="countup" data-count="@Model.TripsCount">0</span> trips</div>
+            <div class="bento__chip">🌍 <span class="countup" data-count="@Model.CountriesVisited">0</span> countries</div>
           </div>
 
           <div class="bento__achievementProgress">
             <div class="bento__achievementRow">
               <span class="bento__small" style="opacity:.75;">Next badge</span>
               <span class="bento__small" style="opacity:.85;">
-                @if (tier.Name == "Mythic")
-                {
-                  <text>Maxed</text>
-                }
-                else
-                {
-                  <text>@t/@nextTarget trips</text>
-                }
+                @if (tier.Name == "Mythic") { <text>Maxed</text> }
+                else { <text>@t/@nextTarget trips</text> }
               </span>
             </div>
 
@@ -160,7 +203,7 @@ else
         </div>
       </a>
 
-      <!-- Row 2 Right: Upcoming Spotlight (BIG) -->
+      <!-- Row 2 Right: Spotlight -->
       <a class="bento__tile bento__tile--spotlight bento__tileLink" href="@nextUrl" aria-label="Upcoming trip spotlight">
         <div class="bento__spotlightMedia"
              style="@(string.IsNullOrWhiteSpace(nextImg) ? "" : $"background-image:url('{nextImg}');")"></div>
@@ -175,6 +218,7 @@ else
             <div class="bento__spotlightTitle">
               @(nextTrip == null ? "Plan your next trip" : nextTrip.Title)
             </div>
+
             <div class="bento__spotlightSub">
               @if (nextTrip == null)
               {
@@ -198,14 +242,14 @@ else
         </div>
       </a>
 
-      <!-- Row 3 Left: Map placeholder (link for now) -->
+      <!-- Row 3 Left: Map -->
       <a class="bento__tile bento__tile--mainMap bento__tileLink" href="@tripsUrl" aria-label="Visited countries">
         <div class="bento__tileInner">
           <p class="bento__kicker">Visited countries</p>
 
           <div class="bento__statRow">
             <div class="bento__statNum">
-              <span class="countup" data-count="@Model.CountriesVisited"> &nbsp; </span>
+              <span class="countup" data-count="@Model.CountriesVisited">0</span>
             </div>
             <div class="bento__statLbl">countries highlighted on your map</div>
           </div>
@@ -216,8 +260,23 @@ else
             <span class="bento__chip">Longest: @Model.LongestTripDays days</span>
           </div>
 
-          <div class="bento__mapFrame">
-            Map comes next — countries will light up automatically from your selected country.
+          <div class="bento__mapFrame--svg">
+            <object
+              id="@mapObjectId"
+              class="bento__mapSvgObject bento__mapSvgObject--loading"
+              type="image/svg+xml"
+              data="/maps/world.svg"
+              aria-label="Visited countries map">
+            </object>
+
+            <div id="@tooltipId" class="bento__mapTooltip" hidden></div>
+
+            @if (visitedIso2.Length == 0)
+            {
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:18px; text-align:center; color:rgba(14,43,47,.65); font-weight:800;">
+                Add a trip with a country selected to light up the map.
+              </div>
+            }
           </div>
         </div>
       </a>
@@ -246,11 +305,19 @@ else
               </div>
               <div class="bento__thumb" aria-hidden="true"></div>
             </a>
+
+            <a class="bento__card" href="@friendsUrl">
+              <div class="bento__cardText">
+                <div class="bento__cardTitle">Find new friends</div>
+                <div class="bento__cardSub">Get new holiday inspo</div>
+              </div>
+              <div class="bento__thumb" aria-hidden="true"></div>
+            </a>
           </div>
         </div>
       </section>
 
-      <!-- Bottom row pair (NOT squeezed): Upcoming list + Milestone -->
+      <!-- Bottom row pair -->
       <div class="bento__bottomPair">
 
         <section class="bento__tile bento__tile--sideList" aria-label="Upcoming trips list">
@@ -319,16 +386,16 @@ else
           </div>
         </section>
 
- <a class="bento__tile bento__tile--sideBottom bento__tileLink @personaClass" href="/insights" aria-label="Travel personality">
-  <div class="bento__tileInner bento__personaSimple">
-    <p class="bento__kicker bento__kicker--onAccent">Personality</p>
+        <a class="bento__tile bento__tile--sideBottom bento__tileLink @personaClass" href="/insights" aria-label="Travel personality">
+          <div class="bento__tileInner bento__personaSimple">
+            <p class="bento__kicker bento__kicker--onAccent">Personality</p>
 
-    <div class="bento__personaCenter">
-      <div class="bento__personaEmoji" aria-hidden="true">@personaEmoji</div>
-      <div class="bento__personaTitle">@personaTitle</div>
-    </div>
-  </div>
-</a>
+            <div class="bento__personaCenter">
+              <div class="bento__personaEmoji" aria-hidden="true">@personaEmoji</div>
+              <div class="bento__personaTitle">@personaTitle</div>
+            </div>
+          </div>
+        </a>
 
       </div>
 
@@ -336,6 +403,7 @@ else
   </div>
 </section>
 
+<!-- Count up numbers -->
 <script>
   (function () {
     if (window.__travelBentoCountupBound) return;
@@ -386,4 +454,223 @@ else
       runCountup();
     }
   })();
+</script>
+
+<!-- Map logic (recognises ISO2 + SVG class/name using DB countries) -->
+<script>
+(function () {
+  const obj = document.getElementById("@mapObjectId");
+  const tooltip = document.getElementById("@tooltipId");
+  if (!obj) return;
+
+  if (obj.dataset.init === "1") return;
+  obj.dataset.init = "1";
+
+  const visited = @Html.Raw(visitedJson);
+  const visitedSet = new Set((visited || []).map(x => String(x).toUpperCase()));
+
+  // ✅ ISO2 -> official country name from DB
+  const ISO2_TO_NAME = @Html.Raw(iso2ToNameJson);
+
+  const COLORS = {
+    baseFill: "rgba(14,43,47,0.10)",
+    baseStroke: "rgba(14,43,47,0.16)",
+    visitedFill: getComputedStyle(document.documentElement).getPropertyValue("--sand").trim() || "#EABCA8",
+    hoverFill: "rgba(153,186,185,0.45)"
+  };
+
+  function norm(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/\s+/g, " ");
+  }
+
+  // ✅ Name aliases for SVG naming differences (tiny list, but powerful)
+  const NAME_ALIASES = {
+    "united states of america": "united states",
+    "russian federation": "russia",
+    "korea, republic of": "south korea",
+    "korea (republic of)": "south korea",
+    "korea, democratic people's republic of": "north korea",
+    "iran (islamic republic of)": "iran",
+    "bolivia (plurinational state of)": "bolivia",
+    "tanzania, united republic of": "tanzania",
+    "venezuela (bolivarian republic of)": "venezuela",
+    "syrian arab republic": "syria",
+    "viet nam": "vietnam",
+    "lao people's democratic republic": "laos",
+    "côte d’ivoire": "ivory coast",
+    "cote d'ivoire": "ivory coast"
+  };
+
+  function canonicalName(name) {
+    const n = norm(name);
+    return NAME_ALIASES[n] || n;
+  }
+
+  function showTip(text, x, y) {
+    if (!tooltip) return;
+    tooltip.textContent = text;
+    tooltip.hidden = false;
+    tooltip.style.left = (x + 12) + "px";
+    tooltip.style.top = (y + 12) + "px";
+  }
+  function hideTip() {
+    if (!tooltip) return;
+    tooltip.hidden = true;
+  }
+
+  function applyFill(el, fill) {
+    el.style.fill = fill;
+    if (el.querySelectorAll) {
+      el.querySelectorAll("path, polygon").forEach(p => p.style.fill = fill);
+    }
+  }
+
+function normalizeAndFitSvg(doc) {
+  const svg = doc.querySelector("svg");
+  if (!svg) return;
+
+  // Make responsive
+  svg.removeAttribute("width");
+  svg.removeAttribute("height");
+  svg.style.width = "100%";
+  svg.style.height = "100%";
+  svg.style.display = "block";
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+  // Ensure we have a viewBox to work with
+  let vb = svg.getAttribute("viewBox") || svg.getAttribute("viewbox");
+  if (!vb) {
+    // if missing, derive from width/height or fallback
+    const w = parseFloat(svg.getAttribute("width")) || 2000;
+    const h = parseFloat(svg.getAttribute("height")) || 857;
+    vb = `0 0 ${w} ${h}`;
+    svg.setAttribute("viewBox", vb);
+  }
+
+  // Crop to the actual drawn shapes (zooms OUT to show full world)
+  const shapes = svg.querySelectorAll("path, polygon");
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+  shapes.forEach(el => {
+    try {
+      const b = el.getBBox();
+      minX = Math.min(minX, b.x);
+      minY = Math.min(minY, b.y);
+      maxX = Math.max(maxX, b.x + b.width);
+      maxY = Math.max(maxY, b.y + b.height);
+    } catch (_) { /* some elements may fail getBBox; ignore */ }
+  });
+
+  if (isFinite(minX) && isFinite(minY) && isFinite(maxX) && isFinite(maxY)) {
+    const w = maxX - minX;
+    const h = maxY - minY;
+
+    // Padding controls zoom level. Increase = zoom out more.
+    const padX = w * 0.12;  // <- more zoom-out
+    const padY = h * 0.18;  // <- more zoom-out
+
+    svg.setAttribute(
+      "viewBox",
+      `${minX - padX} ${minY - padY} ${w + padX * 2} ${h + padY * 2}`
+    );
+  }
+}
+
+  // ✅ Find SVG nodes for a given ISO2:
+  // 1) try id="BR" etc
+  // 2) fallback: match element class/name text to the DB country name
+  function getNodesForIso2(doc, iso2) {
+    const code = String(iso2).toUpperCase();
+    const nodes = [];
+
+    // A) Direct ID (works for most)
+   // A) Direct ID (works for most)
+let byId = doc.getElementById(code) || doc.getElementById(code.toLowerCase());
+if (!byId && code === "GB") {
+  // SimpleMaps sometimes uses UK instead of GB
+  byId = doc.getElementById("UK") || doc.getElementById("uk");
+}
+if (byId) nodes.push(byId);
+
+    // B) Class/name fallback for big countries (US/GB/JP/CN/RU etc)
+    if (!byId) {
+      const dbName = ISO2_TO_NAME[code];
+      if (dbName) {
+        const want = canonicalName(dbName);
+
+        doc.querySelectorAll("[class],[name],[data-name]").forEach(el => {
+          const cls = el.getAttribute("class");
+          const nm = el.getAttribute("name") || el.getAttribute("data-name");
+
+          // SimpleMaps uses class="United States" exactly (spaces)
+          if (cls && canonicalName(cls) === want) nodes.push(el);
+          else if (nm && canonicalName(nm) === want) nodes.push(el);
+        });
+      }
+    }
+
+    return Array.from(new Set(nodes));
+  }
+
+  obj.addEventListener("load", () => {
+    try {
+      const doc = obj.contentDocument;
+      if (!doc) return;
+
+      normalizeAndFitSvg(doc);
+
+      // Base styling
+      doc.querySelectorAll("path, polygon").forEach(s => {
+        s.style.transition = "fill 180ms ease, opacity 180ms ease";
+        s.style.fill = COLORS.baseFill;
+        s.style.stroke = COLORS.baseStroke;
+        s.style.strokeWidth = "0.6";
+      });
+
+      // Highlight visited
+      visitedSet.forEach(code => {
+        const nodes = getNodesForIso2(doc, code);
+        nodes.forEach(el => applyFill(el, COLORS.visitedFill));
+      });
+
+      // Hover/tooltip (never remove visited color; block clicks)
+      const interactive = [];
+      doc.querySelectorAll("[id],[class],[name],[data-name]").forEach(el => interactive.push(el));
+      const uniq = Array.from(new Set(interactive));
+
+      uniq.forEach(el => {
+        // We only care about showing tooltip; highlighting is based on visitedSet
+        el.style.cursor = "default";
+
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }, true);
+
+        el.addEventListener("mouseenter", (e) => {
+          const label = el.getAttribute("name") || el.getAttribute("data-name") || el.getAttribute("class") || el.id || "Country";
+          showTip(label, e.clientX, e.clientY);
+        });
+
+        el.addEventListener("mousemove", (e) => {
+          const label = el.getAttribute("name") || el.getAttribute("data-name") || el.getAttribute("class") || el.id || "Country";
+          showTip(label, e.clientX, e.clientY);
+        });
+
+        el.addEventListener("mouseleave", () => hideTip());
+      });
+
+    } catch (err) {
+      console.error("Map init failed:", err);
+    } finally {
+      obj.classList.remove("bento__mapSvgObject--loading");
+      obj.classList.add("bento__mapSvgObject--ready");
+    }
+  });
+})();
 </script>
