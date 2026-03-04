@@ -353,14 +353,14 @@
                                                 <input type="text" name="notes" value="@item.Notes" placeholder="Notes" class="form-control form-control-sm"/>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-dark btn-sm mt-2 me-2">Save</button>
+                                        <button type="submit" class="btn btn-success btn-sm mt-2 me-2">Save</button>
                                     </form>
                                     <form method="post"
                                         asp-controller="DayItems"
                                         asp-action="CancelInline"
                                         asp-route-id="@item.Id"
                                         class="d-inline">
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm mt-2">Cancel</button>
+                                        <button type="submit" class="btn btn-outline-dark btn-sm mt-2">Cancel</button>
                                     </form>
                                 }
 
