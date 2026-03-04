@@ -4,7 +4,7 @@
 
 @{
   var sessionUserId = Context.Session.GetInt32("User_Id");
-  var tripsUrl = "/holidays";
+  var tripsUrl = "/dashboard";
   var addTripUrl = "/holidays/create";
 
   // Spotlight trip = first upcoming
@@ -36,10 +36,10 @@
     new { Min = 0,  Name = "First Steps",        Emoji = "🌱", Desc = "Log your first trip to unlock badges.", NextAt = 1 },
     new { Min = 1,  Name = "Rookie Traveller",   Emoji = "🧳", Desc = "You’ve started your travel story.",     NextAt = 3 },
     new { Min = 3,  Name = "Weekend Warrior",    Emoji = "📍", Desc = "Short trips, big memories.",           NextAt = 5 },
-    new { Min = 5,  Name = "Explorer",           Emoji = "🧭", Desc = "You’re building momentum.",            NextAt = 10 },
-    new { Min = 10, Name = "Globetrotter",       Emoji = "🌍", Desc = "10+ trips logged. Love to see it.",    NextAt = 20 },
-    new { Min = 20, Name = "Legend",             Emoji = "🏆", Desc = "20+ trips. Respect.",                  NextAt = 25 },
-    new { Min = 25, Name = "Mythic",             Emoji = "✨", Desc = "Travel icon status.",                   NextAt = 25 }
+    new { Min = 5,  Name = "Explorer",           Emoji = "🧭", Desc = "You’re so woke.",                      NextAt = 10 },
+    new { Min = 10, Name = "Globetrotter",       Emoji = "🌍", Desc = "10+ trips logged. Love to see it!",    NextAt = 20 },
+    new { Min = 20, Name = "Legend",             Emoji = "🏆", Desc = "20+ trips. It's giving digital nomad", NextAt = 25 },
+    new { Min = 25, Name = "Mythic",             Emoji = "✨", Desc = "You're the gandalf of holidays.",                   NextAt = 25 }
   };
 
   var tier = tiers.Last(x => t >= x.Min);
@@ -55,7 +55,7 @@
     .Take(3)
     .ToList();
 
-// Personality (simple: title + emoji + tint)
+// Personality
 var trips = Model.TripsCount;
 var countries = Model.CountriesVisited;
 var continents = Model.ContinentsVisited;
@@ -117,7 +117,7 @@ else
       @await Component.InvokeAsync("TravelStats", new { dashboard = Model })
 
       <!-- Row 2 Left: Achievements -->
-      <a class="bento__tile bento__tile--leftInfo bento__tileLink" href="/achievements" aria-label="Achievements">
+      <a class="bento__tile bento__tile--leftInfo bento__tileLink" href="/dashboard" aria-label="Achievements">
         <div class="bento__tileInner">
           <p class="bento__kicker">Achievements</p>
 
