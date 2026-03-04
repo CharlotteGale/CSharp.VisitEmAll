@@ -13,7 +13,7 @@
   var likedHolidays = ViewData["LikedHolidays"] as List<Holiday> ?? new List<Holiday>();
 }
 
-<h1>@(isOwn ? "My Dashboard" : Model.Name + "'s Dashboard")</h1>
+<h1>@(isOwn ? "My Holidays" : Model.Name + "'s Holidays")</h1>
 <h3>@Model.HomeTown</h3>
 <br />
 
@@ -22,7 +22,7 @@
   <!-- UPCOMING HOLIDAYS -->
   <div class="upcoming-holidays-container">
 
-    <div class="upcoming-holidays-header">
+    <div class="upcoming-holidays-header" id = "upcomingholidays">
       <div class="row">
         <div class="col">
           <h2>@Model.Name's Upcoming Holidays</h2>
@@ -87,7 +87,7 @@
   <div class="liked-holidays-container">
     @if (isOwn)
     {
-      <div class="liked-holidays-header">
+      <div class="liked-holidays-header" id = "holidayinspo">
         <h2>Holiday Inspo</h2>
       </div>
       <div class="liked-holidays-grid">
@@ -129,7 +129,7 @@
     <!-- PAST HOLIDAYS -->
     <div class="past-holidays-container">
 
-      <div class="past-holidays-header">
+      <div class="past-holidays-header" id = "pastholidays">
         <h2>@Model.Name's Past Holidays</h2>
       </div>
 

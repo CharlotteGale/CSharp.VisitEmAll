@@ -91,11 +91,17 @@ header.fixed-top::after {
   font-weight: 800;
 }
 
-.nav-link {
+.nav-link, .nav-link-sub {
   color: #99BAB9 !important;
   font-weight: 500;
   border: 1.5px solid transparent;
   padding: 8px 15px;
+}
+
+.nav-link.nav-sub {
+  /* font-style: oblique; */
+  font-weight: 300;
+
 }
 
 .nav-link-active {
@@ -249,6 +255,8 @@ header.fixed-top::after {
 {
   display: flex;
   flex-direction: column;
+  scroll-margin-top: 65px;
+  position: relative;
   padding: 0.5rem;
 }
 
