@@ -20,9 +20,6 @@ public class CreateHolidayViewModel
     public DateOnly? EndDate { get; set; }
 
     public decimal? TotalCost { get; set; }
-
-    public string? ThumbnailUrl { get; set; }
-
     public List<ActivityInput> Activities { get; set; } = new();
 
     public class ActivityInput
