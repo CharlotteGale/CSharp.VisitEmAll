@@ -233,7 +233,8 @@ header.fixed-top::after {
 
 .holiday-container,
 .upcoming-holidays-container,
-.past-holidays-container {
+.past-holidays-container,
+.liked-holidays-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
@@ -243,7 +244,9 @@ header.fixed-top::after {
 }
 
 .upcoming-holidays-header,
-.past-holidays-header {
+.past-holidays-header,
+.liked-holidays-header
+{
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
@@ -262,7 +265,9 @@ header.fixed-top::after {
 }
 
 .upcoming-holidays-grid,
-.past-holidays-grid {
+.past-holidays-grid,
+.liked-holidays-grid
+{
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -273,7 +278,9 @@ header.fixed-top::after {
 }
 
 .upcoming-holidays-card,
-.past-holidays-card {
+.past-holidays-card,
+.liked-holidays-card 
+{
   display: flex;
   align-items: stretch;
   justify-self: center;
@@ -299,7 +306,9 @@ header.fixed-top::after {
 }
 
 .upcoming-holidays-title,
-.past-holidays-title {
+.past-holidays-title,
+.liked-holidays-title
+{
   font-weight: 600;
   font-size: 1.1rem;
   margin-bottom: 0px;
@@ -339,3 +348,48 @@ header.fixed-top::after {
     grid-template-columns: 1fr;
   }
 }
+
+/* LIKED HOLIDAYS/HOLIDAY INSPO */
+
+ .heart-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.8rem;
+  }
+
+  .heart {
+    transition: transform 0.2s ease;
+  }
+
+  .heart:hover {
+    transform: scale(1.2);
+  }
+
+  .heart.liked {
+    color: red;
+  }
+
+  /* .liked-holidays-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  } */
+
+  /* .liked-holidays-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .liked-holidays-title {
+    margin-top: 0.5rem;
+    font-weight: bold;
+  } */
+
+  .liked-holidays-user {
+    padding-left: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
