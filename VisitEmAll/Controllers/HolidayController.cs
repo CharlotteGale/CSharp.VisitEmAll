@@ -35,6 +35,7 @@ public class HolidaysController : Controller
         return View(vm);
     }
 
+
     [HttpPost("/holidays/create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateHolidayViewModel vm)
@@ -244,6 +245,20 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
     }
 
 
+    [HttpPost("/holidays/{id:int}/delete")]
+    public async Task<IActionResult> DeleteHoliday(int id)
+    {
+        var holiday = await _db.Holidays.FirstOrDefaultAsync(i => i.Id == id);
+        if (holiday == null) return NotFound();
+
+        var day = await _db.HolidayDays.FindAsync(holiday.Id);
+
+        _db.Holidays.Remove(holiday);
+        await _db.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Dashboard");
+    }
+    
     // ---------------------------
     // SYNC HOLIDAY DAYS (HELPER)
     // ---------------------------
