@@ -58,6 +58,30 @@ body {
 }
 
 /* Activities + Tips lists */
+
+/* Shared base style for all Add buttons */
+.btn-add-activity,
+.btn-add-restaurant,
+.btn-add-accommodation {
+    background: #ffffff;
+    border: 2px solid #394949;  
+    color: #394949;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Hover*/
+.btn-add-activity:hover,
+.btn-add-restaurant:hover,
+.btn-add-accommodation:hover {
+    background: #394949;   
+    color: #ffffff;      
+    border-color: #394949; 
+}
+
+
 .activity-list,
 .tips-list {
   list-style: none;

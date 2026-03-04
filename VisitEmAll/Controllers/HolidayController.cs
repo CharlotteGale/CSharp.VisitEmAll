@@ -3,16 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using VisitEmAll.Models;
 using VisitEmAll.ViewModels;
 
+
 namespace VisitEmAll.Controllers;
 
 public class HolidaysController : Controller
 {
   private readonly VisitEmAllDbContext _db;
 
-  public HolidaysController(VisitEmAllDbContext db)
-  {
-    _db = db;
-  }
+        
+    private readonly IWebHostEnvironment webHostEnvironment;
+
+    public HolidaysController(VisitEmAllDbContext db, IWebHostEnvironment hostEnvironment)
+    {
+        _db = db;
+        webHostEnvironment = hostEnvironment;
+
+    }
 
   // ---------------------------
   // CREATE HOLIDAY
@@ -26,20 +32,22 @@ public class HolidaysController : Controller
       Activities = new List<CreateHolidayViewModel.ActivityInput> { new() }
     };
 
-    return View(vm);
-  }
-
-  [HttpPost("/holidays/create")]
-  [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Create(CreateHolidayViewModel vm)
-  {
-    // Date validation (main)
-    if (vm.StartDate.HasValue && vm.EndDate.HasValue &&
-        vm.EndDate.Value < vm.StartDate.Value)
-    {
-      ModelState.AddModelError(nameof(vm.EndDate),
-          "End date cannot be before start date.");
+        return View(vm);
     }
+
+
+    [HttpPost("/holidays/create")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateHolidayViewModel vm)
+    {
+
+        // Date validation (main)
+        if (vm.StartDate.HasValue && vm.EndDate.HasValue &&
+            vm.EndDate.Value < vm.StartDate.Value)
+        {
+            ModelState.AddModelError(nameof(vm.EndDate),
+                "End date cannot be before start date.");
+        }
 
     // Country validation (your feature)
     if (vm.CountryId == null)
@@ -60,29 +68,45 @@ public class HolidaysController : Controller
       return View(vm);
     }
 
-    var userId = HttpContext.Session.GetInt32("User_Id");
-    if (userId == null) return RedirectToAction("Login", "Auth");
+        var userId = HttpContext.Session.GetInt32("User_Id");
+        if (userId == null) return RedirectToAction("Login", "Auth");
 
-    var holiday = new Holiday
-    {
-      UserId = userId.Value,
-      Title = vm.Title,
-      Location = vm.Location,
-      StartDate = vm.StartDate,
-      EndDate = vm.EndDate,
-      TotalCost = vm.TotalCost,
-      ThumbnailUrl = vm.ThumbnailUrl,
-      HeroImageUrl = vm.HeroImageUrl,
-      Days = new List<HolidayDay>()
-    };
+        string uniqueFileName = null;
+        if (vm.HeroImageFile != null)
+        {
+            string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads/heros");
+            
+            if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
-    // Create HolidayDays if dates provided (main)
-    if (vm.StartDate.HasValue && vm.EndDate.HasValue)
-    {
-      for (var date = vm.StartDate.Value; date <= vm.EndDate.Value; date = date.AddDays(1))
-      {
-        holiday.Days.Add(new HolidayDay { Date = date });
-      }
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + vm.HeroImageFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+            await vm.HeroImageFile.CopyToAsync(fileStream);
+            }
+        }
+
+        var holiday = new Holiday
+        {
+            UserId = userId.Value,
+            Title = vm.Title,
+            Location = vm.Location,
+            StartDate = vm.StartDate,
+            EndDate = vm.EndDate,
+            TotalCost = vm.TotalCost,
+            ThumbnailUrl = vm.ThumbnailUrl,
+            HeroImageUrl = uniqueFileName,
+            Days = new List<HolidayDay>()
+        };
+
+        // Create HolidayDays if dates provided (main)
+        if (vm.StartDate.HasValue && vm.EndDate.HasValue)
+if (vm.StartDate.HasValue && vm.EndDate.HasValue) 
+{ 
+    for (var date = vm.StartDate.Value; date <= vm.EndDate.Value; date = date.AddDays(1)) 
+    { holiday.Days.Add(new HolidayDay { Date = date }); 
+    } 
     }
 
     _db.Holidays.Add(holiday);
@@ -110,19 +134,19 @@ public class HolidaysController : Controller
     if (holiday == null || holiday.UserId != userId)
       return NotFound();
 
-    var vm = new CreateHolidayViewModel
-    {
-      Id = holiday.Id,
-      Title = holiday.Title,
-      Location = holiday.Location,
-      StartDate = holiday.StartDate,
-      EndDate = holiday.EndDate,
-      TotalCost = holiday.TotalCost,
-      ThumbnailUrl = holiday.ThumbnailUrl,
-      HeroImageUrl = holiday.HeroImageUrl,
-      CountryId = holiday.CountryId,
-      Activities = new List<CreateHolidayViewModel.ActivityInput>()
-    };
+        var vm = new CreateHolidayViewModel
+        {
+            Id = holiday.Id,
+            Title = holiday.Title,
+            Location = holiday.Location,
+            StartDate = holiday.StartDate,
+            EndDate = holiday.EndDate,
+            TotalCost = holiday.TotalCost,
+            ThumbnailUrl = holiday.ThumbnailUrl,
+            ExistingHeroImage = holiday.HeroImageUrl,
+            CountryId = holiday.CountryId,
+            Activities = new List<CreateHolidayViewModel.ActivityInput>()
+        };
 
     return View("Edit", vm);
   }
@@ -170,29 +194,74 @@ public class HolidaysController : Controller
     if (!ModelState.IsValid)
       return View("Edit", updatedHoliday);
 
-    // Update fields
-    holiday.Title = updatedHoliday.Title;
-    holiday.Location = updatedHoliday.Location;
-    holiday.StartDate = updatedHoliday.StartDate;
-    holiday.EndDate = updatedHoliday.EndDate;
-    holiday.TotalCost = updatedHoliday.TotalCost;
-    holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
-    holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
-    holiday.CountryId = updatedHoliday.CountryId;
+
+        string uniqueFileName = null;
+
+        if (updatedHoliday.HeroImageFile != null)
+        {
+            string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads/heros");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + updatedHoliday.HeroImageFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await updatedHoliday.HeroImageFile.CopyToAsync(fileStream);
+            }
+
+            if (!string.IsNullOrEmpty(holiday.HeroImageUrl))
+            {
+                string oldFilePath = Path.Combine(uploadsFolder, holiday.HeroImageUrl);
+
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
+            holiday.HeroImageUrl = uniqueFileName;
+        }
+
+        holiday.Title = updatedHoliday.Title;
+        holiday.Location = updatedHoliday.Location;
+        holiday.StartDate = updatedHoliday.StartDate;
+        holiday.EndDate = updatedHoliday.EndDate;
+        holiday.TotalCost = updatedHoliday.TotalCost;
+        holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
+        if (uniqueFileName != null)
+            {
+                holiday.HeroImageUrl = uniqueFileName;
+            }
+        holiday.CountryId = updatedHoliday.CountryId;
 
     await _db.SaveChangesAsync();
 
-    // 🔥 Automatically regenerate the correct number of days
-    await SyncHolidayDays(holiday);
+        await SyncHolidayDays(holiday);
 
     TempData["Success"] = "Holiday updated!";
     return Redirect($"/holidays/{holiday.Id}");
   }
 
 
-  // ---------------------------
-  // SYNC HOLIDAY DAYS (HELPER)
-  // ---------------------------
+    [HttpPost("/holidays/{id:int}/delete")]
+    public async Task<IActionResult> DeleteHoliday(int id)
+    {
+        var holiday = await _db.Holidays.FirstOrDefaultAsync(i => i.Id == id);
+        if (holiday == null) return NotFound();
+
+        var day = await _db.HolidayDays.FindAsync(holiday.Id);
+
+        _db.Holidays.Remove(holiday);
+        await _db.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Dashboard");
+    }
+    
+    // ---------------------------
+    // SYNC HOLIDAY DAYS (HELPER)
+    // ---------------------------
 
   private async Task SyncHolidayDays(Holiday holiday)
   {
