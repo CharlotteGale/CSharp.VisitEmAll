@@ -1,3 +1,8 @@
+/* wwwroot/css/Travel-Bento.css */
+
+/* =========================
+   Theme + base
+   ========================= */
 :root{
   --bg: #F6F4F1;
   --card: #FFFFFF;
@@ -10,7 +15,7 @@
 
   --hero: #072B30;
 
-  /* Palette */
+  /* Pastel palette */
   --pink: #E4ACB2;
   --sand: #EABCA8;
   --cream: #FAEDCD;
@@ -33,6 +38,9 @@ body{
 
 .countup{ font-variant-numeric: tabular-nums; }
 
+/* =========================
+   Shell
+   ========================= */
 .bento{ width:100%; }
 .bento__wrap{
   max-width: 1080px;
@@ -62,7 +70,9 @@ body{
   font-size: 14px;
 }
 
-/* Buttons */
+/* =========================
+   Buttons
+   ========================= */
 .bento__btn{
   border:1px solid var(--line);
   background: #fff;
@@ -84,7 +94,9 @@ body{
   border-color: rgba(14,43,47,.12);
 }
 
-/* Grid */
+/* =========================
+   Grid
+   ========================= */
 .bento__grid{
   display:grid;
   gap: 18px;
@@ -95,10 +107,15 @@ body{
 @media (max-width: 980px){
   .bento__grid{ grid-template-columns: 1fr; }
   .bento__tile{ grid-column: 1 / -1 !important; }
-  .bento__bottomPair{ grid-column: 1 / -1 !important; grid-template-columns: 1fr !important; }
+  .bento__bottomPair{
+    grid-column: 1 / -1 !important;
+    grid-template-columns: 1fr !important;
+  }
 }
 
-/* Base tile */
+/* =========================
+   Tile base
+   ========================= */
 .bento__tile{
   border-radius: var(--radius);
   overflow:hidden;
@@ -114,16 +131,14 @@ body{
   transform: translateY(-4px);
   box-shadow: 0 26px 70px rgba(14,43,47,.12), inset 0 1px 0 rgba(255,255,255,.7);
 }
-.bento__tile:active{
-  transform: translateY(-2px) scale(0.995);
-}
+.bento__tile:active{ transform: translateY(-2px) scale(0.995); }
 
 .bento__tileInner{
   padding: 26px;
   height: 100%;
 }
 
-/* Clickable tiles */
+/* Clickable tile wrapper */
 .bento__tileLink{
   display:block;
   color: inherit;
@@ -135,7 +150,9 @@ body{
   border-radius: var(--radius);
 }
 
-/* Typography */
+/* =========================
+   Typography helpers
+   ========================= */
 .bento__kicker{
   text-transform: uppercase;
   letter-spacing: .12em;
@@ -153,17 +170,19 @@ body{
   letter-spacing:-0.02em;
   margin: 6px 0 0;
 }
-
 .bento__small{
   margin-top: 8px;
   opacity: .88;
   font-weight: 700;
   font-size: 13px;
 }
-
 .bento__mt{ margin-top: 12px; }
 
-/* Placement */
+/* =========================
+   Placement + theming
+   ========================= */
+
+/* Achievements (left) */
 .bento__tile--leftInfo{
   grid-column: 1 / span 4;
   min-height: 260px;
@@ -173,6 +192,7 @@ body{
     linear-gradient(180deg, rgba(250,237,205,.55), #fff 62%);
 }
 
+/* Spotlight (big upcoming trip) */
 .bento__tile--spotlight{
   grid-column: 5 / -1;
   min-height: 260px;
@@ -184,7 +204,6 @@ body{
   box-shadow: var(--shadowSoft);
   border-radius: var(--radius-lg);
 }
-
 .bento__tile--spotlight::before{
   content:"";
   position:absolute;
@@ -194,9 +213,10 @@ body{
   pointer-events:none;
 }
 
+/* Map tile (left wide) */
 .bento__tile--mainMap{
   grid-column: 1 / span 8;
-  min-height: 260px;
+  min-height: 420px; /* room for header + chips + 320px frame */
   background:
     radial-gradient(circle at 25% 15%, rgba(250,237,205,.65), transparent 55%),
     radial-gradient(circle at 85% 10%, rgba(153,186,185,.22), transparent 55%),
@@ -204,9 +224,10 @@ body{
     #fff;
 }
 
+/* Quick actions (right) */
 .bento__tile--sideTop{
   grid-column: 9 / -1;
-  min-height: 260px;
+  min-height: 420px;
   border: none;
   background:
     radial-gradient(circle at 20% 20%, rgba(250,237,205,.35), transparent 55%),
@@ -214,18 +235,16 @@ body{
   color: rgba(14,43,47,0.85);
 }
 
-/* Bottom row pair: not squeezed */
+/* Bottom row pair (upcoming list + personality) */
 .bento__bottomPair{
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 18px;
 }
-.bento__bottomPair > .bento__tile{
-  grid-column: auto !important;
-}
+.bento__bottomPair > .bento__tile{ grid-column: auto !important; }
 
-/* Upcoming tile tint */
+/* Upcoming list tint */
 .bento__tile--sideList{
   min-height: 240px;
   background:
@@ -233,7 +252,7 @@ body{
     linear-gradient(180deg, rgba(255,255,255,.95), rgba(250,237,205,.25));
 }
 
-/* Milestone tile tint */
+/* Personality tile tint (right bottom) */
 .bento__tile--sideBottom{
   min-height: 240px;
   border: none;
@@ -241,10 +260,12 @@ body{
     radial-gradient(circle at 70% 25%, rgba(234,188,168,.55), transparent 58%),
     radial-gradient(circle at 20% 80%, rgba(228,172,178,.32), transparent 60%),
     linear-gradient(180deg, rgba(234,188,168,.90), rgba(228,172,178,.75));
-  color: rgba(14,43,47,0.88);
+  color: rgba(14,43,47,.88);
 }
 
-/* Chips */
+/* =========================
+   Chips + stat row
+   ========================= */
 .bento__chips{
   display:flex;
   gap: 10px;
@@ -261,7 +282,6 @@ body{
   color: rgba(14,43,47,.80);
 }
 
-/* Stats row */
 .bento__statRow{
   display:flex;
   align-items:baseline;
@@ -278,26 +298,54 @@ body{
   font-weight: 700;
 }
 
-/* Map frame placeholder */
-.bento__mapFrame{
-  margin-top: 14px;
-  height: 170px;
+/* =========================
+   Map frame + SVG object
+   ========================= */
+.bento__mapFrame--svg{
+  position: relative;
+  height: 320px;          /* your perfect value */
   border-radius: 22px;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(250,237,205,.60), transparent 55%),
-    radial-gradient(circle at 70% 10%, rgba(230,244,241,.75), transparent 55%),
-    linear-gradient(180deg, #fff, #FBFAF7);
+  overflow: hidden;
+  padding: 0 !important;
+  display: grid;
+  place-items: stretch;
   border: 1px dashed rgba(14,43,47,.18);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color: rgba(14,43,47,.65);
-  font-weight: 700;
-  text-align:center;
-  padding: 18px;
+  background: transparent;
 }
 
-/* Progress */
+.bento__mapSvgObject{
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  border: 0;
+}
+
+.bento__mapSvgObject--loading{
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.bento__mapSvgObject--ready{
+  opacity: 1;
+}
+
+/* Tooltip (if you use it) */
+.bento__mapTooltip{
+  position: fixed;
+  z-index: 9999;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(14,43,47,.92);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 16px 40px rgba(0,0,0,.18);
+  font-weight: 800;
+  font-size: 12px;
+  pointer-events:none;
+}
+
+/* =========================
+   Progress bars
+   ========================= */
 .bento__progress{
   margin-top: 18px;
   background: rgba(14,43,47,0.12);
@@ -319,7 +367,9 @@ body{
   background: rgba(14,43,47,0.35);
 }
 
-/* Cards (lists) */
+/* =========================
+   List cards (Upcoming / Quick actions)
+   ========================= */
 .bento__listHeader{ margin-bottom: 10px; }
 .bento__listTitle{
   margin: 0;
@@ -374,7 +424,9 @@ body{
   flex: 0 0 auto;
 }
 
-/* Achievements */
+/* =========================
+   Achievements styles
+   ========================= */
 .bento__achievementTop{
   display:flex;
   gap: 12px;
@@ -412,7 +464,9 @@ body{
   margin-bottom: 8px;
 }
 
-/* Spotlight internals */
+/* =========================
+   Spotlight internals
+   ========================= */
 .bento__spotlightMedia{
   position:absolute;
   inset:0;
@@ -487,7 +541,9 @@ body{
   border: 1px solid rgba(14,43,47,.12);
 }
 
-/* TravelStats micro component */
+/* =========================
+   TravelStats micro component
+   ========================= */
 .bento__tile--hero{
   grid-column: 1 / span 8;
   min-height: 180px;
@@ -550,7 +606,9 @@ body{
   text-align:center;
 }
 
-/* --- Personality tile (simple) --- */
+/* =========================
+   Personality tile (centered)
+   ========================= */
 .bento__personaSimple{
   display:flex;
   flex-direction:column;
@@ -560,34 +618,7 @@ body{
   height: 100%;
 }
 
-.bento__personaEmoji{
-  font-size: 48px;
-  line-height: 1;
-  margin-top: 8px;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 10px 18px rgba(12,24,28,.10));
-}
-
-.bento__personaTitle{
-  font-weight: 950;
-  font-size: 20px;
-  letter-spacing: -0.01em;
-  color: rgba(14,43,47,.92);
-}
-
-/* --- Personality tile (centered, emoji is hero) --- */
-.bento__personaSimple{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  height: 100%;
-}
-
-.bento__personaSimple .bento__kicker{
-  margin-bottom: 14px;
-}
+.bento__personaSimple .bento__kicker{ margin-bottom: 14px; }
 
 .bento__personaCenter{
   display:flex;
@@ -599,7 +630,7 @@ body{
 }
 
 .bento__personaEmoji{
-  font-size: 72px;           /* BIG */
+  font-size: 72px;
   line-height: 1;
   margin: 0;
   transform: translateY(-2px);
