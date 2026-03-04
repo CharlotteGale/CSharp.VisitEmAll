@@ -55,7 +55,7 @@ public class DayItemsController : Controller
         return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
     }
     // -------------------------------------
-    // UPDATE ACTIVITY / RESTURANT / ACCOM - NOT WORKING
+    // UPDATE ACTIVITY / RESTURANT / ACCOM 
     // -------------------------------------
     [HttpPost("/day-items/{id:int}/update")]
     public async Task<IActionResult> UpdateItem(
@@ -97,5 +97,29 @@ public class DayItemsController : Controller
         return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
     }
 
+        [HttpPost("/day-items/{id:int}/edit-inline")]
+        public async Task<IActionResult> EditInline(int id)
+        {
+            var item = await _db.DayItems.FirstOrDefaultAsync(i => i.Id == id);
+            if (item == null) return NotFound();
+
+            TempData["EditingItemId"] = id;
+
+            var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
+            return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+        }
+
+        [HttpPost("/day-items/{id:int}/cancel-inline")]
+        public async Task<IActionResult> CancelInline(int id)
+        {
+            // Clear edit mode
+            TempData["EditingItemId"] = null;
+
+            var item = await _db.DayItems.FirstOrDefaultAsync(i => i.Id == id);
+            if (item == null) return NotFound();
+
+            var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
+            return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+        }
 
 }
