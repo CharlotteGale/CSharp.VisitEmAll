@@ -3,15 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using VisitEmAll.Models;
 using VisitEmAll.ViewModels;
 
+
 namespace VisitEmAll.Controllers;
 
 public class HolidaysController : Controller
 {
     private readonly VisitEmAllDbContext _db;
 
-    public HolidaysController(VisitEmAllDbContext db)
+        
+    private readonly IWebHostEnvironment webHostEnvironment;
+
+    public HolidaysController(VisitEmAllDbContext db, IWebHostEnvironment hostEnvironment)
     {
         _db = db;
+        webHostEnvironment = hostEnvironment;
+
     }
 
     // ---------------------------
@@ -63,6 +69,22 @@ public class HolidaysController : Controller
         var userId = HttpContext.Session.GetInt32("User_Id");
         if (userId == null) return RedirectToAction("Login", "Auth");
 
+        string uniqueFileName = null;
+        if (vm.HeroImageUrl != null)
+        {
+            string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads/heros");
+            
+            if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + vm.HeroImageUrl.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+            await vm.HeroImageUrl.CopyToAsync(fileStream);
+            }
+        }
+
         var holiday = new Holiday
         {
             UserId = userId.Value,
@@ -72,7 +94,7 @@ public class HolidaysController : Controller
             EndDate = vm.EndDate,
             TotalCost = vm.TotalCost,
             ThumbnailUrl = vm.ThumbnailUrl,
-            HeroImageUrl = vm.HeroImageUrl,
+            HeroImageUrl = uniqueFileName,
             Days = new List<HolidayDay>()
         };
 
