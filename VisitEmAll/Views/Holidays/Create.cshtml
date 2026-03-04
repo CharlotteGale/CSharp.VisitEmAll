@@ -7,7 +7,7 @@
 
 <h1>Add Holiday</h1>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
     <div>
@@ -26,21 +26,21 @@
     <div>
         <label for="country-search">Country</label>
 
-        <input id="country-search"
-               type="text"
-               autocomplete="off"
-               placeholder="Start typing a country… (e.g. Japan)"
-               value="@(Model.CountryName ?? "")" />
+            <input id="country-search"
+                type="text"
+                autocomplete="off"
+                placeholder="Start typing a country… (e.g. Japan)"
+                value="@(Model.CountryName ?? "")" />
 
         <input asp-for="CountryId" type="hidden" id="CountryId" />
         <span asp-validation-for="CountryId"></span>
 
         <!-- Results dropdown (absolute so it doesn't push layout) -->
-        <div style="position:relative;">
-            <div id="country-results"
-                 style="display:none; position:absolute; left:0; right:0; z-index:50;
-                        border:1px solid #ddd; border-radius:10px; margin-top:6px;
-                        overflow:hidden; background:white; max-height:240px; overflow-y:auto;">
+            <div style="position:relative;">
+                <div id="country-results"
+                    style="display:none; position:absolute; left:0; right:0; z-index:50;
+                            border:1px solid #ddd; border-radius:10px; margin-top:6px;
+                            overflow:hidden; background:white; max-height:240px; overflow-y:auto;">
             </div>
         </div>
 
@@ -73,6 +73,13 @@
         <input asp-for="ThumbnailUrl" />
         <span asp-validation-for="ThumbnailUrl"></span>
     </div>
+
+    <div class="mb-3">
+        <label asp-for="HeroImageFile" class="form-label text-muted small">Banner Image(Optional)</label>
+        <input asp-for="HeroImageFile" type="file" class="auth-form-field" accept="image/*" />
+        <span asp-validation-for="HeroImageFile" class="text-danger small"></span>
+    </div>
+
 
     <h3>Activities</h3>
 

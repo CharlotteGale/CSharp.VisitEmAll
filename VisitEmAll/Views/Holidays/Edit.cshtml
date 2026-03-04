@@ -7,7 +7,7 @@
 
 <h1>Update Holiday</h1>
 
-<form asp-route="UpdateHolidayRoute" asp-route-id="@Model.Id" method="post">
+<form asp-route="UpdateHolidayRoute" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
     <div>
@@ -73,9 +73,9 @@
     </div>
 
     <div>
-        <label asp-for="HeroImageUrl">Hero Image (URL)</label>
-        <input asp-for="HeroImageUrl" />
-        <span asp-validation-for="HeroImageUrl"></span>
+        <label asp-for="HeroImageFile">Hero Image (URL)</label>
+        <input asp-for="HeroImageFile" type="file"  accept="image/*"/>
+        <span asp-validation-for="HeroImageFile"></span>
     </div>
 
     <h3>Activities</h3>
