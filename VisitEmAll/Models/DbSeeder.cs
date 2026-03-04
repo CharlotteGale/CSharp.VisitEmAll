@@ -36,7 +36,6 @@ public static class DbSeeder
             new Country { Name = "Japan", Iso2 = "JP", Continent = "Asia" },
             new Country { Name = "United States", Iso2 = "US", Continent = "North America" },
 
-            // needed for your seeded holidays
             new Country { Name = "Norway", Iso2 = "NO", Continent = "Europe" },
             new Country { Name = "Greece", Iso2 = "GR", Continent = "Europe" },
             new Country { Name = "Andorra", Iso2 = "AD", Continent = "Europe" }
@@ -58,7 +57,7 @@ public static class DbSeeder
             if (s.Contains("norway") || s.Contains("oslo")) return countryIdByIso2["NO"];
             if (s.Contains("greece") || s.Contains("santorini")) return countryIdByIso2["GR"];
             if (s.Contains("andorra")) return countryIdByIso2["AD"];
-            if (s.Contains("scotland") || s.Contains("highlands")) return countryIdByIso2["GB"]; // treat Scotland as UK
+            if (s.Contains("scotland") || s.Contains("highlands")) return countryIdByIso2["GB"];
 
             return null;
         }
@@ -97,7 +96,7 @@ public static class DbSeeder
             {
                 h.CountryId = PickCountryId(h.Location);
             }
-            
+
         context.HolidayDays.AddRange(holidayDays);
         context.SaveChanges();
 
