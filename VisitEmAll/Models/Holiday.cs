@@ -28,7 +28,7 @@ public class Holiday
     [MaxLength(500)]
     public string? ThumbnailUrl { get; set; }
 
-    public string? HeroImageUrl { get; set; }
+    public string? HeroImageUrl { get; set; } 
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -32,5 +32,6 @@ public class CreateHolidayViewModel
         [MaxLength(150)]
         public string? Name { get; set; }
     }
-    public IFormFile? HeroImageUrl { get; set; }
+    public IFormFile? HeroImageFile { get; set; }
+    public string? ExistingHeroImage { get; set; }
 }

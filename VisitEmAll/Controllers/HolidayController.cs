@@ -39,6 +39,7 @@ public class HolidaysController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateHolidayViewModel vm)
     {
+
         // Date validation (main)
         if (vm.StartDate.HasValue && vm.EndDate.HasValue &&
             vm.EndDate.Value < vm.StartDate.Value)
@@ -70,18 +71,18 @@ public class HolidaysController : Controller
         if (userId == null) return RedirectToAction("Login", "Auth");
 
         string uniqueFileName = null;
-        if (vm.HeroImageUrl != null)
+        if (vm.HeroImageFile != null)
         {
             string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads/heros");
             
             if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + vm.HeroImageUrl.FileName;
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + vm.HeroImageFile.FileName;
             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-            await vm.HeroImageUrl.CopyToAsync(fileStream);
+            await vm.HeroImageFile.CopyToAsync(fileStream);
             }
         }
 
@@ -100,12 +101,12 @@ public class HolidaysController : Controller
 
         // Create HolidayDays if dates provided (main)
         if (vm.StartDate.HasValue && vm.EndDate.HasValue)
-        {
-            for (var date = vm.StartDate.Value; date <= vm.EndDate.Value; date = date.AddDays(1))
-            {
-                holiday.Days.Add(new HolidayDay { Date = date });
-            }
-        }
+if (vm.StartDate.HasValue && vm.EndDate.HasValue) 
+{ 
+    for (var date = vm.StartDate.Value; date <= vm.EndDate.Value; date = date.AddDays(1)) 
+    { holiday.Days.Add(new HolidayDay { Date = date }); 
+    } 
+    }
 
         _db.Holidays.Add(holiday);
         await _db.SaveChangesAsync();
@@ -141,7 +142,7 @@ public class HolidaysController : Controller
             EndDate = holiday.EndDate,
             TotalCost = holiday.TotalCost,
             ThumbnailUrl = holiday.ThumbnailUrl,
-            HeroImageUrl = holiday.HeroImageUrl,
+            ExistingHeroImage = holiday.HeroImageUrl,
             CountryId = holiday.CountryId,
             Activities = new List<CreateHolidayViewModel.ActivityInput>()
         };
@@ -192,19 +193,50 @@ public class HolidaysController : Controller
         if (!ModelState.IsValid)
             return View("Edit", updatedHoliday);
 
-        // Update fields
+
+        string uniqueFileName = null;
+
+        if (updatedHoliday.HeroImageFile != null)
+        {
+            string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads/heros");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + updatedHoliday.HeroImageFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await updatedHoliday.HeroImageFile.CopyToAsync(fileStream);
+            }
+
+            if (!string.IsNullOrEmpty(holiday.HeroImageUrl))
+            {
+                string oldFilePath = Path.Combine(uploadsFolder, holiday.HeroImageUrl);
+
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
+            holiday.HeroImageUrl = uniqueFileName;
+        }
+
         holiday.Title = updatedHoliday.Title;
         holiday.Location = updatedHoliday.Location;
         holiday.StartDate = updatedHoliday.StartDate;
         holiday.EndDate = updatedHoliday.EndDate;
         holiday.TotalCost = updatedHoliday.TotalCost;
         holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
-        holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
+        if (uniqueFileName != null)
+            {
+                holiday.HeroImageUrl = uniqueFileName;
+            }
         holiday.CountryId = updatedHoliday.CountryId;
 
         await _db.SaveChangesAsync();
 
-        // 🔥 Automatically regenerate the correct number of days
         await SyncHolidayDays(holiday);
 
         TempData["Success"] = "Holiday updated!";
