@@ -98,7 +98,7 @@
     personaClass = "persona--planner";
   }
 
-  // Visited ISO2 list from model (what highlights the map)
+  // Visited ISO2 list 
   var visitedIso2 = (Model.VisitedCountryCodes ?? new HashSet<string>())
     .Where(c => !string.IsNullOrWhiteSpace(c))
     .Select(c => c.Trim().ToUpperInvariant())
@@ -111,7 +111,6 @@
   var mapObjectId = $"world-svg-{(sessionUserId ?? 0)}";
   var tooltipId = $"map-tip-{(sessionUserId ?? 0)}";
 
-  // ---- Build SAFE name -> iso2 map from DB (dedupe by name, ignore duplicates like "Congo") ----
   var rows = await Db.Countries
     .AsNoTracking()
     .Where(c => c.Name != null && c.Iso2 != null)
@@ -456,7 +455,7 @@
   })();
 </script>
 
-<!-- Map logic (recognises ISO2 + SVG class/name using DB countries) -->
+<!-- Map logic -->
 <script>
 (function () {
   const obj = document.getElementById("@mapObjectId");
@@ -469,7 +468,6 @@
   const visited = @Html.Raw(visitedJson);
   const visitedSet = new Set((visited || []).map(x => String(x).toUpperCase()));
 
-  // ✅ ISO2 -> official country name from DB
   const ISO2_TO_NAME = @Html.Raw(iso2ToNameJson);
 
   const COLORS = {
@@ -487,7 +485,6 @@
       .replace(/\s+/g, " ");
   }
 
-  // ✅ Name aliases for SVG naming differences (tiny list, but powerful)
   const NAME_ALIASES = {
     "united states of america": "united states",
     "russian federation": "russia",
@@ -533,7 +530,7 @@ function normalizeAndFitSvg(doc) {
   const svg = doc.querySelector("svg");
   if (!svg) return;
 
-  // Make responsive
+  //responsive
   svg.removeAttribute("width");
   svg.removeAttribute("height");
   svg.style.width = "100%";
@@ -541,17 +538,16 @@ function normalizeAndFitSvg(doc) {
   svg.style.display = "block";
   svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
-  // Ensure we have a viewBox to work with
+  //makes sure we have a viewbox
   let vb = svg.getAttribute("viewBox") || svg.getAttribute("viewbox");
   if (!vb) {
-    // if missing, derive from width/height or fallback
     const w = parseFloat(svg.getAttribute("width")) || 2000;
     const h = parseFloat(svg.getAttribute("height")) || 857;
     vb = `0 0 ${w} ${h}`;
     svg.setAttribute("viewBox", vb);
   }
 
-  // Crop to the actual drawn shapes (zooms OUT to show full world)
+  // zooms OUT to show full world
   const shapes = svg.querySelectorAll("path, polygon");
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 
@@ -562,16 +558,16 @@ function normalizeAndFitSvg(doc) {
       minY = Math.min(minY, b.y);
       maxX = Math.max(maxX, b.x + b.width);
       maxY = Math.max(maxY, b.y + b.height);
-    } catch (_) { /* some elements may fail getBBox; ignore */ }
+    } catch (_) {}
   });
 
   if (isFinite(minX) && isFinite(minY) && isFinite(maxX) && isFinite(maxY)) {
     const w = maxX - minX;
     const h = maxY - minY;
 
-    // Padding controls zoom level. Increase = zoom out more.
-    const padX = w * 0.12;  // <- more zoom-out
-    const padY = h * 0.18;  // <- more zoom-out
+    //padding here for zoom
+    const padX = w * 0.12;  
+    const padY = h * 0.18; 
 
     svg.setAttribute(
       "viewBox",
@@ -580,15 +576,11 @@ function normalizeAndFitSvg(doc) {
   }
 }
 
-  // ✅ Find SVG nodes for a given ISO2:
-  // 1) try id="BR" etc
-  // 2) fallback: match element class/name text to the DB country name
   function getNodesForIso2(doc, iso2) {
     const code = String(iso2).toUpperCase();
     const nodes = [];
 
-    // A) Direct ID (works for most)
-   // A) Direct ID (works for most)
+
 let byId = doc.getElementById(code) || doc.getElementById(code.toLowerCase());
 if (!byId && code === "GB") {
   // SimpleMaps sometimes uses UK instead of GB
@@ -596,7 +588,6 @@ if (!byId && code === "GB") {
 }
 if (byId) nodes.push(byId);
 
-    // B) Class/name fallback for big countries (US/GB/JP/CN/RU etc)
     if (!byId) {
       const dbName = ISO2_TO_NAME[code];
       if (dbName) {
@@ -606,7 +597,6 @@ if (byId) nodes.push(byId);
           const cls = el.getAttribute("class");
           const nm = el.getAttribute("name") || el.getAttribute("data-name");
 
-          // SimpleMaps uses class="United States" exactly (spaces)
           if (cls && canonicalName(cls) === want) nodes.push(el);
           else if (nm && canonicalName(nm) === want) nodes.push(el);
         });
@@ -623,7 +613,6 @@ if (byId) nodes.push(byId);
 
       normalizeAndFitSvg(doc);
 
-      // Base styling
       doc.querySelectorAll("path, polygon").forEach(s => {
         s.style.transition = "fill 180ms ease, opacity 180ms ease";
         s.style.fill = COLORS.baseFill;
@@ -631,19 +620,16 @@ if (byId) nodes.push(byId);
         s.style.strokeWidth = "0.6";
       });
 
-      // Highlight visited
       visitedSet.forEach(code => {
         const nodes = getNodesForIso2(doc, code);
         nodes.forEach(el => applyFill(el, COLORS.visitedFill));
       });
 
-      // Hover/tooltip (never remove visited color; block clicks)
       const interactive = [];
       doc.querySelectorAll("[id],[class],[name],[data-name]").forEach(el => interactive.push(el));
       const uniq = Array.from(new Set(interactive));
 
       uniq.forEach(el => {
-        // We only care about showing tooltip; highlighting is based on visitedSet
         el.style.cursor = "default";
 
         el.addEventListener("click", (e) => {

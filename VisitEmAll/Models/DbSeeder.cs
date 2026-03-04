@@ -98,7 +98,7 @@ public static class DbSeeder
             new() { UserId = users[6].Id, Title = "Hiking in the Highlands", Location = "Scotland", StartDate = new DateOnly(2024, 8, 1), EndDate = new DateOnly(2024, 8, 2) }
         };
 
-        // ✅ Set CountryId BEFORE saving holidays
+        // Set CountryId before saving holidays
         foreach (var h in holidays)
             h.CountryId = PickCountryId(h.Location);
 
@@ -116,7 +116,7 @@ public static class DbSeeder
         context.HolidayDays.AddRange(holidayDays);
         context.SaveChanges();
 
-        // === DAY ITEMS (TPH) ===
+        // === DAY ITEMS ===
         var items = new List<DayItem>
         {
             new DayAccommodation { HolidayDayId = holidayDays[0].Id, Name = "Blue Dome Suites", Time = new TimeOnly(14, 0), Location = "Oia" },
