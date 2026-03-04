@@ -1,4 +1,6 @@
 ﻿@using VisitEmAll.Models
+@* @using VisitEmAll.Models.ViewComponents *@
+
 
 @{
   ViewData["Title"] = Model.Name + "'s Dashboard";
@@ -16,6 +18,8 @@
 <h1>@(isOwn ? "My Holidays" : Model.Name + "'s Holidays")</h1>
 <h3>@Model.HomeTown</h3>
 <br />
+
+@* @await Component.InvokeAsync("TravelStats", new { dashboard = Model }) *@
 
 <div class="holiday-container">
 
