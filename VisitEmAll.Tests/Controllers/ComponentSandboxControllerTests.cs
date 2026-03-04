@@ -7,7 +7,6 @@ public class ComponentSandboxControllerTests : NUnitTestBase
     [SetUp]
     public void LocalSetUp()
     {
-        var logger = Mock.Of<ILogger<ComponentSandboxController>>();
         _controller = new ComponentSandboxController();
 
         var httpContext = new DefaultHttpContext();
