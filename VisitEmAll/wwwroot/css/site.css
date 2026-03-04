@@ -91,11 +91,17 @@ header.fixed-top::after {
   font-weight: 800;
 }
 
-.nav-link {
+.nav-link, .nav-link-sub {
   color: #99BAB9 !important;
   font-weight: 500;
   border: 1.5px solid transparent;
   padding: 8px 15px;
+}
+
+.nav-link.nav-sub {
+  /* font-style: oblique; */
+  font-weight: 300;
+
 }
 
 .nav-link-active {
@@ -148,8 +154,19 @@ header.fixed-top::after {
 }
 
 .auth-left {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.212), rgba(0, 0, 0, 0.4)), url('/images/brand-bg.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
   max-width: 400px;
-  padding-right: 3rem;
+  min-height: 300px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
 }
 
 .auth-brand-title {
@@ -233,7 +250,8 @@ header.fixed-top::after {
 
 .holiday-container,
 .upcoming-holidays-container,
-.past-holidays-container {
+.past-holidays-container,
+.liked-holidays-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
@@ -243,9 +261,13 @@ header.fixed-top::after {
 }
 
 .upcoming-holidays-header,
-.past-holidays-header {
+.past-holidays-header,
+.liked-holidays-header
+{
   display: flex;
   flex-direction: column;
+  scroll-margin-top: 65px;
+  position: relative;
   padding: 0.5rem;
 }
 
@@ -257,8 +279,14 @@ header.fixed-top::after {
   text-decoration: none;
 }
 
+.add-holiday-btn:hover {
+  color: #E4ACB2 !important;
+}
+
 .upcoming-holidays-grid,
-.past-holidays-grid {
+.past-holidays-grid,
+.liked-holidays-grid
+{
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -269,7 +297,9 @@ header.fixed-top::after {
 }
 
 .upcoming-holidays-card,
-.past-holidays-card {
+.past-holidays-card,
+.liked-holidays-card 
+{
   display: flex;
   align-items: stretch;
   justify-self: center;
@@ -284,17 +314,25 @@ header.fixed-top::after {
 .upcoming-holidays-dates,
 .past-holidays-dates {
   flex-grow: 1;
-  padding: 8px;
+  font-weight: 450;
+  font-size: 0.9rem;
+  padding: 4px;
+  margin-bottom: 0px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .upcoming-holidays-title,
-.past-holidays-title {
+.past-holidays-title,
+.liked-holidays-title
+{
   font-weight: 600;
   font-size: 1.1rem;
-  padding: 8px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
 }
@@ -329,3 +367,48 @@ header.fixed-top::after {
     grid-template-columns: 1fr;
   }
 }
+
+/* LIKED HOLIDAYS/HOLIDAY INSPO */
+
+ .heart-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.8rem;
+  }
+
+  .heart {
+    transition: transform 0.2s ease;
+  }
+
+  .heart:hover {
+    transform: scale(1.2);
+  }
+
+  .heart.liked {
+    color: red;
+  }
+
+  /* .liked-holidays-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  } */
+
+  /* .liked-holidays-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .liked-holidays-title {
+    margin-top: 0.5rem;
+    font-weight: bold;
+  } */
+
+  .liked-holidays-user {
+    padding-left: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
