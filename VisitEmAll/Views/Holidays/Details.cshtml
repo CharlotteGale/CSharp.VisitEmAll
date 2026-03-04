@@ -34,16 +34,12 @@
         <!-- Summary -->
         <div class="col-md-6">
             <div class="summary-card card-summary p-4 rounded">
-
                 <h2>Trip Summary</h2>
-
                 @if (!string.IsNullOrEmpty(Model.Location))
                 {
                     <p><strong>Location:</strong> @Model.Location</p>
                 }
-
                 <p><strong>Plan:</strong> @Model.Days.Count Day Itinerary</p>
-
                 @if (Model.StartDate.HasValue || Model.EndDate.HasValue)
                 {
                     <p><strong>Dates:</strong>
@@ -55,44 +51,39 @@
                         @Model.EndDate?.ToString("dd MMMM yyyy")
                     </p>
                 }
-
                 @if (Model.TotalCost.HasValue)
                 {
                     <p><strong>Total Cost:</strong> £@Model.TotalCost.Value.ToString("0.00")</p>
                 }
-
             </div>
         </div>
-
         <!-- Activities -->
         <div class="col-md-6">
             <div class="section-card card-activities p-4 rounded">
                 <h2>Activities</h2>
-                <ul class="activity-list">
-                    @foreach (var day in Model.Days)
-                    {
-                        foreach (var item in day.Items.Where(i => i.ItemType == "Activity"))
+                <div class="activities-scroll">
+                    <ul class="activity-list">
+                        @foreach (var day in Model.Days)
                         {
-                            <li class="activities-item">
-                                <span class="activity-title">@item.Name</span>
-
-                                @if (!string.IsNullOrEmpty(item.Location))
-                                {
-                                    <span class="location"> - @item.Location</span>
-                                }
-
-                                @if (!string.IsNullOrEmpty(item.Notes))
-                                {
-                                    <div class="notes">@item.Notes</div>
-                                }
-                            </li>
+                            foreach (var item in day.Items.Where(i => i.ItemType == "Activity"))
+                            {
+                                <li class="activities-item">
+                                    <span class="activity-title">@item.Name</span>
+                                    @if (!string.IsNullOrEmpty(item.Location))
+                                    {
+                                        <span class="location"> - @item.Location</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.Notes))
+                                    {
+                                        <div class="notes">@item.Notes</div>
+                                    }
+                                </li>
+                            }
                         }
-                    }
-                </ul>
-
+                    </ul>
+                </div>
             </div>
         </div>
-        
     </div>
 
 
