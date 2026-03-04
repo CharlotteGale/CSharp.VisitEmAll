@@ -27,6 +27,8 @@ public class DashboardController : Controller
             .Include(u => u.Holidays)
             .FirstOrDefaultAsync(u => u.Id == targetUserId);
 
+        ViewData["CurrentUserId"] = currentUserId;
+
         if (user == null) return NotFound();
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -41,10 +43,27 @@ public class DashboardController : Controller
             .OrderByDescending(h => h.StartDate)
             .ToList();
 
-        ViewData["CurrentUser"] = user;
+
+        var likedHolidays = await _context.UserLikedHolidays
+            .Where(x => x.UserId == currentUserId)
+            .Include(x => x.Holiday)
+                .ThenInclude(h => h.User)
+            .Select(x => x.Holiday!)
+            .ToListAsync();
+
+        var likedHolidayIds = await _context.UserLikedHolidays 
+        .Where(x => x.UserId == currentUserId) 
+        .Select(x => x.HolidayId) 
+        .ToListAsync();
+
+        ViewData["CurrentUser"] = user; 
         ViewData["IsOwnDashboard"] = targetUserId == currentUserId;
         ViewData["UpcomingHolidays"] = upcomingHolidays;
         ViewData["PastHolidays"] = pastHolidays;
+        ViewData["LikedHolidays"] = likedHolidays;
+        ViewData["LikedHolidayIds"] = likedHolidayIds;
+
+
 
         return View(user);
     }

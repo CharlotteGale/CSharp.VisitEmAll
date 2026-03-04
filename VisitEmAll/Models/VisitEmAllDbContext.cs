@@ -14,6 +14,9 @@ public class VisitEmAllDbContext : DbContext
   public DbSet<Friendship> Friendships => Set<Friendship>();
   public DbSet<Country> Countries => Set<Country>();
 
+  public DbSet<UserLikedHoliday> UserLikedHolidays { get; set; }
+
+
   public string? DbPath { get; }
 
   public string? GetDatabaseName()
@@ -72,6 +75,20 @@ public class VisitEmAllDbContext : DbContext
         .WithOne(i => i.HolidayDay)
         .HasForeignKey(i => i.HolidayDayId)
         .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<UserLikedHoliday>()
+        .HasKey(x => new { x.UserId, x.HolidayId });
+
+    modelBuilder.Entity<UserLikedHoliday>()
+        .HasOne(x => x.User)
+        .WithMany(u => u.LikedHolidays)
+        .HasForeignKey(x => x.UserId);
+
+    modelBuilder.Entity<UserLikedHoliday>()
+        .HasOne(x => x.Holiday)
+        .WithMany(h => h.LikedByUsers)
+        .HasForeignKey(x => x.HolidayId);
+
 
     modelBuilder.Entity<DayItem>(entity =>
     {

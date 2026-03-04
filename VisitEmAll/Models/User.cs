@@ -18,4 +18,6 @@ public class User
 
     public ICollection<Holiday> Holidays { get; set; } = new List<Holiday>();
     public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+    public ICollection<UserLikedHoliday> LikedHolidays { get; set; } = new List<UserLikedHoliday>();
+
 }

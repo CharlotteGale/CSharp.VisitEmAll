@@ -72,8 +72,7 @@ public class HolidaysController : Controller
             EndDate = vm.EndDate,
             TotalCost = vm.TotalCost,
             ThumbnailUrl = vm.ThumbnailUrl,
-            // HeroImageUrl = vm.HeroImageUrl,
-            CountryId = vm.CountryId,
+            HeroImageUrl = vm.HeroImageUrl,
             Days = new List<HolidayDay>()
         };
 
@@ -92,7 +91,6 @@ public class HolidaysController : Controller
         TempData["Success"] = "Holiday created successfully!";
         return RedirectToAction("Index", "Dashboard");
     }
-
     // ---------------------------
     // EDIT HOLIDAY (GET)
     // ---------------------------
@@ -106,6 +104,7 @@ public class HolidaysController : Controller
 
         var holiday = await _db.Holidays
             .Include(h => h.Country)
+            .Include(h => h.Days)
             .FirstOrDefaultAsync(h => h.Id == id);
 
         if (holiday == null || holiday.UserId != userId)
@@ -120,16 +119,14 @@ public class HolidaysController : Controller
             EndDate = holiday.EndDate,
             TotalCost = holiday.TotalCost,
             ThumbnailUrl = holiday.ThumbnailUrl,
-            // HeroImageUrl = holiday.HeroImageUrl,
+            HeroImageUrl = holiday.HeroImageUrl,
             CountryId = holiday.CountryId,
-            CountryName = holiday.Country?.Name,
-
-            // Ensure Activities is never null so edit form doesn't break (main)
             Activities = new List<CreateHolidayViewModel.ActivityInput>()
         };
 
         return View("Edit", vm);
     }
+
 
     // ---------------------------
     // EDIT HOLIDAY (POST)
@@ -139,13 +136,18 @@ public class HolidaysController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateHoliday(CreateHolidayViewModel updatedHoliday, int id)
     {
-        var holiday = await _db.Holidays.FirstOrDefaultAsync(h => h.Id == id);
-        if (holiday == null) return NotFound();
+        var holiday = await _db.Holidays
+            .Include(h => h.Days)
+            .FirstOrDefaultAsync(h => h.Id == id);
+
+        if (holiday == null)
+            return NotFound();
 
         var userId = HttpContext.Session.GetInt32("User_Id");
-        if (userId != holiday.UserId) return Forbid();
+        if (userId != holiday.UserId)
+            return Forbid();
 
-        // Date validation (main)
+        // Date validation
         if (updatedHoliday.StartDate.HasValue && updatedHoliday.EndDate.HasValue &&
             updatedHoliday.EndDate.Value < updatedHoliday.StartDate.Value)
         {
@@ -153,7 +155,7 @@ public class HolidaysController : Controller
                 "End date cannot be before start date.");
         }
 
-        // Country validation (your feature)
+        // Country validation
         if (updatedHoliday.CountryId == null)
         {
             ModelState.AddModelError(nameof(updatedHoliday.CountryId), "Please select a country.");
@@ -168,49 +170,73 @@ public class HolidaysController : Controller
         if (!ModelState.IsValid)
             return View("Edit", updatedHoliday);
 
+        // Update fields
         holiday.Title = updatedHoliday.Title;
         holiday.Location = updatedHoliday.Location;
         holiday.StartDate = updatedHoliday.StartDate;
         holiday.EndDate = updatedHoliday.EndDate;
         holiday.TotalCost = updatedHoliday.TotalCost;
         holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
-        // holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
+        holiday.HeroImageUrl = updatedHoliday.HeroImageUrl;
         holiday.CountryId = updatedHoliday.CountryId;
 
-        _db.Update(holiday);
         await _db.SaveChangesAsync();
+
+        // 🔥 Automatically regenerate the correct number of days
+        await SyncHolidayDays(holiday);
 
         TempData["Success"] = "Holiday updated!";
         return Redirect($"/holidays/{holiday.Id}");
     }
 
+
     // ---------------------------
-    // DELETE HOLIDAY
+    // SYNC HOLIDAY DAYS (HELPER)
     // ---------------------------
 
-    [HttpPost("/holidays/{id:int}/delete")]
-    [ValidateAntiForgeryToken]
-    public IActionResult Delete(int id)
+    private async Task SyncHolidayDays(Holiday holiday)
     {
-        var holiday = _db.Holidays.FirstOrDefault(h => h.Id == id);
-        if (holiday == null) return NotFound();
+        if (!holiday.StartDate.HasValue || !holiday.EndDate.HasValue)
+            return;
 
-        var userId = HttpContext.Session.GetInt32("User_Id");
-        if (userId == null || userId != holiday.UserId)
-            return Redirect("/");
+        // DateOnly already contains only a date — no .Date needed
+        var start = holiday.StartDate.Value;
+        var end = holiday.EndDate.Value;
 
-        _db.Holidays.Remove(holiday);
-        _db.SaveChanges();
+        var existingDays = holiday.Days.ToList();
 
-        return RedirectToAction("Index", "Dashboard");
+        // Add missing days
+        for (var date = start; date <= end; date = date.AddDays(1))
+        {
+            if (!existingDays.Any(d => d.Date == date))
+            {
+                _db.HolidayDays.Add(new HolidayDay
+                {
+                    HolidayId = holiday.Id,
+                    Date = date
+                });
+            }
+        }
+
+        // Remove days outside the new range
+        foreach (var day in existingDays)
+        {
+            if (day.Date < start || day.Date > end)
+            {
+                _db.HolidayDays.Remove(day);
+            }
+        }
+
+        await _db.SaveChangesAsync();
     }
+
 
     // ---------------------------
     // DETAILS (READ-ONLY)
     // ---------------------------
 
-    [HttpGet("/holidays/{id:int}")]
-    public async Task<IActionResult> Details(int id)
+[HttpGet("/holidays/{id:int}")]
+    public async Task<IActionResult> Details(int id, string? addType = null, int? dayId = null)
     {
         var holiday = await _db.Holidays
             .Include(h => h.Country)
@@ -230,7 +256,8 @@ public class HolidaysController : Controller
             TotalCost = holiday.TotalCost,
             StartDate = holiday.StartDate,
             EndDate = holiday.EndDate,
-            /* HeroImageUrl = holiday.HeroImageUrl, */
+            HeroImageUrl = holiday.HeroImageUrl,
+
             Days = holiday.Days
                 .OrderBy(d => d.Date)
                 .Select(d => new HolidayDayViewModel
@@ -239,11 +266,15 @@ public class HolidaysController : Controller
                     Date = d.Date,
                     Items = MergeAndSortItems(d)
                 })
-                .ToList()
+                .ToList(),
+
+            // NEW — tells the view which inline form to show
+            AddType = addType,
+            AddDayId = dayId
         };
 
-        return View(vm);
-    }
+    return View(vm);
+}
 
     private List<DayTimelineItemViewModel> MergeAndSortItems(HolidayDay day)
     {
@@ -274,4 +305,54 @@ public class HolidaysController : Controller
             _ => "Unknown"
         };
     }
+        [HttpPost("/holidays/{id:int}/like")]
+        public async Task<IActionResult> Like(int id)
+        {
+            var userId = HttpContext.Session.GetInt32("User_Id");
+            if (userId == null) return Unauthorized();
+
+            var holiday = await _db.Holidays
+                .Include(h => h.User)
+                .FirstOrDefaultAsync(h => h.Id == id);
+
+            if (holiday == null) return NotFound();
+
+            // Cannot like your own holiday
+            if (holiday.UserId == userId) return BadRequest("You cannot like your own holiday.");
+
+            bool alreadyLiked = await _db.UserLikedHolidays
+                .AnyAsync(x => x.UserId == userId && x.HolidayId == id);
+
+            if (!alreadyLiked)
+            {
+                _db.UserLikedHolidays.Add(new UserLikedHoliday
+                {
+                    UserId = userId.Value,
+                    HolidayId = id
+                });
+                await _db.SaveChangesAsync();
+            }
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        [HttpPost("/holidays/{id:int}/unlike")]
+        public async Task<IActionResult> Unlike(int id)
+        {
+            var userId = HttpContext.Session.GetInt32("User_Id");
+            if (userId == null) return Unauthorized();
+
+            var like = await _db.UserLikedHolidays
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.HolidayId == id);
+
+            if (like != null)
+            {
+                _db.UserLikedHolidays.Remove(like);
+                await _db.SaveChangesAsync();
+            }
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+
 }

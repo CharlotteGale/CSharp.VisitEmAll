@@ -28,7 +28,7 @@
         <p class="details-location">@Model.Location</p>
     }
 
-    <!-- ROW 1: SUMMARY + ACTIVITIES -->
+    <!-- SUMMARY + ACTIVITIES -->
     <div class="row g-4 mb-4">
 
         <!-- Summary -->
@@ -56,11 +56,6 @@
                     </p>
                 }
 
-@*                 @if (!string.IsNullOrEmpty(Model.DayAccommodation))
-                {
-                    <p><strong>Accommodation:</strong> @Model.DayAccommodation</p>
-                } *@
-
                 @if (Model.TotalCost.HasValue)
                 {
                     <p><strong>Total Cost:</strong> £@Model.TotalCost.Value.ToString("0.00")</p>
@@ -68,7 +63,6 @@
 
             </div>
         </div>
-
 
         <!-- Activities -->
         <div class="col-md-6">
@@ -101,27 +95,184 @@
 
     </div>
 
-
-    <!-- ROW 2: ITINERARY DAY 1 + MAP -->
-    @if (Model.Days.Count > 0)
+    <!-- DAY SECTIONS -->
+    @foreach (var day in Model.Days)
     {
-        var day1 = Model.Days[0];
-
         <div class="row g-4 mb-4">
 
-            <!-- Day 1 -->
             <div class="col-md-6">
                 <div class="section-card card-itinerary p-4 rounded">
-                    <h3>@day1.Date.ToString("dddd, dd MMM yyyy")</h3>
 
-                    @if (!day1.Items.Any())
+                    <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
+
+                    <!-- ADD BUTTONS -->
+                    @if (currentUserId == Model.OwnerUserId)
+                    {
+                        <div class="mb-3">
+
+                            <a asp-action="Details"
+                                asp-route-id="@Model.HolidayId"
+                                asp-route-addType="Activity"
+                                asp-route-dayId="@day.DayId"
+                                class="btn btn-primary btn-sm">
+                                Add Activity
+                            </a>
+
+                            <a asp-action="Details"
+                                asp-route-id="@Model.HolidayId"
+                                asp-route-addType="Restaurant"
+                                asp-route-dayId="@day.DayId"
+                                class="btn btn-secondary btn-sm">
+                                Add Restaurant
+                            </a>
+
+                            <a asp-action="Details"
+                                asp-route-id="@Model.HolidayId"
+                                asp-route-addType="Accommodation"
+                                asp-route-dayId="@day.DayId"
+                                class="btn btn-info btn-sm">
+                                Add Accommodation
+                            </a>
+
+                        </div>
+                    }
+
+                    <!-- INLINE ADD FORM -->
+                    @if (Model.AddDayId == day.DayId)
+                    {
+                        if (Model.AddType == "Activity")
+                        {
+                            <form asp-controller="DayItems"
+                                    asp-action="CreateActivity"
+                                    asp-route-dayId="@day.DayId"
+                                    method="post"
+                                    class="border p-3 rounded mb-3">
+
+                                <h5>Add Activity</h5>
+
+                                <div class="mb-2">
+                                    <label>Name</label>
+                                    <input class="form-control" name="Name" required />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Time</label>
+                                    <input class="form-control" type="time" name="Time" />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Location</label>
+                                    <input class="form-control" name="Location" />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Notes</label>
+                                    <textarea class="form-control" name="Notes"></textarea>
+                                </div>
+
+                                <button class="btn btn-success btn-sm">Save</button>
+
+                                <a asp-action="Details"
+                                    asp-route-id="@Model.HolidayId"
+                                    class="btn btn-secondary btn-sm">
+                                    Cancel
+                                </a>
+
+                            </form>
+                        }
+
+                        if (Model.AddType == "Restaurant")
+                        {
+                            <form asp-controller="DayItems"
+                                    asp-action="CreateRestaurant"
+                                    asp-route-dayId="@day.DayId"
+                                    method="post"
+                                    class="border p-3 rounded mb-3">
+
+                                <h5>Add Restaurant</h5>
+
+                                <div class="mb-2">
+                                    <label>Name</label>
+                                    <input class="form-control" name="Name" required />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Time</label>
+                                    <input class="form-control" type="time" name="Time" />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Location</label>
+                                    <input class="form-control" name="Location" />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Notes</label>
+                                    <textarea class="form-control" name="Notes"></textarea>
+                                </div>
+
+                                <button class="btn btn-success btn-sm">Save</button>
+
+                                <a asp-action="Details"
+                                    asp-route-id="@Model.HolidayId"
+                                    class="btn btn-secondary btn-sm">
+                                    Cancel
+                                </a>
+
+                            </form>
+                        }
+
+                        if (Model.AddType == "Accommodation")
+                        {
+                            <form asp-controller="DayItems"
+                                    asp-action="CreateAccommodation"
+                                    asp-route-dayId="@day.DayId"
+                                    method="post"
+                                    class="border p-3 rounded mb-3">
+
+                                <h5>Add Accommodation</h5>
+
+                                <div class="mb-2">
+                                    <label>Name</label>
+                                    <input class="form-control" name="Name" required />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Time</label>
+                                    <input class="form-control" type="time" name="Time" />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Location</label>
+                                    <input class="form-control" name="Location" />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Notes</label>
+                                    <textarea class="form-control" name="Notes"></textarea>
+                                </div>
+
+                                <button class="btn btn-success btn-sm">Save</button>
+
+                                <a asp-action="Details"
+                                    asp-route-id="@Model.HolidayId"
+                                    class="btn btn-secondary btn-sm">
+                                    Cancel
+                                </a>
+
+                            </form>
+                        }
+                    }
+
+                    <!-- TIMELINE -->
+                    @if (!day.Items.Any())
                     {
                         <p>No items planned for this day.</p>
                     }
                     else
                     {
                         <ul class="timeline">
-                            @foreach (var item in day1.Items)
+                            @foreach (var item in day.Items)
                             {
                                 <li class="timeline-item">
                                     <span class="time">@((item.Time?.ToString("HH:mm") ?? "--:--"))</span>
@@ -137,58 +288,22 @@
                                     {
                                         <div class="notes">@item.Notes</div>
                                     }
-                                </li>
-                            }
-                        </ul>
-                    }
-                </div>
-            </div>
 
-            <!-- Map -->
-            <div class="col-md-6">
-                <div class="map-card p-3 rounded map-placeholder">
-                    <div class="">[INSERT MAP HERE]</div>
-                </div>
-            </div>
-
-        </div>
-    }
-
-
-    <!-- ROW 3: ITINERARY DAY 2 + TRAVEL TIPS -->
-    @if (Model.Days.Count > 1)
-    {
-        var day2 = Model.Days[1];
-
-        <div class="row g-4 mb-4">
-
-            <!-- Day 2 -->
-            <div class="col-md-6">
-                <div class="section-card card-itinerary p-4 rounded">
-                    <h3>@day2.Date.ToString("dddd, dd MMM yyyy")</h3>
-
-                    @if (!day2.Items.Any())
-                    {
-                        <p>No items planned for this day.</p>
-                    }
-                    else
-                    {
-                        <ul class="timeline">
-                            @foreach (var item in day2.Items)
-                            {
-                                <li class="timeline-item">
-                                    <span class="time">@((item.Time?.ToString("HH:mm") ?? "--:--"))</span>
-                                    <span class="item-title">@item.Name</span>
-                                    <span class="item-type">(@item.ItemType)</span>
-
-                                    @if (!string.IsNullOrEmpty(item.Location))
+                                    @if (currentUserId == Model.OwnerUserId)
                                     {
-                                        <span class="location"> - @item.Location</span>
-                                    }
+                                        <div class="item-actions mt-2">
 
-                                    @if (!string.IsNullOrEmpty(item.Notes))
-                                    {
-                                        <div class="notes">@item.Notes</div>
+                                            <form asp-controller="DayItems"
+                                                    asp-action="DeleteItem"
+                                                    asp-route-id="@item.Id"
+                                                    method="post"
+                                                    class="d-inline">
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Delete this item?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     }
                                 </li>
                             }
@@ -197,67 +312,10 @@
                 </div>
             </div>
 
-            <!-- Travel Tips -->
-            <div class="col-md-6">
-                <div class="section-card card-travel-tips p-4 rounded">
-                    <h2>Travel Tips</h2>
-                    <ul class="tips-list">
-                        <li>Lorem ipsum dolor sit amet consectetur adipiscing elit.</li>
-                        <li>Consectetur adipiscing elit quisque.</li>
-                        <li>Ex sapien vitae pellentesque sem.</li>
-                        <li>Placerat in id cursus mi pretium duis.</li>
-                        <li>Pretium tellus duis convallis tempus leo eu aenean.</li>
-                    </ul>
-                </div>
-            </div>
-
         </div>
+        
     }
-
-
-    <!-- ROW 4: ITINERARY DAY 3 (FULL WIDTH) -->
-    @if (Model.Days.Count > 2)
-    {
-        var day3 = Model.Days[2];
-
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="section-card card-itinerary p-4 rounded">
-                    <h3>@day3.Date.ToString("dddd, dd MMM yyyy")</h3>
-
-                    @if (!day3.Items.Any())
-                    {
-                        <p>No items planned for this day.</p>
-                    }
-                    else
-                    {
-                        <ul class="timeline">
-                            @foreach (var item in day3.Items)
-                            {
-                                <li class="timeline-item">
-                                    <span class="time">@((item.Time?.ToString("HH:mm") ?? "--:--"))</span>
-                                    <span class="item-title">@item.Name</span>
-                                    <span class="item-type">(@item.ItemType)</span>
-
-                                    @if (!string.IsNullOrEmpty(item.Location))
-                                    {
-                                        <span class="location"> - @item.Location</span>
-                                    }
-
-                                    @if (!string.IsNullOrEmpty(item.Notes))
-                                    {
-                                        <div class="notes">@item.Notes</div>
-                                    }
-                                </li>
-                            }
-                        </ul>
-                    }
-                </div>
-            </div>
-        </div>
-    }
-
-
+            
     <!-- PHOTOS -->
     <div class="row mb-4">
         <div class="col-12">
@@ -267,7 +325,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- OWNER ACTIONS -->
     @if (currentUserId == Model.OwnerUserId)
