@@ -240,6 +240,7 @@ public class HolidaysController : Controller
   {
     var holiday = await _db.Holidays
         .Include(h => h.Country)
+        .Include(h => h.Images)
         .Include(h => h.Days)
             .ThenInclude(d => d.TimelineItems)
         .FirstOrDefaultAsync(h => h.Id == id);
@@ -257,6 +258,7 @@ public class HolidaysController : Controller
       StartDate = holiday.StartDate,
       EndDate = holiday.EndDate,
       HeroImageUrl = holiday.HeroImageUrl,
+      Images = holiday.Images.ToList(),
 
       Days = holiday.Days
             .OrderBy(d => d.Date)
@@ -355,45 +357,82 @@ public class HolidaysController : Controller
   }
 
   [HttpPost]
+  [RequestSizeLimit(100_000_000)]
   public async Task<IActionResult> AddImages(HolidayDetailsViewModel viewModel)
   {
+    if (viewModel == null || !ModelState.IsValid)
+    {
+      TempData["Error"] = "Upload failed. Your images might be too large or the connection timed out.";
+      return RedirectToAction("Details", new { id = viewModel?.HolidayId });
+    }
     var holiday = await _db.Holidays
-    .Include(h => h.Images)
-    .FirstOrDefaultAsync(h => h.Id == viewModel.HolidayId);
-
+      .Include(h => h.Images)
+      .FirstOrDefaultAsync(h => h.Id == viewModel.HolidayId);
     if (holiday == null) return NotFound();
+    var userId = HttpContext.Session.GetInt32("User_Id");
+    if (userId != holiday.UserId) return Unauthorized();
 
     if (viewModel.ImageFiles != null && viewModel.ImageFiles.Count > 0)
     {
-      string relativeFolder = Path.Combine("uploads", $"User_{viewModel.OwnerUserId}", $"Holiday_{holiday.Id}");
+      string relativeFolder = Path.Combine("uploads", "holidayImages", $"User_{userId}", $"Holiday_{holiday.Id}");
       string absoluteFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeFolder);
-
       if (!Directory.Exists(absoluteFolderPath))
         Directory.CreateDirectory(absoluteFolderPath);
-
       foreach (var file in viewModel.ImageFiles)
       {
         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         var savePath = Path.Combine(absoluteFolderPath, fileName);
-
         using (var stream = new FileStream(savePath, FileMode.Create))
         {
           await file.CopyToAsync(stream);
         }
-
         string dbPath = $"/{relativeFolder.Replace("\\", "/")}/{fileName}";
-
         holiday.Images.Add(new HolidayImage
         {
           FilePath = dbPath,
           HolidayId = holiday.Id
         });
       }
-
       await _db.SaveChangesAsync();
+      TempData["Success"] = "Photos uploaded successfully!";
+    }
+    return RedirectToAction("Details", new { id = viewModel.HolidayId });
+  }
+
+  [HttpPost]
+  public async Task<IActionResult> DeleteImage(int id)
+  {
+    var image = await _db.HolidayImages
+      .Include(i => i.Holiday)
+      .FirstOrDefaultAsync(i => i.Id == id);
+
+    if (image == null) return NotFound();
+    
+    var userId = HttpContext.Session.GetInt32("User_Id");
+    if (userId == null || image.Holiday.UserId != userId)
+    {
+      return Unauthorized();
     }
 
-    return RedirectToAction("Details", new { id = viewModel.HolidayId });
+    int holidayId = image.HolidayId;
+
+    try
+    {
+      var relativePath = image.FilePath.TrimStart('/');
+      var absolutePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
+      if (System.IO.File.Exists(absolutePath))
+      {
+        System.IO.File.Delete(absolutePath);
+      }
+      _db.HolidayImages.Remove(image);
+      await _db.SaveChangesAsync();
+      TempData["Success"] = "Photo deleted successfully.";
+    }
+    catch (Exception ex)
+    {
+      TempData["Error"] = "An error occurred while deleting the photo.";
+    }
+    return RedirectToAction("Details", new { id = holidayId });
   }
 
 

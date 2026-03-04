@@ -110,18 +110,18 @@
           {
             <div class="mb-3">
 
-              <a asp-action="Details"          asp-route-id="@Model.HolidayId"   asp-route-addType="Activity"
-                 asp-route-dayId="@day.DayId"                 class="btn btn-primary btn-sm">
+              <a asp-action="Details" asp-route-id="@Model.HolidayId" asp-route-addType="Activity"
+                 asp-route-dayId="@day.DayId" class="btn btn-primary btn-sm">
                 Add Activity
               </a>
 
-              <a asp-action="Details"                            asp-route-id="@Model.HolidayId"                     asp-route-addType="Restaurant"
-                 asp-route-dayId="@day.DayId"               class="btn btn-secondary btn-sm">
+              <a asp-action="Details" asp-route-id="@Model.HolidayId" asp-route-addType="Restaurant"
+                 asp-route-dayId="@day.DayId" class="btn btn-secondary btn-sm">
                 Add Restaurant
               </a>
 
-              <a asp-action="Details"       asp-route-id="@Model.HolidayId" asp-route-addType="Accommodation"
-                 asp-route-dayId="@day.DayId"               class="btn btn-info btn-sm">
+              <a asp-action="Details" asp-route-id="@Model.HolidayId" asp-route-addType="Accommodation"
+                 asp-route-dayId="@day.DayId" class="btn btn-info btn-sm">
                 Add Accommodation
               </a>
 
@@ -133,7 +133,7 @@
           {
             if (Model.AddType == "Activity")
             {
-              <form asp-controller="DayItems"             asp-action="CreateActivity"          asp-route-dayId="@day.DayId"        method="post"
+              <form asp-controller="DayItems" asp-action="CreateActivity" asp-route-dayId="@day.DayId" method="post"
                     class="border p-3 rounded mb-3">
 
                 <h5>Add Activity</h5>
@@ -160,7 +160,7 @@
 
                 <button class="btn btn-success btn-sm">Save</button>
 
-                <a asp-action="Details"    asp-route-id="@Model.HolidayId"  class="btn btn-secondary btn-sm">
+                <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-secondary btn-sm">
                   Cancel
                 </a>
 
@@ -169,7 +169,7 @@
 
             if (Model.AddType == "Restaurant")
             {
-              <form asp-controller="DayItems"                   asp-action="CreateRestaurant"                asp-route-dayId="@day.DayId"              method="post"
+              <form asp-controller="DayItems" asp-action="CreateRestaurant" asp-route-dayId="@day.DayId" method="post"
                     class="border p-3 rounded mb-3">
 
                 <h5>Add Restaurant</h5>
@@ -196,7 +196,7 @@
 
                 <button class="btn btn-success btn-sm">Save</button>
 
-                <a asp-action="Details"          asp-route-id="@Model.HolidayId"        class="btn btn-secondary btn-sm">
+                <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-secondary btn-sm">
                   Cancel
                 </a>
 
@@ -205,7 +205,7 @@
 
             if (Model.AddType == "Accommodation")
             {
-              <form asp-controller="DayItems"                        asp-action="CreateAccommodation"                     asp-route-dayId="@day.DayId"                   method="post"
+              <form asp-controller="DayItems" asp-action="CreateAccommodation" asp-route-dayId="@day.DayId" method="post"
                     class="border p-3 rounded mb-3">
 
                 <h5>Add Accommodation</h5>
@@ -232,7 +232,7 @@
 
                 <button class="btn btn-success btn-sm">Save</button>
 
-                <a asp-action="Details"                asp-route-id="@Model.HolidayId"              class="btn btn-secondary btn-sm">
+                <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-secondary btn-sm">
                   Cancel
                 </a>
 
@@ -269,9 +269,9 @@
                   {
                     <div class="item-actions mt-2">
 
-                      <form asp-controller="DayItems"        asp-action="DeleteItem"                      asp-route-id="@item.Id"                                    method="post"
+                      <form asp-controller="DayItems" asp-action="DeleteItem" asp-route-id="@item.Id" method="post"
                             class="d-inline">
-                        <button class="btn btn-danger btn-sm"      onclick="return confirm('Delete this item?');">
+                        <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this item?');">
                           Delete
                         </button>
                       </form>
@@ -291,19 +291,127 @@
   <!-- PHOTOS -->
   <div class="row mb-4">
     <div class="col-12">
-      <div class="section-card card-itinerary p-4 rounded">
+      <div class="photo-carousel-card card-itinerary p-4 rounded">
         <h2>Photos</h2>
-        <form asp-action="AddImages" method="post" enctype="multipart/form-data">
+        <form id="uploadForm" asp-action="AddImages" method="post" enctype="multipart/form-data">
           <input type="hidden" asp-for="HolidayId" />
-
           <div class="mb-3">
             <label class="form-label">Add more photos to your trip</label>
+            @if (TempData["Success"] != null)
+            {
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            }
             <input asp-for="ImageFiles" type="file" accept="image/*" multiple class="form-control" />
+            <div id="sizeError" class="text-danger mt-1" style="display:none;">
+              Total size exceeds 50MB. Please select fewer or smaller images.
+            </div>
           </div>
-
           <button type="submit" class="btn btn-primary">Upload Photos</button>
         </form>
-        <div class="photo-placeholder">[INSERT PHOTOS HERE]</div>
+
+        <script>
+          document.getElementById('ImageFiles').addEventListener('change', function () {
+            const files = this.files;
+            let totalSize = 0;
+            const limit = 50 * 1024 * 1024;
+
+            for (let i = 0; i < files.length; i++) {
+              totalSize += files[i].size;
+            }
+            const errorDiv = document.getElementById('sizeError');
+            const btn = document.getElementById('uploadBtn');
+            if (totalSize > limit) {
+              errorDiv.style.display = 'block';
+              btn.disabled = true;
+            } else {
+              errorDiv.style.display = 'none';
+              btn.disabled = false;
+            }
+          });
+        </script>
+
+        <div class="photo-carousel">
+          @if (Model.Images != null && Model.Images.Any())
+          {
+            <div id="holidayCarousel" class="carousel slide carousel-custom" data-bs-ride="false">
+              <div class="carousel-inner">
+                @for (int i = 0; i < Model.Images.Count; i++)
+                {
+                  var image = Model.Images[i];
+                  <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="carousel-container">
+                      <img src="@image.FilePath" class="rounded shadow" alt="Holiday Image">
+
+                      <div class="carousel-caption d-none d-md-block">
+                        <form asp-action="DeleteImage" asp-route-id="@image.Id" method="post"
+                              onsubmit="return confirm('Delete?')">
+                          <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash">Delete</i></button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <button class="carousel-control-prev" type="button" data-bs-target="#holidayCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#holidayCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+              </button>
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  const carousel = document.getElementById('holidayCarousel');
+                  if (!carousel) return;
+
+                  const inner = carousel.querySelector('.carousel-inner');
+                  const items = carousel.querySelectorAll('.carousel-item');
+                  const total = items.length;
+
+                  const updateLayout = (targetIndex) => {
+
+                    items.forEach(el => {
+                      el.classList.remove('active', 'item-wing-left', 'item-wing-right');
+                      el.classList.remove('carousel-item-next', 'carousel-item-prev', 'carousel-item-start', 'carousel-item-end');
+                  });
+
+                    const prevIndex = (targetIndex - 1 + total) % total;
+                    const nextIndex = (targetIndex + 1) % total;
+
+                    items[targetIndex].classList.add('active');
+                    items[prevIndex].classList.add('item-wing-left');
+                    items[nextIndex].classList.add('item-wing-right');
+
+                    const offset = -(targetIndex * 100);
+                    inner.style.transform = `translateX(${offset}%)`;
+                  };
+
+                  carousel.addEventListener('slide.bs.carousel', function (e) {
+                    updateLayout(e.to);
+                  });
+                  updateLayout(0);
+                });
+              </script>
+            </div>
+          }
+          else
+          {
+            <div class="col-12 text-center py-5 border rounded bg-light">
+              <i class="bi bi-images d-block mb-2 fs-1 text-muted"></i>
+              <p class="text-muted">No photos yet. Use the upload tool above to add some!</p>
+            </div>
+          }
+        </div>
       </div>
     </div>
   </div>

@@ -1,135 +1,182 @@
-html, body {
-    background-color: white !important;
-    color: #222 !important;
+html,
+body {
+  background-color: white !important;
+  color: #222 !important;
 }
 
 .hero-image img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 
 /* Title + location */
 .details-title {
-    font-size: 2.4rem;
-    font-weight: 700;
-    margin-bottom: 5px;
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 5px;
 }
 
 .details-location {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 30px;
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
 }
 
 /* Generic card styling (no shadows) */
 .summary-card,
 .section-card,
-.map-card {
-    padding: 25px;
-    border-radius: 12px;
-    
+.map-card,
+.photo-carousel-card {
+  padding: 25px;
+  border-radius: 12px;
 }
 
 /* Card-specific colours */
-.card-summary, .card-travel-tips{
-    background-color: #fcf2dcdf;
+.card-summary,
+.card-travel-tips {
+  background-color: #fcf2dcdf;
 }
 
 .card-activities {
-    background-color: #CCDDDC;
+  background-color: #CCDDDC;
 }
 
 .card-itinerary {
-    background-color: #EBF1F1;
+  background-color: #EBF1F1;
 }
 
 
 /* Map box */
 .map-placeholder {
-    width: 100%;
-    height: 250px;
-    background: #eaeaea;
-    border-radius: 10px;
+  width: 100%;
+  height: 250px;
+  background: #eaeaea;
+  border-radius: 10px;
 }
 
 /* Activities + Tips lists */
 .activity-list,
 .tips-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .activities-item {
-    margin: 8px 0;
-    padding: 10px 12px;
-    background: #fafafa;
-    border-radius: 8px;
-    
+  margin: 8px 0;
+  padding: 10px 12px;
+  background: #fafafa;
+  border-radius: 8px;
+
 }
 
 .activity-title {
-    margin-left: 10px;
-    font-weight: 600;
-    font-size: 1.05rem;
-    display: inline-block;
-    margin-bottom: 2px;
+  margin-left: 10px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: inline-block;
+  margin-bottom: 2px;
 }
 
 
 .tips-list li {
-    padding: 6px 0;
-    border-bottom: 1px solid #5b5b5b;
+  padding: 6px 0;
+  border-bottom: 1px solid #5b5b5b;
 }
 
 /* Itinerary timeline */
 .timeline {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .timeline-item {
-    margin: 8px 0;
-    padding: 10px 12px;
-    background: #fafafa;
-    border-radius: 8px;
-    
+  margin: 8px 0;
+  padding: 10px 12px;
+  background: #fafafa;
+  border-radius: 8px;
+
 }
 
 
 .time {
-    font-weight: 600;
-    margin-right: 8px;
-    color: #444;
+  font-weight: 600;
+  margin-right: 8px;
+  color: #444;
 }
 
 .item-title {
-    font-weight: 600;
-    margin-right: 4px;
+  font-weight: 600;
+  margin-right: 4px;
 }
 
 .item-type {
-    color: #777;
+  color: #777;
 }
 
 .location {
-    color: #555;
+  color: #555;
 }
 
 .notes {
-    margin-top: 4px;
-    font-size: 0.9rem;
-    color: #666;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: #666;
 }
 
-/* Photos */
-.photo-placeholder {
-    width: 100%;
-    height: 200px;
-    background: #eaeaea;
-    border-radius: 10px;
+.photo-carousel-card {
+  height: 700px !important;
+  background: #f8f9fa;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-inner {
+  display: flex !important; 
+  flex-direction: row;
+  width: 50%; 
+  margin: auto;
+  overflow: visible !important; 
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+}
+
+.carousel-item {
+  flex: 0 0 100%; 
+  position: relative !important;
+  display: flex !important; 
+  align-items: center;
+  justify-content: center;
+  opacity: 0.3;
+  transform: scale(0.8);
+  transition: transform 0.7s ease, opacity 0.7s ease;
+  float: none !important; 
+  margin-right: 0 !important;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  transform: scale(1.1);
+  z-index: 5;
+}
+
+.item-wing-right,
+.item-wing-left {
+  opacity: 0.3 !important;
+  transform: scale(0.8) !important;
+}
+
+.carousel-container img {
+  max-height: 500px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }

@@ -1,4 +1,5 @@
 namespace VisitEmAll.ViewModels;
+using VisitEmAll.Models;
 
 public class HolidayDetailsViewModel
 {
@@ -14,6 +15,8 @@ public class HolidayDetailsViewModel
     public List<HolidayDayViewModel> Days { get; set; } = new();
 
     public List<IFormFile> ImageFiles { get; set; } = new();
+
+    public List<HolidayImage> Images { get; set; } = new();
 
     // NEW — tells the view which inline form to show
     public string? AddType { get; set; }
