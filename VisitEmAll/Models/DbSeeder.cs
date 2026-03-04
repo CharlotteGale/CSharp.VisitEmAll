@@ -1,16 +1,19 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace VisitEmAll.Models;
 
 public static class DbSeeder
 {
     public static void Seed(VisitEmAllDbContext context)
     {
+        // Clear tables (order matters for FK constraints)
         context.Friendships.RemoveRange(context.Friendships);
         context.DayItems.RemoveRange(context.DayItems);
         context.HolidayDays.RemoveRange(context.HolidayDays);
         context.Holidays.RemoveRange(context.Holidays);
         context.Users.RemoveRange(context.Users);
         context.Countries.RemoveRange(context.Countries);
-
         context.SaveChanges();
 
         // === USERS ===
@@ -26,23 +29,37 @@ public static class DbSeeder
         };
         context.Users.AddRange(users);
         context.SaveChanges();
-        // === COUNTRIES (MVP seed) ===
-        context.Countries.AddRange(
-            new Country { Name = "United Kingdom", Iso2 = "GB", Continent = "Europe" },
-            new Country { Name = "France", Iso2 = "FR", Continent = "Europe" },
-            new Country { Name = "Spain", Iso2 = "ES", Continent = "Europe" },
-            new Country { Name = "Italy", Iso2 = "IT", Continent = "Europe" },
 
-            new Country { Name = "Japan", Iso2 = "JP", Continent = "Asia" },
-            new Country { Name = "United States", Iso2 = "US", Continent = "North America" },
+        // === COUNTRIES (full seed from json) ===
+        var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "data", "countries.json");
+        if (!File.Exists(jsonPath))
+            throw new FileNotFoundException($"countries.json not found at {jsonPath}");
 
-            new Country { Name = "Norway", Iso2 = "NO", Continent = "Europe" },
-            new Country { Name = "Greece", Iso2 = "GR", Continent = "Europe" },
-            new Country { Name = "Andorra", Iso2 = "AD", Continent = "Europe" }
-        );
+        var json = File.ReadAllText(jsonPath);
+
+        var dict = JsonSerializer.Deserialize<Dictionary<string, CountryRow>>(json)
+                   ?? new Dictionary<string, CountryRow>();
+
+        var toAdd = dict.Values
+            .Where(x => !string.IsNullOrWhiteSpace(x.CountryName)
+                     && !string.IsNullOrWhiteSpace(x.CountryCode2)
+                     && !string.IsNullOrWhiteSpace(x.ContinentName))
+            .Select(x => new Country
+            {
+                Name = NormalizeCountryName(x.CountryName.Trim()),   // ✅ USE NORMALIZER
+                Iso2 = x.CountryCode2.Trim().ToUpperInvariant(),
+                Continent = x.ContinentName.Trim()
+            })
+            .GroupBy(c => c.Iso2) // safety: avoid duplicates
+            .Select(g => g.First())
+            .ToList();
+
+        context.Countries.AddRange(toAdd);
         context.SaveChanges();
 
-        var countryIdByIso2 = context.Countries.ToDictionary(c => c.Iso2, c => c.Id);
+        // Build ISO2 -> Id lookup (case-insensitive)
+        var countryIdByIso2 = context.Countries
+            .ToDictionary(c => c.Iso2.ToUpperInvariant(), c => c.Id);
 
         int? PickCountryId(string? location)
         {
@@ -57,10 +74,11 @@ public static class DbSeeder
             if (s.Contains("norway") || s.Contains("oslo")) return countryIdByIso2["NO"];
             if (s.Contains("greece") || s.Contains("santorini")) return countryIdByIso2["GR"];
             if (s.Contains("andorra")) return countryIdByIso2["AD"];
-            if (s.Contains("scotland") || s.Contains("highlands")) return countryIdByIso2["GB"];
+            if (s.Contains("scotland") || s.Contains("highlands") || s.Contains("uk") || s.Contains("united kingdom")) return countryIdByIso2["GB"];
 
             return null;
         }
+
         // === HOLIDAYS ===
         var holidays = new List<Holiday>
         {
@@ -80,6 +98,10 @@ public static class DbSeeder
             new() { UserId = users[6].Id, Title = "Hiking in the Highlands", Location = "Scotland", StartDate = new DateOnly(2024, 8, 1), EndDate = new DateOnly(2024, 8, 2) }
         };
 
+        // ✅ Set CountryId BEFORE saving holidays
+        foreach (var h in holidays)
+            h.CountryId = PickCountryId(h.Location);
+
         context.Holidays.AddRange(holidays);
         context.SaveChanges();
 
@@ -91,76 +113,66 @@ public static class DbSeeder
             holidayDays.Add(new HolidayDay { HolidayId = h.Id, Date = start });
             holidayDays.Add(new HolidayDay { HolidayId = h.Id, Date = start.AddDays(1) });
         }
-
-        foreach (var h in holidays)
-            {
-                h.CountryId = PickCountryId(h.Location);
-            }
-
         context.HolidayDays.AddRange(holidayDays);
         context.SaveChanges();
 
         // === DAY ITEMS (TPH) ===
         var items = new List<DayItem>
         {
-            // --- Santorini (holidayDays[0..1]) ---
             new DayAccommodation { HolidayDayId = holidayDays[0].Id, Name = "Blue Dome Suites", Time = new TimeOnly(14, 0), Location = "Oia" },
             new DayRestaurant    { HolidayDayId = holidayDays[0].Id, Name = "Sunset Dinner in Oia", Time = new TimeOnly(19, 30) },
             new DayActivity      { HolidayDayId = holidayDays[1].Id, Name = "Catamaran Sailing Tour", Time = new TimeOnly(10, 0), Cost = 150.00m },
 
-            // --- Alps (holidayDays[2..3]) ---
             new DayAccommodation { HolidayDayId = holidayDays[2].Id, Name = "Alpine Lodge", Time = new TimeOnly(15, 0), Location = "Chamonix" },
             new DayActivity      { HolidayDayId = holidayDays[2].Id, Name = "Full Day Ski Pass", Time = new TimeOnly(8, 30), Cost = 65.00m },
             new DayRestaurant    { HolidayDayId = holidayDays[3].Id, Name = "Après-ski at La Folie Douce", Time = new TimeOnly(16, 0) },
 
-            // --- Tokyo (holidayDays[4..5]) ---
             new DayAccommodation { HolidayDayId = holidayDays[4].Id, Name = "Shinjuku Park Hotel", Time = new TimeOnly(15, 0) },
             new DayRestaurant    { HolidayDayId = holidayDays[4].Id, Name = "Tsukiji Outer Market Breakfast", Time = new TimeOnly(7, 30) },
             new DayActivity      { HolidayDayId = holidayDays[5].Id, Name = "Robot Cafe Experience", Time = new TimeOnly(18, 0), Cost = 80.00m },
 
-            // --- Rome (holidayDays[6..7]) ---
             new DayAccommodation { HolidayDayId = holidayDays[6].Id, Name = "AirBnB near Colosseum", Time = new TimeOnly(14, 0) },
             new DayActivity      { HolidayDayId = holidayDays[6].Id, Name = "Colosseum Underground Tour", Time = new TimeOnly(10, 0), Cost = 50.00m },
             new DayActivity      { HolidayDayId = holidayDays[7].Id, Name = "Pasta Making Class", Time = new TimeOnly(17, 0), Cost = 90.00m },
 
-            // --- Scotland (holidayDays[8..9]) ---
             new DayAccommodation { HolidayDayId = holidayDays[8].Id, Name = "Highland Campsite", Time = new TimeOnly(16, 0), Location = "Glencoe" },
             new DayActivity      { HolidayDayId = holidayDays[8].Id, Name = "Hiking Ben Nevis", Time = new TimeOnly(8, 0), Notes = "Bring waterproofs!" },
             new DayRestaurant    { HolidayDayId = holidayDays[9].Id, Name = "Local Pub Dinner", Time = new TimeOnly(19, 0) }
         };
-
         context.DayItems.AddRange(items);
 
         // === FRIENDSHIPS ===
-        if (!context.Friendships.Any())
+        var friendships = new List<Friendship>
         {
-            var friendships = new List<Friendship>
-            {
-                new() {
-                    RequesterId = users[0].Id,
-                    ReceiverId = users[1].Id,
-                    Status = FriendshipStatus.Accepted
-                },
-                new() {
-                    RequesterId = users[2].Id,
-                    ReceiverId = users[0].Id,
-                    Status = FriendshipStatus.Pending
-                },
-                new() {
-                    RequesterId = users[3].Id,
-                    ReceiverId = users[0].Id,
-                    Status = FriendshipStatus.Pending
-                },
-                new() {
-                    RequesterId = users[0].Id,
-                    ReceiverId = users[5].Id,
-                    Status = FriendshipStatus.Pending
-                }
-            };
-
-            context.Friendships.AddRange(friendships);
-        }
+            new() { RequesterId = users[0].Id, ReceiverId = users[1].Id, Status = FriendshipStatus.Accepted },
+            new() { RequesterId = users[2].Id, ReceiverId = users[0].Id, Status = FriendshipStatus.Pending },
+            new() { RequesterId = users[3].Id, ReceiverId = users[0].Id, Status = FriendshipStatus.Pending },
+            new() { RequesterId = users[0].Id, ReceiverId = users[5].Id, Status = FriendshipStatus.Pending }
+        };
+        context.Friendships.AddRange(friendships);
 
         context.SaveChanges();
+    }
+
+    private sealed record CountryRow(
+        [property: JsonPropertyName("country_name")] string CountryName,
+        [property: JsonPropertyName("country_code2")] string CountryCode2,
+        [property: JsonPropertyName("continent_name")] string ContinentName
+    );
+
+    private static string NormalizeCountryName(string name)
+    {
+        return name switch
+        {
+            "United Kingdom of Great Britain & Northern Ireland" => "United Kingdom",
+            "United States of America" => "United States",
+            "Russian Federation" => "Russia",
+            "Viet Nam" => "Vietnam",
+            "Iran (Islamic Republic of)" => "Iran",
+            "Korea, Republic of" => "South Korea",
+            "Korea (Republic of)" => "South Korea",
+            "Korea, Democratic People's Republic of" => "North Korea",
+            _ => name
+        };
     }
 }
