@@ -1,14 +1,21 @@
+/* ============================================================
+    GLOBAL BASE
+   ============================================================ */
 html, body {
     background-color: white !important;
     color: #222 !important;
 }
 
+/* ============================================================
+    HERO + DETAILS
+   ============================================================ */
 .hero-image img {
     width: 100%;
     height: 300px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
 }
+
 .details-title {
     font-size: 2.4rem;
     font-weight: 700;
@@ -21,6 +28,18 @@ html, body {
     margin-bottom: 30px;
 }
 
+.card-summary h2 {
+    margin-bottom: 22px;   /* adjust to taste */
+}
+
+.card-summary strong {
+    font-size: 1.4rem;    /* makes the labels stand out */
+    font-weight: 500;
+}
+
+/* ============================================================
+    CARD BASE STYLES
+   ============================================================ */
 .summary-card,
 .section-card {
     padding: 25px;
@@ -29,9 +48,18 @@ html, body {
 
 .card-summary {
     height: 295px;
+    border-radius: 16px;
     overflow: hidden;
-    background-color: #fcf2dcdf;
+
+    /* Replace the flat background with a vertical gradient */
+    background: linear-gradient(
+        to bottom,
+        #fcf2dcdf 50%,        
+        #f5e4c2 100%,        
+        #f7e1b0cd 100%       
+    );
 }
+
 
 .card-travel-tips {
     max-height: 260px;
@@ -40,18 +68,15 @@ html, body {
 
 .card-activities {
     height: 295px;
-    background-color: #CCDDDC;
-}
-
-.card-itinerary {
-    background-color: #EBF1F1;
-}
-
-.map-placeholder {
-    width: 100%;
-    height: 250px;
-    background: #eaeaea;
-    border-radius: 10px;
+    border-radius: 16px;
+    background: linear-gradient(
+        to bottom,
+        #CCDDDC 50%,    
+        #b7c9c8 90%,  
+        #9fb5b4 110%    
+    );
+    position: relative;
+    overflow: hidden;
 }
 
 .activities-scroll {
@@ -61,25 +86,40 @@ html, body {
     scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: #7a8a8a transparent;
+    -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
 
-.activities-scroll::-webkit-scrollbar {
-    width: 8px;
+.card-itinerary {
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(
+        to bottom,
+        #EBF1F1 0%,     
+        #d6e0e0 60%,    
+        #c0cecea9 80%   
+    );
 }
 
-.activities-scroll::-webkit-scrollbar-track {
-    background: transparent;
+
+
+/* ============================================================
+    ACTIVITIES SCROLL AREA + SCROLLBAR
+   ============================================================ */
+.activities-scroll {
+    max-height: 200px;
+    overflow: hidden;       
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #7a8a8a transparent;
+    position: relative;
 }
 
-.activities-scroll::-webkit-scrollbar-thumb {
-    background: #7a8a8a;
-    border-radius: 4px;
-}
-
-.activities-scroll::-webkit-scrollbar-thumb:hover {
-    background: #5a6a6a;
-}
-
+/* ============================================================
+    ADD BUTTONS
+   ============================================================ */
 .btn-add-activity,
 .btn-add-restaurant,
 .btn-add-accommodation {
@@ -100,6 +140,9 @@ html, body {
     border-color: #394949;
 }
 
+/* ============================================================
+    LISTS (Activities, Tips)
+   ============================================================ */
 .activity-list,
 .tips-list {
     list-style: none;
@@ -127,6 +170,9 @@ html, body {
     border-bottom: 1px solid #5b5b5b;
 }
 
+/* ============================================================
+    ITINERARY TIMELINE
+   ============================================================ */
 .timeline {
     list-style: none;
     padding: 0;
@@ -163,11 +209,4 @@ html, body {
     margin-top: 4px;
     font-size: 0.9rem;
     color: #666;
-}
-
-.photo-placeholder {
-    width: 100%;
-    height: 200px;
-    background: #eaeaea;
-    border-radius: 10px;
 }
