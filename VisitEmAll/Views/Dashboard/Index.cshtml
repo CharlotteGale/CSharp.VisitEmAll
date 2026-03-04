@@ -1,25 +1,27 @@
 ﻿@using VisitEmAll.Models
 @using VisitEmAll.ViewModels;
+@model VisitEmAll.ViewModels.DashboardViewModel;
 
-@{
+
+@* @{
   ViewData["Title"] = Model.Name + "'s Dashboard";
 
   var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
   var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
 
   var currentUserId = ViewData["CurrentUserId"] as int?;
-  var isOwn = Model.Id == currentUserId;
 
   var likedHolidayIds = ViewData["LikedHolidayIds"] as List<int> ?? new List<int>();
   var likedHolidays = ViewData["LikedHolidays"] as List<Holiday> ?? new List<Holiday>();
-}
+} *@
 
-<h1>@(isOwn ? "My Holidays" : Model.Name + "'s Holidays")</h1>
-<h3>@Model.HomeTown</h3>
+<h1>@(Model.IsOwnDashboard ? "My Holidays" : Model.User.Name + "'s Holidays")</h1>
+<h3>@Model.User.HomeTown</h3>
 <br />
 
-@await Component.InvokeAsync("TravelStats", new { dashboard = Model })
-
+<div class="stats-container">
+@await Component.InvokeAsync("TravelStats", new { dashboard = Model.TravelStats })
+</div>
 <div class="holiday-container">
 
   <!-- UPCOMING HOLIDAYS -->
@@ -28,10 +30,10 @@
     <div class="upcoming-holidays-header" id = "upcomingholidays">
       <div class="row">
         <div class="col">
-          <h2>@Model.Name's Upcoming Holidays</h2>
+          <h2>@Model.User.Name's Upcoming Holidays</h2>
         </div>
 
-        @if (isOwn)
+        @if (Model.IsOwnDashboard)
         {
           <div class="col d-flex flex-column justify-content-end align-items-end">
             <a class="add-holiday-btn" href="/holidays/create">Add Holiday</a>
@@ -41,13 +43,13 @@
     </div>
 
     <div class="upcoming-holidays-grid">
-      @if (!upcomingHolidays.Any())
+      @if (!Model.UpcomingHolidays.Any())
       {
         <p>No upcoming holidays.</p>
       }
       else
       {
-        @foreach (var holiday in upcomingHolidays)
+        @foreach (var holiday in Model.UpcomingHolidays)
         {
           <div class="upcoming-holidays-card" style="width: 18rem;">
             <div class="card-body">
@@ -62,12 +64,12 @@
               <h5 class="upcoming-holidays-title">@holiday.Title</h5>
               <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
 
-              @if (!isOwn)
+              @if (!Model.IsOwnDashboard)
               {
-                <form method="post" action="/holidays/@holiday.Id/@(likedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
+                <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
                       class="like-form">
                   <button type="submit" class="heart-btn">
-                    @if (likedHolidayIds.Contains(holiday.Id))
+                    @if (Model.LikedHolidayIds.Contains(holiday.Id))
                     {
                       <span class="heart liked">❤️</span>
                     }
@@ -88,19 +90,19 @@
 
   <!-- LIKED HOLIDAYS / HOLIDAY INSPO -->
   <div class="liked-holidays-container">
-    @if (isOwn)
+    @if (Model.IsOwnDashboard)
     {
       <div class="liked-holidays-header" id = "holidayinspo">
         <h2>Holiday Inspo</h2>
       </div>
       <div class="liked-holidays-grid">
-        @if (!likedHolidays.Any())
+        @if (!Model.LikedHolidays.Any())
         {
           <p>You haven't liked any holidays yet.</p>
         }
         else
         {
-          @foreach (var holiday in likedHolidays)
+          @foreach (var holiday in Model.LikedHolidays)
           {
             <div class="liked-holidays-card" style="width: 18rem;">
               <div class="card-body">
@@ -133,17 +135,17 @@
     <div class="past-holidays-container">
 
       <div class="past-holidays-header" id = "pastholidays">
-        <h2>@Model.Name's Past Holidays</h2>
+        <h2>@Model.User.Name's Past Holidays</h2>
       </div>
 
       <div class="past-holidays-grid">
-        @if (!pastHolidays.Any())
+        @if (!Model.PastHolidays.Any())
         {
           <p>No past holidays.</p>
         }
         else
         {
-          @foreach (var holiday in pastHolidays)
+          @foreach (var holiday in Model.PastHolidays)
           {
             <div class="past-holidays-card" style="width: 18rem;">
               <div class="card-body">
@@ -158,12 +160,12 @@
                 <h5 class="past-holidays-title">@holiday.Title</h5>
                 <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
 
-                @if (!isOwn)
+                @if (!Model.IsOwnDashboard)
                 {
-                  <form method="post" action="/holidays/@holiday.Id/@(likedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
+                  <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
                         class="like-form">
                     <button type="submit" class="heart-btn">
-                      @if (likedHolidayIds.Contains(holiday.Id))
+                      @if (Model.LikedHolidayIds.Contains(holiday.Id))
                       {
                         <span class="heart liked">❤️</span>
                       }
