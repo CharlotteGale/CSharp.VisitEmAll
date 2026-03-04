@@ -1,6 +1,6 @@
 namespace VisitEmAll.ViewModels;
 
-public class DashboardViewModel
+public class TravelStatsViewModel
 {
     // Stats
     public int TripsCount { get; set; }

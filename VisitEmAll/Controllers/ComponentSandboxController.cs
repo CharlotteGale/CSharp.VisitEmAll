@@ -7,7 +7,7 @@ public class ComponentSandboxController : Controller
     [HttpGet("/sandbox/bento")]
     public IActionResult Bento()
     {
-        var vm = new DashboardViewModel
+        var vm = new TravelStatsViewModel
         {
             TripsCount = 6,
             CountriesVisited = 4,
@@ -20,8 +20,8 @@ public class ComponentSandboxController : Controller
             MostVisitedCountryCode = "JP",
             UpcomingTrips = new()
             {
-                new DashboardViewModel.TripCard { Id=1, Title="Japan Trip", Location="Tokyo", ThumbnailUrl=null, StartDate=null, EndDate=null },
-                new DashboardViewModel.TripCard { Id=2, Title="Paris Weekend", Location="Paris", ThumbnailUrl=null, StartDate=null, EndDate=null }
+                new TravelStatsViewModel.TripCard { Id=1, Title="Japan Trip", Location="Tokyo", ThumbnailUrl=null, StartDate=null, EndDate=null },
+                new TravelStatsViewModel.TripCard { Id=2, Title="Paris Weekend", Location="Paris", ThumbnailUrl=null, StartDate=null, EndDate=null }
             }
         };
 

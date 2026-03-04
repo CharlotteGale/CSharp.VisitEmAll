@@ -56,6 +56,8 @@ public class DashboardController : Controller
         .Select(x => x.HolidayId) 
         .ToListAsync();
 
+        
+
         ViewData["CurrentUser"] = user; 
         ViewData["IsOwnDashboard"] = targetUserId == currentUserId;
         ViewData["UpcomingHolidays"] = upcomingHolidays;
