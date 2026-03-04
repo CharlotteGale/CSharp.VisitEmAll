@@ -154,8 +154,19 @@ header.fixed-top::after {
 }
 
 .auth-left {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.212), rgba(0, 0, 0, 0.4)), url('/images/brand-bg.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
   max-width: 400px;
-  padding-right: 3rem;
+  min-height: 300px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
 }
 
 .auth-brand-title {
