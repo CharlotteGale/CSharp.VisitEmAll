@@ -5,12 +5,16 @@ namespace VisitEmAll.Tests.Controllers;
 public class HolidaysControllerTests : NUnitTestBase
 {
     private HolidaysController _controller;
+    private Mock<IWebHostEnvironment> _mockEnv;
     private User _testUser;
 
     [SetUp]
     public void LocalSetUp()
     {
-        _controller = new HolidaysController(_context);
+        _mockEnv = new Mock<IWebHostEnvironment>();
+        _mockEnv.Setup(m => m.WebRootPath).Returns(Path.GetTempPath());
+
+        _controller = new HolidaysController(_context, _mockEnv.Object);
 
         var httpContext = new DefaultHttpContext();
         httpContext.Session = new MockHttpSession();
@@ -60,7 +64,7 @@ public class HolidaysControllerTests : NUnitTestBase
         {
             Title = "Broken Trip",
             StartDate = new DateOnly(2026, 12, 31),
-            EndDate = new DateOnly(2026, 01, 01) 
+            EndDate = new DateOnly(2026, 01, 01)
         };
 
         var result = await _controller.Create(vm) as ViewResult;
@@ -100,7 +104,7 @@ public class HolidaysControllerTests : NUnitTestBase
         var savedHoliday = _context.Holidays.FirstOrDefault(h => h.Title == uniqueTitle);
         Assert.That(savedHoliday, Is.Not.Null);
         Assert.That(savedHoliday.UserId, Is.EqualTo(_testUser.Id));
-        Assert.That(savedHoliday.Days.Count, Is.EqualTo(3)); 
+        Assert.That(savedHoliday.Days.Count, Is.EqualTo(3));
 
 
     }
@@ -111,7 +115,7 @@ public class HolidaysControllerTests : NUnitTestBase
         var country = new Country { Name = "United Kingdom" };
         _context.Countries.Add(country);
         _context.SaveChanges();
-        
+
         var vm = new CreateHolidayViewModel
         {
             Title = "Day Trip",
@@ -144,7 +148,7 @@ public class HolidaysControllerTests : NUnitTestBase
 
         Assert.That(result, Is.Not.Null);
         Assert.That(vm.Title, Is.EqualTo("Edit Test"));
-        Assert.That(vm.StartDate, Is.EqualTo(new DateOnly(2026,1,1)));
+        Assert.That(vm.StartDate, Is.EqualTo(new DateOnly(2026, 1, 1)));
     }
 
     [Test]
@@ -197,7 +201,7 @@ public class HolidaysControllerTests : NUnitTestBase
 
         var updatedHoliday = _context.Holidays.Find(holiday.Id);
         Assert.That(updatedHoliday.Title, Is.EqualTo("New Title"));
-        Assert.That(updatedHoliday.EndDate, Is.EqualTo(new DateOnly(2026,1,3)));
+        Assert.That(updatedHoliday.EndDate, Is.EqualTo(new DateOnly(2026, 1, 3)));
     }
 
     [Test]
@@ -218,23 +222,23 @@ public class HolidaysControllerTests : NUnitTestBase
         Assert.That(result, Is.InstanceOf<ForbidResult>());
     }
 
-    // [Test]
-    // public void Delete_RemovesHolidayAndRedirects()
-    // {
-    //     var holiday = new Holiday
-    //     {
-    //         Title = "Delete Me",
-    //         UserId = _testUser.Id
-    //     };
-    //     _context.Holidays.Add(holiday);
-    //     _context.SaveChanges();
+    [Test]
+    public async Task DeleteHoliday_RemovesHolidayAndRedirects()
+    {
+        var holiday = new Holiday
+        {
+            Title = "Delete Me",
+            UserId = _testUser.Id
+        };
+        _context.Holidays.Add(holiday);
+        _context.SaveChanges();
 
-    //     var result = _controller.Delete(holiday.Id) as RedirectToActionResult;
+        var result = await _controller.DeleteHoliday(holiday.Id) as RedirectToActionResult;
 
-    //     Assert.That(result.ActionName, Is.EqualTo("Index"));
-    //     Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
-    //     Assert.That(_context.Holidays.Any(h => h.Id == holiday.Id), Is.False);
-    // }
+        Assert.That(result.ActionName, Is.EqualTo("Index"));
+        Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
+        Assert.That(_context.Holidays.Any(h => h.Id == holiday.Id), Is.False);
+    }
 
     [Test]
     public async Task Details_Get_ReturnsViewWithHolidayAndDays()
@@ -268,10 +272,10 @@ public class HolidaysControllerTests : NUnitTestBase
     {
         var holiday = new Holiday { Title = "Multi-Item Trip", UserId = _testUser.Id };
         var day = new HolidayDay { Date = new DateOnly(2026, 6, 1) };
-        
+
         day.TimelineItems.Add(new DayActivity { Name = "Museum", Time = new TimeOnly(10, 0) });
         day.TimelineItems.Add(new DayRestaurant { Name = "Pasta Place", Time = new TimeOnly(19, 0) });
-        
+
         holiday.Days.Add(day);
         _context.Holidays.Add(holiday);
         _context.SaveChanges();
@@ -282,5 +286,130 @@ public class HolidaysControllerTests : NUnitTestBase
         var items = vm.Days.First().Items;
         Assert.That(items.Any(i => i.ItemType == "Activity"), Is.True);
         Assert.That(items.Any(i => i.ItemType == "Restaurant"), Is.True);
+    }
+
+    [Test]
+    public async Task Like_ValidHoliday_AddsLikeAndRedirectsToReferer()
+    {
+        var otherUser = new User { Name = "Other", Email = "other@l.com", Password = "1!" };
+        _context.Users.Add(otherUser);
+        _context.SaveChanges();
+
+        var holiday = new Holiday { Title = "Likable Trip", UserId = otherUser.Id };
+        _context.Holidays.Add(holiday);
+        _context.SaveChanges();
+
+        _controller.Request.Headers["Referer"] = "http://localhost/holidays/1";
+
+        var result = await _controller.Like(holiday.Id) as RedirectResult;
+
+        var likeExists = _context.UserLikedHolidays.Any(l => l.HolidayId == holiday.Id && l.UserId == _testUser.Id);
+        Assert.That(likeExists, Is.True);
+        Assert.That(result, Is.Not.Null);
+    }
+
+    [Test]
+    public async Task Like_OwnHoliday_ReturnsBadRequest()
+    {
+        var myHoliday = new Holiday { Title = "My Trip", UserId = _testUser.Id };
+        _context.Holidays.Add(myHoliday);
+        _context.SaveChanges();
+
+        var result = await _controller.Like(myHoliday.Id);
+
+        Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+    }
+
+    [Test]
+    public async Task UpdateHoliday_ShorteningDates_RemovesExtraDays()
+    {
+        var country = new Country { Name = "Italy" };
+        _context.Countries.Add(country);
+        _context.SaveChanges();
+
+        var holiday = new Holiday
+        {
+            Title = "Italy",
+            UserId = _testUser.Id,
+            CountryId = country.Id,
+            StartDate = new DateOnly(2026, 1, 1),
+            EndDate = new DateOnly(2026, 1, 3)
+        };
+        _context.Holidays.Add(holiday);
+        _context.SaveChanges();
+
+        var vm = new CreateHolidayViewModel
+        {
+            Title = "Italy",
+            CountryId = country.Id,
+            StartDate = new DateOnly(2026, 1, 1),
+            EndDate = new DateOnly(2026, 1, 1)
+        };
+        await _controller.UpdateHoliday(vm, holiday.Id);
+
+        var updated = _context.Holidays.Include(h => h.Days).First(h => h.Id == holiday.Id);
+        Assert.That(updated.Days.Count, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task Create_Post_WithImage_SavesFileToDisk()
+    {
+        var country = new Country { Name = "France" };
+        _context.Countries.Add(country);
+        await _context.SaveChangesAsync();
+
+        var content = "fake image content";
+        var fileName = "test_hero.jpg";
+        var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content));
+
+        var mockFile = new Mock<IFormFile>();
+        mockFile.Setup(_ => _.FileName).Returns(fileName);
+        mockFile.Setup(_ => _.Length).Returns(stream.Length);
+        mockFile.Setup(_ => _.OpenReadStream()).Returns(stream);
+        mockFile.Setup(_ => _.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .Returns((Stream target, CancellationToken ct) => stream.CopyToAsync(target, ct));
+
+        var vm = new CreateHolidayViewModel
+        {
+            Title = "Photo Trip",
+            CountryId = country.Id,
+            HeroImageFile = mockFile.Object
+        };
+
+        var result = await _controller.Create(vm) as RedirectToActionResult;
+
+        var saved = await _context.Holidays.FirstOrDefaultAsync(h => h.Title == "Photo Trip");
+        Assert.That(saved.HeroImageUrl, Does.StartWith("/uploads/heros/"));
+
+        var expectedPath = Path.Combine(_mockEnv.Object.WebRootPath, saved.HeroImageUrl.TrimStart('/'));
+        Assert.That(File.Exists(expectedPath), Is.True, $"File was not found at {expectedPath}");
+
+        if (File.Exists(expectedPath)) File.Delete(expectedPath);
+    }
+
+    [Test]
+public async Task UpdateHoliday_NewImage_DoesNotDeleteOldImage_LegacyBehavior()
+    {
+        var holiday = new Holiday { 
+            Title = "Old Trip", 
+            UserId = _testUser.Id, 
+            HeroImageUrl = "/uploads/heros/old_image.jpg" 
+        };
+        _context.Holidays.Add(holiday);
+        await _context.SaveChangesAsync();
+
+        var fullPath = Path.Combine(_mockEnv.Object.WebRootPath, "uploads/heros/old_image.jpg");
+        Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+        await File.WriteAllTextAsync(fullPath, "old data");
+
+        var newFile = new Mock<IFormFile>();
+        newFile.Setup(_ => _.FileName).Returns("new.jpg");
+        newFile.Setup(_ => _.OpenReadStream()).Returns(new MemoryStream());
+
+        var vm = new CreateHolidayViewModel { Title = "Updated", HeroImageFile = newFile.Object };
+
+        await _controller.UpdateHoliday(vm, holiday.Id);
+
+        Assert.That(File.Exists(fullPath), Is.True, "Old image persists for 'recoverability' purposes.");
     }
 }
