@@ -42,19 +42,19 @@
                 <a class="nav-link @(currentPath.Contains("/dashboard") ? "nav-link-active" : "")" asp-controller="Dashboard" asp-action="Index"
                 asp-route-id="">My Holidays</a>
               </li>
-                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                @if (currentPath.Contains("/dashboard")  && Model.IsOwnDashboard)
                 {<li class="nav-item">                
                 <a class="nav-link nav-sub" href="#upcomingholidays" 
                 >Upcoming Holidays</a>
                 </li>
                 }
-                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                @if (currentPath.Contains("/dashboard")  && Model.IsOwnDashboard)
                 {<li class="nav-item">                
                 <a class="nav-link nav-sub" href="#holidayinspo" 
                 >Holiday Inspo</a>
                 </li>
                 }
-                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                @if (currentPath.Contains("/dashboard")  && Model.IsOwnDashboard) 
                 {<li class="nav-item">                
                 <a class="nav-link nav-sub" href="#pastholidays" 
                 >Past Holidays</a>
