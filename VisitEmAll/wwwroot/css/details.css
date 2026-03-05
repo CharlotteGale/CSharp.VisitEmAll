@@ -83,19 +83,21 @@ html {
 }
 
 .card-activities {
-    height: 295px;
+    min-height: 385px;   
+    height: auto;       
     border-radius: 16px;
     background: linear-gradient(
         to bottom,
-        #CCDDDC 50%,    
-        #b7c9c8 90%,  
-        #9fb5b4 110%    
+        #CCDDDC 50%,
+        #b7c9c8 90%,
+        #9fb5b4 110%
     );
     position: relative;
-    overflow: hidden;
+    overflow: visible;   /* MUST be visible for growth */
 }
 
-.activities-scroll {
+
+/* .activities-scroll {
     max-height: 200px;
     overflow-y: auto;
     padding-right: 6px;
@@ -105,7 +107,7 @@ html {
     -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
-
+ */
 .card-itinerary {
     border-radius: 16px;
     overflow: hidden;
@@ -115,22 +117,21 @@ html {
         #d6e0e0 60%,    
         #c0cecea9 80%   
     );
+  margin-bottom:20px;
 }
-
 
 
 /* ============================================================
     ACTIVITIES SCROLL AREA + SCROLLBAR
    ============================================================ */
 .activities-scroll {
-    max-height: 200px;
-    overflow: hidden;       
-    overflow-y: auto;
+    max-height: none;    /* remove the cap */
+    height: auto;        /* allow natural expansion */
+    overflow: visible;   /* no scroll unless you want it */
     padding-right: 6px;
     scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: #7a8a8a transparent;
-    position: relative;
 }
 
 /* ============================================================
