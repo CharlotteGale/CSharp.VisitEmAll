@@ -388,12 +388,59 @@ public class HolidaysControllerTests : NUnitTestBase
     }
 
     [Test]
-public async Task UpdateHoliday_NewImage_DoesNotDeleteOldImage_LegacyBehavior()
+    public async Task UpdateHoliday_WithNewImage_SavesNewFileAndSetsProperty()
     {
-        var holiday = new Holiday { 
-            Title = "Old Trip", 
-            UserId = _testUser.Id, 
-            HeroImageUrl = "/uploads/heros/old_image.jpg" 
+        var country = new Country { Name = "Germany" };
+        _context.Countries.Add(country);
+        _context.SaveChanges();
+
+        var holiday = new Holiday
+        {
+            Title = "Berlin Trip",
+            UserId = _testUser.Id,
+            CountryId = country.Id,
+            HeroImageUrl = "/uploads/heros/old-germany.jpg"
+        };
+        _context.Holidays.Add(holiday);
+        _context.SaveChanges();
+
+        var content = "new image data";
+        var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content));
+        var mockFile = new Mock<IFormFile>();
+        mockFile.Setup(_ => _.FileName).Returns("brand-new-berlin.jpg");
+        mockFile.Setup(_ => _.Length).Returns(stream.Length);
+        mockFile.Setup(_ => _.OpenReadStream()).Returns(stream);
+        mockFile.Setup(_ => _.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .Returns((Stream target, CancellationToken ct) => stream.CopyToAsync(target, ct));
+
+        var vm = new CreateHolidayViewModel
+        {
+            Title = "Berlin Updated",
+            CountryId = country.Id,
+            HeroImageFile = mockFile.Object 
+        };
+
+        await _controller.UpdateHoliday(vm, holiday.Id);
+
+        var updated = await _context.Holidays.AsNoTracking().FirstOrDefaultAsync(h => h.Id == holiday.Id);
+
+        Assert.That(updated.HeroImageUrl, Does.StartWith("/uploads/heros/"));
+        Assert.That(updated.HeroImageUrl, Does.Contain("brand-new-berlin.jpg"));
+
+        var expectedPath = Path.Combine(_mockEnv.Object.WebRootPath, updated.HeroImageUrl.TrimStart('/'));
+        Assert.That(File.Exists(expectedPath), Is.True, "The new image file should exist on disk.");
+
+        if (File.Exists(expectedPath)) File.Delete(expectedPath);
+    }
+
+    [Test]
+    public async Task UpdateHoliday_NewImage_DoesNotDeleteOldImage_LegacyBehavior()
+    {
+        var holiday = new Holiday
+        {
+            Title = "Old Trip",
+            UserId = _testUser.Id,
+            HeroImageUrl = "/uploads/heros/old_image.jpg"
         };
         _context.Holidays.Add(holiday);
         await _context.SaveChangesAsync();
@@ -411,5 +458,78 @@ public async Task UpdateHoliday_NewImage_DoesNotDeleteOldImage_LegacyBehavior()
         await _controller.UpdateHoliday(vm, holiday.Id);
 
         Assert.That(File.Exists(fullPath), Is.True, "Old image persists for 'recoverability' purposes.");
+    }
+
+    [Test]
+    public async Task Create_Post_NoUserInSession_RedirectsToLogin()
+    {
+        var country = new Country { Name = "Testland" };
+        _context.Countries.Add(country);
+        _context.SaveChanges();
+
+        var vm = new CreateHolidayViewModel
+        {
+            Title = "Ghost Trip",
+            CountryId = country.Id,
+            StartDate = new DateOnly(2026, 1, 1),
+            EndDate = new DateOnly(2026, 1, 2)
+        };
+
+        _controller.HttpContext.Session.Clear();
+
+        var result = await _controller.Create(vm) as RedirectToActionResult;
+
+        Assert.That(result, Is.Not.Null, "Result should be a RedirectToActionResult");
+        Assert.That(result.ActionName, Is.EqualTo("Login"));
+        Assert.That(result.ControllerName, Is.EqualTo("Auth"));
+    }
+
+    [Test]
+    public async Task Details_InvalidId_ReturnsNotFound()
+    {
+        var result = await _controller.Details(9999);
+
+        Assert.That(result, Is.InstanceOf<NotFoundResult>());
+    }
+
+    [Test]
+    public async Task Unlike_ExistingLike_RemovesFromDbAndRedirects()
+    {
+        var otherUser = new User { Name = "Other", Email = "other@unlike.com", Password = "Password1!" };
+        _context.Users.Add(otherUser);
+        _context.SaveChanges();
+
+        var holiday = new Holiday { Title = "Likable Trip", UserId = otherUser.Id };
+        _context.Holidays.Add(holiday);
+        _context.SaveChanges();
+
+        var existingLike = new UserLikedHoliday
+        {
+            UserId = _testUser.Id,
+            HolidayId = holiday.Id
+        };
+        _context.UserLikedHolidays.Add(existingLike);
+        _context.SaveChanges();
+
+        _controller.Request.Headers["Referer"] = $"/holidays/{holiday.Id}";
+
+        var result = await _controller.Unlike(holiday.Id) as RedirectResult;
+
+        var likeStillExists = await _context.UserLikedHolidays
+            .AnyAsync(l => l.UserId == _testUser.Id && l.HolidayId == holiday.Id);
+
+        Assert.That(likeStillExists, Is.False, "The like record should have been removed.");
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Url, Is.EqualTo($"/holidays/{holiday.Id}"));
+    }
+
+    [Test]
+    public async Task Unlike_NoUserInSession_ReturnsUnauthorized()
+    {
+        _controller.HttpContext.Session.Clear();
+
+        var result = await _controller.Unlike(1);
+
+        Assert.That(result, Is.InstanceOf<UnauthorizedResult>());
     }
 }
