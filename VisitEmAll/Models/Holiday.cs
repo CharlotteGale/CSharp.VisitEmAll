@@ -24,7 +24,13 @@ public class Holiday
     public DateOnly? EndDate { get; set; }
 
     public decimal? TotalCost { get; set; } // Maybe compute at a later stage?
-    public string? HeroImageUrl { get; set; } 
+
+    [MaxLength(500)]
+    public string? ThumbnailUrl { get; set; }
+
+    public string? HeroImageUrl { get; set; }
+    
+    public List<HolidayImage> Images { get; set; } = new();
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

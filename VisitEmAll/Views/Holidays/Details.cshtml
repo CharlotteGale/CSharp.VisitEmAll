@@ -1,5 +1,5 @@
 @section Styles {
-    <link rel="stylesheet" href="~/css/details.css" />
+  <link rel="stylesheet" href="~/css/details.css" />
 }
 
 @using VisitEmAll.ViewModels
@@ -8,13 +8,13 @@
 
 @inject IHttpContextAccessor HttpContextAccessor
 @{
-    var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
+  var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
 }
 @if (!string.IsNullOrEmpty(Model.HeroImageUrl))
 {
-    <div class="hero-image">
-        <img src="@Model.HeroImageUrl" alt="Hero Image" />
-    </div>
+  <div class="hero-image">
+    <img src="@Model.HeroImageUrl" alt="Hero Image" />
+  </div>
 }
 <div class="container py-4">
     <h1 class="details-title">@Model.Title</h1>
@@ -306,24 +306,165 @@
                     }
                 </div>
             </div>
-        </div>
-        
-    }
-            
-    <!-- PHOTOS -->
-<h1 class="details-title">Photos</h1>
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="section-card card-itinerary p-4 rounded">
-                <div class="photo-placeholder">[INSERT PHOTOS HERE]</div>
-            </div>
-        </div>
+
     </div>
-    <!-- OWNER ACTIONS -->
-    @if (currentUserId == Model.OwnerUserId)
-    {
-        <div class="mt-4">
-            <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="btn btn-success me-2">Edit Holiday</a>
+
+  }
+
+  <!-- PHOTOS -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary rounded">
+        <h2>Photos</h2>
+        <form id="uploadForm" asp-action="AddImages" method="post" enctype="multipart/form-data">
+          <input type="hidden" asp-for="HolidayId" />
+          <div class="mb-3">
+            <label class="form-label">Add more photos to your trip</label>
+            @if (TempData["Success"] != null)
+            {
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            }
+            <div class="photo-input-group d-flex align-items-center gap-3 mb-4">
+              <input asp-for="ImageFiles" 
+                    type="file" 
+                    accept="image/*" 
+                    multiple 
+                    class="form-control photos-form-field" 
+                    id="ImageFiles" />
+              <button type="submit" class="btn btn-primary photo-upload-btn" id="uploadBtn">
+                <i class="bi bi-cloud-upload"></i> Upload Photos
+              </button>
+            </div>
+            <div id="sizeError" class="text-danger mt-1" style="display:none;">
+              Total size exceeds 50MB. Please select fewer or smaller images.
+            </div>
+          </div>
+        </form>
+
+        <script>
+          document.getElementById('ImageFiles').addEventListener('change', function () {
+            const files = this.files;
+            let totalSize = 0;
+            const limit = 50 * 1024 * 1024;
+
+            for (let i = 0; i < files.length; i++) {
+              totalSize += files[i].size;
+            }
+            const errorDiv = document.getElementById('sizeError');
+            const btn = document.getElementById('uploadBtn');
+            if (totalSize > limit) {
+              errorDiv.style.display = 'block';
+              btn.disabled = true;
+            } else {
+              errorDiv.style.display = 'none';
+              btn.disabled = false;
+            }
+          });
+        </script>
+
+        <div id="photos" class="photo-carousel">
+          @if (Model.Images != null && Model.Images.Any())
+          {
+            <div id="holidayCarousel" class="carousel slide carousel-custom" data-bs-ride="false">
+              <div class="carousel-inner">
+                @for (int i = 0; i < Model.Images.Count; i++)
+                {
+                  var image = Model.Images[i];
+                  <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="carousel-container">
+                      <img src="@image.FilePath" class="rounded shadow" alt="Holiday Image">
+
+                      <div class="carousel-caption d-none d-md-block">
+                        <form asp-action="DeleteImage" asp-route-id="@image.Id" method="post"
+                              onsubmit="return confirm('Delete?')">
+                          <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash">Delete</i></button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              @if (Model.Images.Count > 1)
+              {
+                <button class="carousel-control-prev" type="button" data-bs-target="#holidayCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#holidayCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                </button>
+              }
+
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  const carousel = document.getElementById('holidayCarousel');
+                  if (!carousel) return;
+
+                  const inner = carousel.querySelector('.carousel-inner');
+                  const items = carousel.querySelectorAll('.carousel-item');
+                  const total = items.length;
+                  const updateLayout = (targetIndex) => {
+                    items.forEach(el => {
+                      el.classList.remove('active', 'item-wing-left', 'item-wing-right');
+                      el.classList.remove('carousel-item-next', 'carousel-item-prev', 'carousel-item-start', 'carousel-item-end');
+                    });
+
+                    items[targetIndex].classList.add('active');
+
+                    if (total > 1) {
+                      const prevIndex = (targetIndex - 1 + total) % total;
+                      const nextIndex = (targetIndex + 1) % total;
+                      const offset = -(targetIndex * 100);
+                      
+                      inner.style.transform = `translateX(${offset}%)`;
+                      if (total === 2) {
+                        items[nextIndex].classList.add('item-wing-right');
+                      } else {
+                        items[prevIndex].classList.add('item-wing-left');
+                        items[nextIndex].classList.add('item-wing-right');
+                      }
+                    } else {
+                      inner.style.transform = `translateX(0)`;
+                      items[0].style.opacity = "1";
+                    }
+                  };
+
+                  carousel.addEventListener('slide.bs.carousel', function (e) {
+                    updateLayout(e.to);
+                  });
+                  updateLayout(0);
+                });
+              </script>
+            </div>
+          }
+          else
+          {
+            <div class="col-12 text-center py-5 border rounded bg-light">
+              <i class="bi bi-images d-block mb-2 fs-1 text-muted"></i>
+              <p class="text-muted">No photos yet. Use the upload tool above to add some!</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OWNER ACTIONS -->
+  @if (currentUserId == Model.OwnerUserId)
+  {
+    <div class="mt-4">
+      <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="btn btn-success me-2">Edit Holiday</a>
+
             <form asp-action="DeleteHoliday" asp-route-id="@Model.HolidayId" method="post" class="d-inline">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn btn-danger"

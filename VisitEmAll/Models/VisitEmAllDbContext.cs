@@ -15,6 +15,7 @@ public class VisitEmAllDbContext : DbContext
   public DbSet<Country> Countries => Set<Country>();
 
   public DbSet<UserLikedHoliday> UserLikedHolidays { get; set; }
+  public DbSet<HolidayImage> HolidayImages => Set<HolidayImage>();
 
 
   public string? DbPath { get; }
