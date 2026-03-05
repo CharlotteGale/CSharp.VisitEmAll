@@ -85,7 +85,7 @@
     @foreach (var day in Model.Days)
     {
         <div class="row g-4 mb-4">
-            <div class="col-md-6">
+            <div class="col-md-6" id="day-@day.DayId">
                 <div class="section-card card-itinerary p-4">
                     <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
                     <!-- ADD BUTTONS -->
