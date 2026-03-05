@@ -2,6 +2,10 @@
 @using VisitEmAll.ViewModels;
 @model VisitEmAll.ViewModels.DashboardViewModel;
 
+<style>
+    html { scroll-behavior: smooth; }
+</style>
+
 <h1>@(Model.IsOwnDashboard ? "My Holidays" : Model.User.Name + "'s Holidays")</h1>
 <h3>@Model.User.HomeTown</h3>
 <br />
@@ -54,6 +58,7 @@
               {
                 <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
                       class="like-form">
+                  <input type="hidden" name="returnFragment" value="upcomingholidays" />    
                   <button type="submit" class="heart-btn">
                     @if (Model.LikedHolidayIds.Contains(holiday.Id))
                     {
@@ -102,6 +107,7 @@
                                 <h5 class="liked-holidays-title">@holiday.Title</h5>
                                 <p class="liked-holidays-user">by @holiday.User.Name</p>
                                   <form method="post" action="/holidays/@holiday.Id/unlike" class="like-form">
+                                  <input type="hidden" name="returnFragment" value="holidayinspo" />
                                       <button type="submit" class="heart-btn">
                                           <span class="heart liked">❤️</span>
                                       </button>
@@ -146,6 +152,7 @@
                 {
                   <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
                         class="like-form">
+                    <input type="hidden" name="returnFragment" value="pastholidays" />    
                     <button type="submit" class="heart-btn">
                       @if (Model.LikedHolidayIds.Contains(holiday.Id))
                       {
