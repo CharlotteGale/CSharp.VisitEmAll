@@ -13,7 +13,7 @@
   // Spotlight trip = first upcoming
   var nextTrip = Model.UpcomingTrips?.FirstOrDefault();
   var nextUrl = nextTrip != null ? $"/holidays/{nextTrip.Id}" : addTripUrl;
-  var nextImg = nextTrip?.ThumbnailUrl;
+  var nextImg = nextTrip?.HeroImageUrl;
 
   // Date line for spotlight
   string dateLine = "";

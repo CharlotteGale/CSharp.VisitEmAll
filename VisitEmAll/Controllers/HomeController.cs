@@ -36,7 +36,7 @@ public class HomeController : Controller
                     Title = h.Title,
                     Location = h.Location,
                     CountryCode = h.Country != null ? h.Country.Iso2 : null,
-                    ThumbnailUrl = h.ThumbnailUrl,
+                    HeroImageUrl = h.HeroImageUrl,
                     StartDate = h.StartDate,
                     EndDate = h.EndDate
                 },
