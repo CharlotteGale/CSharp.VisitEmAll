@@ -2,19 +2,6 @@
 @using VisitEmAll.ViewModels;
 @model VisitEmAll.ViewModels.DashboardViewModel;
 
-
-@* @{
-  ViewData["Title"] = Model.Name + "'s Dashboard";
-
-    var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
-    var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
-
-  var currentUserId = ViewData["CurrentUserId"] as int?;
-
-  var likedHolidayIds = ViewData["LikedHolidayIds"] as List<int> ?? new List<int>();
-  var likedHolidays = ViewData["LikedHolidays"] as List<Holiday> ?? new List<Holiday>();
-} *@
-
 <h1>@(Model.IsOwnDashboard ? "My Holidays" : Model.User.Name + "'s Holidays")</h1>
 <h3>@Model.User.HomeTown</h3>
 <br />
@@ -30,7 +17,7 @@
     <div class="upcoming-holidays-header" id = "upcomingholidays">
       <div class="row">
         <div class="col">
-          <h2>@Model.User.Name's Upcoming Holidays</h2>
+          <h2>@(Model.IsOwnDashboard ? "My Upcoming Holidays" : Model.User.Name + "'s Upcoming Holidays")</h2>
         </div>
 
         @if (Model.IsOwnDashboard)
@@ -92,7 +79,7 @@
     @if (Model.IsOwnDashboard)
     {
       <div class="liked-holidays-header" id = "holidayinspo">
-        <h2>Holiday Inspo</h2>
+        <h2>My Holiday Inspo</h2>
       </div>
       <div class="liked-holidays-grid">
         @if (!Model.LikedHolidays.Any())
@@ -131,7 +118,7 @@
     <div class="past-holidays-container">
 
       <div class="past-holidays-header" id = "pastholidays">
-        <h2>@Model.User.Name's Past Holidays</h2>
+        <h2>@(Model.IsOwnDashboard ? "My Past Holidays" : Model.User.Name + "'s Past Holidays")</h2>
       </div>
 
       <div class="past-holidays-grid">
