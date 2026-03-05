@@ -115,7 +115,8 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
         await _db.SaveChangesAsync();
 
         TempData["Success"] = "Holiday created successfully!";
-        return RedirectToAction("Index", "Dashboard");
+        return RedirectToAction("Details", "Holidays", new { id = holiday.Id });
+
     }
     // ---------------------------
     // EDIT HOLIDAY (GET)
