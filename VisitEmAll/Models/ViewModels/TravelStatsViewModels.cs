@@ -72,7 +72,7 @@ public class TravelStatsViewModel
                 Title = h.Title,
                 Location = h.Location,
                 CountryCode = h.Country?.Iso2,
-                ThumbnailUrl = h.ThumbnailUrl,
+                HeroImageUrl = h.HeroImageUrl,
                 StartDate = h.StartDate,
                 EndDate = h.EndDate,
             }).ToList(),
@@ -82,7 +82,7 @@ public class TravelStatsViewModel
                 Title = h.Title,
                 Location = h.Location,
                 CountryCode = h.Country?.Iso2,
-                ThumbnailUrl = h.ThumbnailUrl,
+                HeroImageUrl = h.HeroImageUrl,
                 StartDate = h.StartDate,
                 EndDate = h.EndDate,
             }).ToList(),
@@ -96,7 +96,7 @@ public class TravelStatsViewModel
         public string Title { get; set; } = "";
         public string? Location { get; set; }
         public string? CountryCode { get; set; }
-        public string? ThumbnailUrl { get; set; }
+        public string? HeroImageUrl { get; set; }
         public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
     }

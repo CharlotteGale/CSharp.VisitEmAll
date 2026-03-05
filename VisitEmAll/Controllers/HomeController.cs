@@ -30,7 +30,7 @@ public class HomeController : Controller
             .OrderByDescending(h => h.StartDate)
             .Select(h => new
             {
-                Trip = new DashboardViewModel.TripCard
+                Trip = new TravelStatsViewModel.TripCard
                 {
                     Id = h.Id,
                     Title = h.Title,
@@ -58,7 +58,7 @@ public class HomeController : Controller
             .Take(5)
             .ToList();
 
-        int TripDays(DashboardViewModel.TripCard t)
+        int TripDays(TravelStatsViewModel.TripCard t)
         {
             if (t.StartDate == null || t.EndDate == null) return 0;
             var days = t.EndDate.Value.DayNumber - t.StartDate.Value.DayNumber + 1;
@@ -92,7 +92,7 @@ public class HomeController : Controller
             .Select(g => g.Key)
             .FirstOrDefault();
 
-        var vm = new DashboardViewModel
+        var vm = new TravelStatsViewModel
         {
             TripsCount = trips.Count,
             CountriesVisited = countriesVisited,
