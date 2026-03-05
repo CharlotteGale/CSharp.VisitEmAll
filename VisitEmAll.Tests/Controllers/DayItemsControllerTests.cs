@@ -11,7 +11,7 @@ public class DayItemsControllerTests : NUnitTestBase
     public void LocalSetUp()
     {
         _controller = new DayItemsController(_context);
-        
+
         var httpContext = new DefaultHttpContext();
         httpContext.Session = new MockHttpSession();
 
@@ -40,13 +40,16 @@ public class DayItemsControllerTests : NUnitTestBase
         _context.Holidays.Add(_testHoliday);
         _context.SaveChanges();
 
-        _testDay = new HolidayDay 
-        { 
-            HolidayId = _testHoliday.Id, 
-            Date = new DateOnly(2026, 6, 1) 
+        _testDay = new HolidayDay
+        {
+            HolidayId = _testHoliday.Id,
+            Date = new DateOnly(2026, 6, 1)
         };
         _context.HolidayDays.Add(_testDay);
         _context.SaveChanges();
+
+        var tempDataData = new TempDataDictionary(_controller.HttpContext, Mock.Of<ITempDataProvider>());
+        _controller.TempData = tempDataData;
     }
 
     [Test]
@@ -68,34 +71,34 @@ public class DayItemsControllerTests : NUnitTestBase
     [Test]
     public async Task CreateRestaurant_SavesCorrectType()
     {
-        var restaurant = new DayRestaurant 
-        { 
-            Name = "Le Bistro", 
+        var restaurant = new DayRestaurant
+        {
+            Name = "Le Bistro",
             Location = "Paris"
         };
 
         var result = await _controller.CreateRestaurant(_testDay.Id, restaurant) as RedirectToActionResult;
 
         var saved = await _context.DayItems.FirstOrDefaultAsync(i => i.Name == "Le Bistro");
-        
+
         Assert.That(saved, Is.Not.Null);
-        Assert.That(saved, Is.TypeOf<DayRestaurant>()); 
+        Assert.That(saved, Is.TypeOf<DayRestaurant>());
         Assert.That(result.RouteValues["id"], Is.EqualTo(_testHoliday.Id));
     }
 
     [Test]
     public async Task CreateAccommodation_SavesCorrectType()
     {
-        var hotel = new DayAccommodation 
-        { 
-            Name = "Grand Hotel", 
-            Location = "City Center" 
+        var hotel = new DayAccommodation
+        {
+            Name = "Grand Hotel",
+            Location = "City Center"
         };
 
         await _controller.CreateAccommodation(_testDay.Id, hotel);
 
         var saved = await _context.DayItems.FirstOrDefaultAsync(i => i.Name == "Grand Hotel");
-        
+
         Assert.That(saved, Is.Not.Null);
         Assert.That(saved, Is.TypeOf<DayAccommodation>());
     }
@@ -136,5 +139,42 @@ public class DayItemsControllerTests : NUnitTestBase
         var exists = await _context.DayItems.AnyAsync(i => i.Id == item.Id);
         Assert.That(exists, Is.False);
         Assert.That(result.RouteValues["id"], Is.EqualTo(_testHoliday.Id));
+    }
+
+    [Test]
+    public async Task EditInline_SetsTempData_AndRedirects()
+    {
+        var item = new DayActivity { HolidayDayId = _testDay.Id, Name = "Inline Item" };
+        _context.DayItems.Add(item);
+        await _context.SaveChangesAsync();
+
+        var result = await _controller.EditInline(item.Id) as RedirectToActionResult;
+
+        Assert.That(_controller.TempData["EditingItemId"], Is.EqualTo(item.Id));
+        Assert.That(result.ActionName, Is.EqualTo("Details"));
+        Assert.That(result.RouteValues["id"], Is.EqualTo(_testHoliday.Id));
+    }
+
+    [Test]
+    public async Task CancelInline_ClearsTempData_AndRedirects()
+    {
+        var item = new DayActivity { HolidayDayId = _testDay.Id, Name = "Cancel Item" };
+        _context.DayItems.Add(item);
+        await _context.SaveChangesAsync();
+
+        _controller.TempData["EditingItemId"] = item.Id;
+
+        var result = await _controller.CancelInline(item.Id) as RedirectToActionResult;
+
+        Assert.That(_controller.TempData["EditingItemId"], Is.Null);
+        Assert.That(result.ActionName, Is.EqualTo("Details"));
+    }
+
+    [Test]
+    public async Task EditInline_InvalidId_ReturnsNotFound()
+    {
+        var result = await _controller.EditInline(999);
+
+        Assert.That(result, Is.TypeOf<NotFoundResult>());
     }
 }
