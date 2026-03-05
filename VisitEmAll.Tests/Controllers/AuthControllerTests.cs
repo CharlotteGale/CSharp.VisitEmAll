@@ -173,7 +173,7 @@ public class AuthControllerTests : NUnitTestBase
 
         var result = await _controller.Login(model) as RedirectToActionResult;
 
-        Assert.That(result!.ControllerName, Is.EqualTo("Dashboard"));
+        Assert.That(result!.ControllerName, Is.EqualTo("Home"));
         
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", null);
     }
@@ -226,7 +226,7 @@ public class AuthControllerTests : NUnitTestBase
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result.ActionName, Is.EqualTo("Index"));
-        Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
+        Assert.That(result.ControllerName, Is.EqualTo("Home"));
 
         var sessionUserId = _controller.HttpContext.Session.GetInt32("User_Id");
         Assert.That(sessionUserId, Is.Not.Null);
