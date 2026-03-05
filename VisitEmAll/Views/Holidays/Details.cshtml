@@ -314,7 +314,7 @@
   <!-- PHOTOS -->
   <div class="row mb-4">
     <div class="col-12">
-      <div class="photo-carousel-card card-itinerary p-4 rounded">
+      <div class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary p-4 rounded">
         <h2>Photos</h2>
         <form id="uploadForm" asp-action="AddImages" method="post" enctype="multipart/form-data">
           <input type="hidden" asp-for="HolidayId" />
@@ -363,7 +363,7 @@
           });
         </script>
 
-        <div class="photo-carousel">
+        <div id="photos" class="photo-carousel">
           @if (Model.Images != null && Model.Images.Any())
           {
             <div id="holidayCarousel" class="carousel slide carousel-custom" data-bs-ride="false">
@@ -386,12 +386,16 @@
                 }
               </div>
 
-              <button class="carousel-control-prev" type="button" data-bs-target="#holidayCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#holidayCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-              </button>
+              @if (Model.Images.Count > 1)
+              {
+                <button class="carousel-control-prev" type="button" data-bs-target="#holidayCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#holidayCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                </button>
+              }
+
               <script>
                 document.addEventListener('DOMContentLoaded', function () {
                   const carousel = document.getElementById('holidayCarousel');
@@ -400,20 +404,23 @@
                   const inner = carousel.querySelector('.carousel-inner');
                   const items = carousel.querySelectorAll('.carousel-item');
                   const total = items.length;
-
                   const updateLayout = (targetIndex) => {
-
                     items.forEach(el => {
                       el.classList.remove('active', 'item-wing-left', 'item-wing-right');
                       el.classList.remove('carousel-item-next', 'carousel-item-prev', 'carousel-item-start', 'carousel-item-end');
                   });
+                  items[targetIndex].classList.add('active');
 
-                    const prevIndex = (targetIndex - 1 + total) % total;
-                    const nextIndex = (targetIndex + 1) % total;
-
-                    items[targetIndex].classList.add('active');
-                    items[prevIndex].classList.add('item-wing-left');
-                    items[nextIndex].classList.add('item-wing-right');
+                  if (total > 1) {
+                      const prevIndex = (targetIndex - 1 + total) % total;
+                      const nextIndex = (targetIndex + 1) % total;
+                    if (total === 2) {
+                      items[nextIndex].classList.add('item-wing-right');
+                    } else {
+                      items[prevIndex].classList.add('item-wing-left');
+                      items[nextIndex].classList.add('item-wing-right');
+                    }
+                  }
 
                     const offset = -(targetIndex * 100);
                     inner.style.transform = `translateX(${offset}%)`;

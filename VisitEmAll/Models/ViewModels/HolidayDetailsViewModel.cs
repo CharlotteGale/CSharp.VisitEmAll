@@ -17,9 +17,6 @@ public class HolidayDetailsViewModel
 
     public List<HolidayImage> Images { get; set; } = new();
 
-    public List<IFormFile> ImageFiles { get; set; } = new();
-    public List<HolidayImage> Images { get; set; } = new();
-
     public string? AddType { get; set; }
     public int? AddDayId { get; set; }
 }

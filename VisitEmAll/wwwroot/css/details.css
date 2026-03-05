@@ -2,8 +2,12 @@
     GLOBAL BASE
    ============================================================ */
 html, body {
-    background-color: white !important;
-    color: #222 !important;
+    background-color: #F6F4F1 !important;
+    color: #333 !important;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* ============================================================
@@ -223,6 +227,9 @@ html, body {
   color: #666;
 }
 
+/* ============================================================
+    PHOTO CAROUSEL
+   ============================================================ */
 .photo-carousel-card {
   height: 700px !important;
   background: #f8f9fa;
@@ -230,6 +237,10 @@ html, body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.photo-carousel-card.empty {
+  height: auto !important;
 }
 
 .carousel-inner {

@@ -466,7 +466,7 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
       await _db.SaveChangesAsync();
       TempData["Success"] = "Photos uploaded successfully!";
     }
-    return RedirectToAction("Details", new { id = viewModel.HolidayId });
+    return RedirectToAction("Details", null, new { id = viewModel.HolidayId }, fragment: "photos");
   }
 
   [HttpPost]
@@ -502,7 +502,7 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
     {
       TempData["Error"] = "An error occurred while deleting the photo.";
     }
-    return RedirectToAction("Details", new { id = holidayId });
+    return RedirectToAction("Details", null, new { id = holidayId }, fragment: "photos");
   }
 
 }
