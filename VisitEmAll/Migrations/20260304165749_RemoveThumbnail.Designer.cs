@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VisitEmAll.Models;
@@ -11,9 +12,11 @@ using VisitEmAll.Models;
 namespace VisitEmAll.Migrations
 {
     [DbContext(typeof(VisitEmAllDbContext))]
-    partial class VisitEmAllDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260304165749_RemoveThumbnail")]
+    partial class RemoveThumbnail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,28 +221,6 @@ namespace VisitEmAll.Migrations
                     b.ToTable("HolidayDays");
                 });
 
-            modelBuilder.Entity("VisitEmAll.Models.HolidayImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("HolidayId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HolidayId");
-
-                    b.ToTable("HolidayImage");
-                });
-
             modelBuilder.Entity("VisitEmAll.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -384,17 +365,6 @@ namespace VisitEmAll.Migrations
                     b.Navigation("Holiday");
                 });
 
-            modelBuilder.Entity("VisitEmAll.Models.HolidayImage", b =>
-                {
-                    b.HasOne("VisitEmAll.Models.Holiday", "Holiday")
-                        .WithMany("Images")
-                        .HasForeignKey("HolidayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Holiday");
-                });
-
             modelBuilder.Entity("VisitEmAll.Models.UserLikedHoliday", b =>
                 {
                     b.HasOne("VisitEmAll.Models.Holiday", "Holiday")
@@ -417,8 +387,6 @@ namespace VisitEmAll.Migrations
             modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
                 {
                     b.Navigation("Days");
-
-                    b.Navigation("Images");
 
                     b.Navigation("LikedByUsers");
                 });

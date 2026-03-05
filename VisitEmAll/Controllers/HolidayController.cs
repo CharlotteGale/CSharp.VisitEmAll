@@ -94,10 +94,10 @@ public class HolidaysController : Controller
             UserId = userId.Value,
             Title = vm.Title,
             Location = vm.Location,
+            CountryId = vm.CountryId,
             StartDate = vm.StartDate,
             EndDate = vm.EndDate,
             TotalCost = vm.TotalCost,
-            ThumbnailUrl = vm.ThumbnailUrl,
             HeroImageUrl = uniqueFileName,
             Days = new List<HolidayDay>()
         };
@@ -144,7 +144,6 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
             StartDate = holiday.StartDate,
             EndDate = holiday.EndDate,
             TotalCost = holiday.TotalCost,
-            ThumbnailUrl = holiday.ThumbnailUrl,
             ExistingHeroImage = holiday.HeroImageUrl,
             CountryId = holiday.CountryId,
             Activities = new List<CreateHolidayViewModel.ActivityInput>()
@@ -233,7 +232,6 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
         holiday.StartDate = updatedHoliday.StartDate;
         holiday.EndDate = updatedHoliday.EndDate;
         holiday.TotalCost = updatedHoliday.TotalCost;
-        holiday.ThumbnailUrl = updatedHoliday.ThumbnailUrl;
         if (uniqueFileName != null)
             {
                 holiday.HeroImageUrl = uniqueFileName;
@@ -506,6 +504,5 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
     }
     return RedirectToAction("Details", new { id = holidayId });
   }
-
 
 }

@@ -1,181 +1,423 @@
 @model VisitEmAll.ViewModels.DashboardViewModel
+@using Microsoft.EntityFrameworkCore
+@inject VisitEmAll.Models.VisitEmAllDbContext Db
 
 <link rel="stylesheet" href="~/css/Travel-Bento.css" />
+
+@{
+  var sessionUserId = Context.Session.GetInt32("User_Id");
+  var tripsUrl = "/dashboard";
+  var addTripUrl = "/holidays/create";
+  var friendsUrl = "/friends";
+
+  // Spotlight trip = first upcoming
+  var nextTrip = Model.UpcomingTrips?.FirstOrDefault();
+  var nextUrl = nextTrip != null ? $"/holidays/{nextTrip.Id}" : addTripUrl;
+  var nextImg = nextTrip?.HeroImageUrl;
+
+  // Date line for spotlight
+  string dateLine = "";
+  if (nextTrip?.StartDate != null && nextTrip?.EndDate != null)
+    dateLine = $"{nextTrip.StartDate:dd MMM} – {nextTrip.EndDate:dd MMM yyyy}";
+  else if (nextTrip?.StartDate != null)
+    dateLine = $"{nextTrip.StartDate:dd MMM yyyy}";
+
+  // Spotlight subtitle
+  var daysUntil = Model.DaysUntilNextTrip;
+  var nextSubtitle =
+    nextTrip == null ? "Add a trip to start tracking." :
+    daysUntil == null ? "Tap to view details." :
+    daysUntil == 0 ? "Starts today ✨" :
+    daysUntil == 1 ? "1 day to go" :
+    $"{daysUntil} days to go";
+
+  // Achievements tiers based on trips count
+  var t = Model.TripsCount;
+
+  var tiers = new[]
+  {
+    new { Min = 0,  Name = "First Steps",        Emoji = "🌱", Desc = "Log your first trip to unlock badges.", NextAt = 1 },
+    new { Min = 1,  Name = "Rookie Traveller",   Emoji = "🧳", Desc = "You’ve started your travel story.",     NextAt = 3 },
+    new { Min = 3,  Name = "Weekend Warrior",    Emoji = "📍", Desc = "Short trips, big memories.",           NextAt = 5 },
+    new { Min = 5,  Name = "Explorer",           Emoji = "🧭", Desc = "You’re so woke.",                      NextAt = 10 },
+    new { Min = 10, Name = "Globetrotter",       Emoji = "🌍", Desc = "10+ trips logged. Love to see it!",    NextAt = 20 },
+    new { Min = 20, Name = "Legend",             Emoji = "🏆", Desc = "20+ trips. It's giving digital nomad", NextAt = 25 },
+    new { Min = 25, Name = "Mythic",             Emoji = "✨", Desc = "You're the gandalf of holidays.",      NextAt = 25 }
+  };
+
+  var tier = tiers.Last(x => t >= x.Min);
+  var nextTarget = tier.NextAt;
+
+  var progress =
+    nextTarget <= tier.Min ? 100 :
+    (int)Math.Clamp(((t - tier.Min) / (double)(nextTarget - tier.Min)) * 100.0, 0, 100);
+
+  // Upcoming list excluding spotlight trip
+  var upcomingRest = (Model.UpcomingTrips ?? new List<DashboardViewModel.TripCard>())
+    .Skip(nextTrip == null ? 0 : 1)
+    .Take(3)
+    .ToList();
+
+  // Personality
+  var trips = Model.TripsCount;
+  var countries = Model.CountriesVisited;
+  var continents = Model.ContinentsVisited;
+
+  string personaTitle;
+  string personaEmoji;
+  string personaClass;
+
+  if (continents >= 4 && countries >= 12)
+  {
+    personaTitle = "Continent Collector";
+    personaEmoji = "🌍";
+    personaClass = "persona--collector";
+  }
+  else if (trips >= 10 && countries < 8)
+  {
+    personaTitle = "Repeat Favourite";
+    personaEmoji = "💛";
+    personaClass = "persona--favourite";
+  }
+  else if (countries >= 8)
+  {
+    personaTitle = "City Hopper";
+    personaEmoji = "🏙️";
+    personaClass = "persona--hopper";
+  }
+  else if (trips >= 3)
+  {
+    personaTitle = "Weekend Warrior";
+    personaEmoji = "⚡";
+    personaClass = "persona--warrior";
+  }
+  else
+  {
+    personaTitle = "Dream Planner";
+    personaEmoji = "✨";
+    personaClass = "persona--planner";
+  }
+
+  // Visited ISO2 list 
+  var visitedIso2 = (Model.VisitedCountryCodes ?? new HashSet<string>())
+    .Where(c => !string.IsNullOrWhiteSpace(c))
+    .Select(c => c.Trim().ToUpperInvariant())
+    .Distinct()
+    .ToArray();
+
+  var visitedJson = System.Text.Json.JsonSerializer.Serialize(visitedIso2);
+
+  // Unique ids per session user
+  var mapObjectId = $"world-svg-{(sessionUserId ?? 0)}";
+  var tooltipId = $"map-tip-{(sessionUserId ?? 0)}";
+
+  var rows = await Db.Countries
+    .AsNoTracking()
+    .Where(c => c.Name != null && c.Iso2 != null)
+    .Select(c => new { Name = c.Name!, Iso2 = c.Iso2! })
+    .ToListAsync();
+
+  var safeNameToIso2 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+  foreach (var r in rows)
+  {
+    var key = r.Name.Trim();
+    if (!safeNameToIso2.ContainsKey(key))
+      safeNameToIso2[key] = r.Iso2.Trim().ToUpperInvariant();
+  }
+
+  var nameToIso2Json = System.Text.Json.JsonSerializer.Serialize(safeNameToIso2);
+
+    // ISO2 -> Name map (safe, deduped)
+  var countryRows = await Db.Countries
+    .AsNoTracking()
+    .Where(c => c.Iso2 != null && c.Name != null)
+    .Select(c => new { Iso2 = c.Iso2!, Name = c.Name! })
+    .ToListAsync();
+
+  var iso2ToName = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+  foreach (var r in countryRows)
+  {
+    var key = r.Iso2.Trim().ToUpperInvariant();
+    if (!iso2ToName.ContainsKey(key))
+      iso2ToName[key] = r.Name.Trim();
+  }
+
+  var iso2ToNameJson = System.Text.Json.JsonSerializer.Serialize(iso2ToName);
+}
 
 <section class="bento">
   <div class="bento__wrap">
 
-    <!-- Topbar -->
     <div class="bento__topbar">
       <div class="bento__actions">
-        <a class="bento__btn bento__btn--primary" href="/holidays/create">+ Add trip</a>
+        <a class="bento__btn" href="@tripsUrl">Trips</a>
+        <a class="bento__btn bento__btn--primary" href="@addTripUrl">+ Add trip</a>
       </div>
     </div>
 
-    <!-- Subhead -->
     <p class="bento__subhead">
       @Model.CountriesVisited countries • @Model.ContinentsVisited continents • @Model.WorldPercent% of the world
     </p>
 
-    <!-- Grid -->
     <div class="bento__grid">
 
-      <!-- Row 1: Hero + Sticker (small reusable component) -->
+      <!-- Row 1 -->
       @await Component.InvokeAsync("TravelStats", new { dashboard = Model })
 
-      <!-- Left column: Highlights -->
-      <section class="bento__tile bento__tile--leftInfo" aria-label="Highlights">
+      <!-- Row 2 Left: Achievements -->
+      <a class="bento__tile bento__tile--leftInfo bento__tileLink" href="/dashboard" aria-label="Achievements">
         <div class="bento__tileInner">
-          <p class="bento__kicker">Highlights</p>
+          <p class="bento__kicker">Achievements</p>
 
-          <div class="bento__highlights">
-            <div class="bento__headline">Your Memories</div>
-            <div class="bento__headline bento__headline--muted">Your Friends</div>
-            <div class="bento__headline bento__headline--muted">Your Next Trip</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Middle: Discover -->
-      <section class="bento__tile bento__tile--centerFeature" aria-label="Discover">
-        <div class="bento__cover" aria-hidden="true"></div>
-
-        <div class="bento__coverCaption">
-          <p class="bento__coverTitle">Discover</p>
-          <p class="bento__coverSub">Find your next holiday inspiration</p>
-        </div>
-      </section>
-
-      <!-- Right: Stat tile (Longest trip / progress) -->
-      <section class="bento__tile bento__tile--sideTop" aria-label="Longest trip">
-        <div class="bento__tileInner">
-          <p class="bento__kicker bento__kicker--onTint">Longest trip</p>
-
-          <div class="bento__big">@Model.LongestTripDays days</div>
-          <div class="bento__small">your longest holiday so far</div>
-
-          <div class="bento__progress" title="World progress">
-            <div class="bento__progressFill" style="width:@(Math.Clamp(Model.WorldPercent, 0, 100))%"></div>
+          <div class="bento__achievementTop">
+            <div class="bento__badge">@tier.Emoji</div>
+            <div>
+              <div class="bento__achievementTitle">@tier.Name</div>
+              <div class="bento__small">@tier.Desc</div>
+            </div>
           </div>
 
-          <div class="bento__small bento__mt">
-            World progress: @Model.CountriesVisited / 195
+          <div class="bento__achievementMeta">
+            <div class="bento__chip">✈️ <span class="countup" data-count="@Model.TripsCount">0</span> trips</div>
+            <div class="bento__chip">🌍 <span class="countup" data-count="@Model.CountriesVisited">0</span> countries</div>
+          </div>
+
+          <div class="bento__achievementProgress">
+            <div class="bento__achievementRow">
+              <span class="bento__small" style="opacity:.75;">Next badge</span>
+              <span class="bento__small" style="opacity:.85;">
+                @if (tier.Name == "Mythic") { <text>Maxed</text> }
+                else { <text>@t/@nextTarget trips</text> }
+              </span>
+            </div>
+
+            <div class="bento__progress bento__progress--soft" title="Achievement progress">
+              <div class="bento__progressFill" style="width:@progress%"></div>
+            </div>
+
+            <div class="bento__small" style="opacity:.72; margin-top:10px;">
+              (Stretch goal: badges + leaderboard)
+            </div>
           </div>
         </div>
-      </section>
+      </a>
 
-      <!-- Left wide: Map -->
-      <section class="bento__tile bento__tile--mainMap" aria-label="Map">
+      <!-- Row 2 Right: Spotlight -->
+      <a class="bento__tile bento__tile--spotlight bento__tileLink" href="@nextUrl" aria-label="Upcoming trip spotlight">
+        <div class="bento__spotlightMedia"
+             style="@(string.IsNullOrWhiteSpace(nextImg) ? "" : $"background-image:url('{nextImg}');")"></div>
+
+        <div class="bento__spotlightOverlay">
+          <div class="bento__spotlightTop">
+            <div class="bento__tag">Up next</div>
+            <div class="bento__tag bento__tag--ghost">@nextSubtitle</div>
+          </div>
+
+          <div class="bento__spotlightBody">
+            <div class="bento__spotlightTitle">
+              @(nextTrip == null ? "Plan your next trip" : nextTrip.Title)
+            </div>
+
+            <div class="bento__spotlightSub">
+              @if (nextTrip == null)
+              {
+                <text>Choose a country, add dates, and we’ll start your stats.</text>
+              }
+              else
+              {
+                <text>@(string.IsNullOrWhiteSpace(nextTrip.Location) ? "Tap to view details" : nextTrip.Location)</text>
+              }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(dateLine))
+            {
+              <div class="bento__spotlightDates">@dateLine</div>
+            }
+
+            <div class="bento__spotlightCta">
+              <span class="bento__cta">@(nextTrip == null ? "+ Add trip" : "View trip")</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Row 3 Left: Map -->
+      <a class="bento__tile bento__tile--mainMap bento__tileLink" href="@tripsUrl" aria-label="Visited countries">
         <div class="bento__tileInner">
           <p class="bento__kicker">Visited countries</p>
 
           <div class="bento__statRow">
-            <div class="bento__statNum">@Model.CountriesVisited</div>
+            <div class="bento__statNum">
+              <span class="countup" data-count="@Model.CountriesVisited">0</span>
+            </div>
             <div class="bento__statLbl">countries highlighted on your map</div>
           </div>
 
           <div class="bento__chips">
             <span class="bento__chip">@Model.ContinentsVisited continents</span>
-            <span class="bento__chip">@Model.TripsThisYear trips this year</span>
+            <span class="bento__chip">Most visited: @(Model.MostVisitedCountryCode ?? "—")</span>
             <span class="bento__chip">Longest: @Model.LongestTripDays days</span>
           </div>
 
-          <div class="bento__mapFrame">
-            @* SVG map goes here later *@
-          </div>
-        </div>
-      </section>
+          <div class="bento__mapFrame--svg">
+            <object
+              id="@mapObjectId"
+              class="bento__mapSvgObject bento__mapSvgObject--loading"
+              type="image/svg+xml"
+              data="/maps/world.svg"
+              aria-label="Visited countries map">
+            </object>
 
-      <!-- Right tall: Upcoming -->
-      <section class="bento__tile bento__tile--sideList" aria-label="Upcoming trips">
-        <div class="bento__tileInner">
-          <div class="bento__listHeader">
-            <h3 class="bento__listTitle">Upcoming</h3>
-            <p class="bento__listHint">
-              @(Model.DaysUntilNextTrip == null ? "No upcoming trips yet." : $"{Model.DaysUntilNextTrip} days until your next trip.")
-            </p>
-          </div>
+            <div id="@tooltipId" class="bento__mapTooltip" hidden></div>
 
-          <div class="bento__list">
-            @if (Model.UpcomingTrips == null || Model.UpcomingTrips.Count == 0)
+            @if (visitedIso2.Length == 0)
             {
-              <div class="bento__card bento__mt">
-                <div class="bento__cardText">
-                  <div class="bento__cardTitle">Add your next trip</div>
-                  <div class="bento__cardSub">Pick a country and dates — we’ll handle the stats.</div>
-                </div>
-                <div class="bento__thumb" aria-hidden="true"></div>
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:18px; text-align:center; color:rgba(14,43,47,.65); font-weight:800;">
+                Add a trip with a country selected to light up the map.
               </div>
             }
-            else
-            {
-              foreach (var t in Model.UpcomingTrips.Take(3))
-              {
-                <a class="bento__card" href="/holidays/@t.Id">
-                  <div class="bento__cardText">
-                    <div class="bento__cardTitle">@t.Title</div>
-                    <div class="bento__cardSub">@t.Location</div>
-                  </div>
+          </div>
+        </div>
+      </a>
 
-                  @if (!string.IsNullOrWhiteSpace(t.ThumbnailUrl))
-                  {
-                    <img class="bento__thumb" src="@t.ThumbnailUrl" alt="" />
-                  }
-                  else
-                  {
-                    <div class="bento__thumb" aria-hidden="true"></div>
-                  }
-                </a>
-              }
-            }
+      <!-- Row 3 Right: Quick actions -->
+      <section class="bento__tile bento__tile--sideTop" aria-label="Quick actions">
+        <div class="bento__tileInner">
+          <p class="bento__kicker bento__kicker--onTint">Quick actions</p>
+
+          <div class="bento__big">Keep it moving</div>
+          <div class="bento__small">Fast shortcuts for a clean demo flow.</div>
+
+          <div class="bento__list bento__mt">
+            <a class="bento__card" href="@addTripUrl">
+              <div class="bento__cardText">
+                <div class="bento__cardTitle">+ Add a trip</div>
+                <div class="bento__cardSub">Country + dates + thumbnail.</div>
+              </div>
+              <div class="bento__thumb" aria-hidden="true"></div>
+            </a>
+
+            <a class="bento__card" href="@tripsUrl">
+              <div class="bento__cardText">
+                <div class="bento__cardTitle">View all trips</div>
+                <div class="bento__cardSub">Edit, update, and plan.</div>
+              </div>
+              <div class="bento__thumb" aria-hidden="true"></div>
+            </a>
+
+            <a class="bento__card" href="@friendsUrl">
+              <div class="bento__cardText">
+                <div class="bento__cardTitle">Find new friends</div>
+                <div class="bento__cardSub">Get new holiday inspo</div>
+              </div>
+              <div class="bento__thumb" aria-hidden="true"></div>
+            </a>
           </div>
         </div>
       </section>
 
-      <!-- Bottom right: Next trip -->
-      <section class="bento__tile bento__tile--sideBottom" aria-label="Next trip">
-        <div class="bento__tileInner">
-          <p class="bento__kicker bento__kicker--onAccent">Next trip</p>
+      <!-- Bottom row pair -->
+      <div class="bento__bottomPair">
 
-          @if (Model.DaysUntilNextTrip == null)
-          {
-            <div class="bento__big">Nothing planned</div>
-            <div class="bento__small">Add your next trip and we’ll start the countdown.</div>
-          }
-          else
-          {
-            <div class="bento__big">@Model.DaysUntilNextTrip days</div>
-            <div class="bento__small">until your next trip starts.</div>
-          }
-
-          @if (!string.IsNullOrWhiteSpace(Model.MostVisitedCountryCode))
-          {
-            <div class="bento__small bento__mt">
-              Most visited: @Model.MostVisitedCountryCode
+        <section class="bento__tile bento__tile--sideList" aria-label="Upcoming trips list">
+          <div class="bento__tileInner">
+            <div class="bento__listHeader">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px;">
+                <h3 class="bento__listTitle">Upcoming</h3>
+                <a href="@tripsUrl" class="bento__small" style="text-decoration:none; opacity:.75;">See all</a>
+              </div>
+              <p class="bento__listHint">
+                @(nextTrip == null ? "No upcoming trips yet." : "Your next few trips at a glance.")
+              </p>
             </div>
-          }
-        </div>
-      </section>
+
+            <div class="bento__list">
+              @if (nextTrip == null)
+              {
+                <a class="bento__card bento__mt" href="@addTripUrl">
+                  <div class="bento__cardText">
+                    <div class="bento__cardTitle">Add your next trip</div>
+                    <div class="bento__cardSub">Pick a country and dates — we’ll handle the stats.</div>
+                  </div>
+                  <div class="bento__thumb" aria-hidden="true"></div>
+                </a>
+              }
+              else if (upcomingRest.Count == 0)
+              {
+                <div class="bento__card bento__mt" style="pointer-events:none;">
+                  <div class="bento__cardText">
+                    <div class="bento__cardTitle">That’s the only one… for now</div>
+                    <div class="bento__cardSub">Add another trip to build your lineup.</div>
+                  </div>
+                  <div class="bento__thumb" aria-hidden="true"></div>
+                </div>
+
+                <a class="bento__card" href="@addTripUrl">
+                  <div class="bento__cardText">
+                    <div class="bento__cardTitle">+ Add another trip</div>
+                    <div class="bento__cardSub">Future you will thank you.</div>
+                  </div>
+                  <div class="bento__thumb" aria-hidden="true"></div>
+                </a>
+              }
+              else
+              {
+                foreach (var t2 in upcomingRest)
+                {
+                  <a class="bento__card" href="/holidays/@t2.Id">
+                    <div class="bento__cardText">
+                      <div class="bento__cardTitle">@t2.Title</div>
+                      <div class="bento__cardSub">@t2.Location</div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(t2.HeroImageUrl))
+                    {
+                      <img class="bento__thumb" src="@t2.HeroImageUrl" alt="" />
+                    }
+                    else
+                    {
+                      <div class="bento__thumb" aria-hidden="true"></div>
+                    }
+                  </a>
+                }
+              }
+            </div>
+          </div>
+        </section>
+
+        <a class="bento__tile bento__tile--sideBottom bento__tileLink @personaClass" href="/insights" aria-label="Travel personality">
+          <div class="bento__tileInner bento__personaSimple">
+            <p class="bento__kicker bento__kicker--onAccent">Personality</p>
+
+            <div class="bento__personaCenter">
+              <div class="bento__personaEmoji" aria-hidden="true">@personaEmoji</div>
+              <div class="bento__personaTitle">@personaTitle</div>
+            </div>
+          </div>
+        </a>
+
+      </div>
 
     </div>
   </div>
 </section>
 
+<!-- Count up numbers -->
 <script>
   (function () {
-    // prevent double-binding if component appears twice
     if (window.__travelBentoCountupBound) return;
     window.__travelBentoCountupBound = true;
 
     function runCountup() {
       const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const nodes = document.querySelectorAll('.countup[data-count]');
+
       nodes.forEach(node => {
         if (node.dataset.done) return;
         node.dataset.done = "1";
 
         const raw = node.getAttribute('data-count') || "0";
-        let target = Number(raw);
+        const target = Number(raw);
         const decimals = Number(node.getAttribute('data-decimals') || "0");
 
         if (!isFinite(target)) {
@@ -211,4 +453,210 @@
       runCountup();
     }
   })();
+</script>
+
+<!-- Map logic -->
+<script>
+(function () {
+  const obj = document.getElementById("@mapObjectId");
+  const tooltip = document.getElementById("@tooltipId");
+  if (!obj) return;
+
+  if (obj.dataset.init === "1") return;
+  obj.dataset.init = "1";
+
+  const visited = @Html.Raw(visitedJson);
+  const visitedSet = new Set((visited || []).map(x => String(x).toUpperCase()));
+
+  const ISO2_TO_NAME = @Html.Raw(iso2ToNameJson);
+
+  const COLORS = {
+    baseFill: "rgba(14,43,47,0.10)",
+    baseStroke: "rgba(14,43,47,0.16)",
+    visitedFill: getComputedStyle(document.documentElement).getPropertyValue("--sand").trim() || "#EABCA8",
+    hoverFill: "rgba(153,186,185,0.45)"
+  };
+
+  function norm(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/\s+/g, " ");
+  }
+
+  const NAME_ALIASES = {
+    "united states of america": "united states",
+    "russian federation": "russia",
+    "korea, republic of": "south korea",
+    "korea (republic of)": "south korea",
+    "korea, democratic people's republic of": "north korea",
+    "iran (islamic republic of)": "iran",
+    "bolivia (plurinational state of)": "bolivia",
+    "tanzania, united republic of": "tanzania",
+    "venezuela (bolivarian republic of)": "venezuela",
+    "syrian arab republic": "syria",
+    "viet nam": "vietnam",
+    "lao people's democratic republic": "laos",
+    "côte d’ivoire": "ivory coast",
+    "cote d'ivoire": "ivory coast"
+  };
+
+  function canonicalName(name) {
+    const n = norm(name);
+    return NAME_ALIASES[n] || n;
+  }
+
+  function showTip(text, x, y) {
+    if (!tooltip) return;
+    tooltip.textContent = text;
+    tooltip.hidden = false;
+    tooltip.style.left = (x + 12) + "px";
+    tooltip.style.top = (y + 12) + "px";
+  }
+  function hideTip() {
+    if (!tooltip) return;
+    tooltip.hidden = true;
+  }
+
+  function applyFill(el, fill) {
+    el.style.fill = fill;
+    if (el.querySelectorAll) {
+      el.querySelectorAll("path, polygon").forEach(p => p.style.fill = fill);
+    }
+  }
+
+function normalizeAndFitSvg(doc) {
+  const svg = doc.querySelector("svg");
+  if (!svg) return;
+
+  //responsive
+  svg.removeAttribute("width");
+  svg.removeAttribute("height");
+  svg.style.width = "100%";
+  svg.style.height = "100%";
+  svg.style.display = "block";
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+  //makes sure we have a viewbox
+  let vb = svg.getAttribute("viewBox") || svg.getAttribute("viewbox");
+  if (!vb) {
+    const w = parseFloat(svg.getAttribute("width")) || 2000;
+    const h = parseFloat(svg.getAttribute("height")) || 857;
+    vb = `0 0 ${w} ${h}`;
+    svg.setAttribute("viewBox", vb);
+  }
+
+  // zooms OUT to show full world
+  const shapes = svg.querySelectorAll("path, polygon");
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+  shapes.forEach(el => {
+    try {
+      const b = el.getBBox();
+      minX = Math.min(minX, b.x);
+      minY = Math.min(minY, b.y);
+      maxX = Math.max(maxX, b.x + b.width);
+      maxY = Math.max(maxY, b.y + b.height);
+    } catch (_) {}
+  });
+
+  if (isFinite(minX) && isFinite(minY) && isFinite(maxX) && isFinite(maxY)) {
+    const w = maxX - minX;
+    const h = maxY - minY;
+
+    //padding here for zoom
+    const padX = w * 0.12;  
+    const padY = h * 0.18; 
+
+    svg.setAttribute(
+      "viewBox",
+      `${minX - padX} ${minY - padY} ${w + padX * 2} ${h + padY * 2}`
+    );
+  }
+}
+
+  function getNodesForIso2(doc, iso2) {
+    const code = String(iso2).toUpperCase();
+    const nodes = [];
+
+
+let byId = doc.getElementById(code) || doc.getElementById(code.toLowerCase());
+if (!byId && code === "GB") {
+  // SimpleMaps sometimes uses UK instead of GB
+  byId = doc.getElementById("UK") || doc.getElementById("uk");
+}
+if (byId) nodes.push(byId);
+
+    if (!byId) {
+      const dbName = ISO2_TO_NAME[code];
+      if (dbName) {
+        const want = canonicalName(dbName);
+
+        doc.querySelectorAll("[class],[name],[data-name]").forEach(el => {
+          const cls = el.getAttribute("class");
+          const nm = el.getAttribute("name") || el.getAttribute("data-name");
+
+          if (cls && canonicalName(cls) === want) nodes.push(el);
+          else if (nm && canonicalName(nm) === want) nodes.push(el);
+        });
+      }
+    }
+
+    return Array.from(new Set(nodes));
+  }
+
+  obj.addEventListener("load", () => {
+    try {
+      const doc = obj.contentDocument;
+      if (!doc) return;
+
+      normalizeAndFitSvg(doc);
+
+      doc.querySelectorAll("path, polygon").forEach(s => {
+        s.style.transition = "fill 180ms ease, opacity 180ms ease";
+        s.style.fill = COLORS.baseFill;
+        s.style.stroke = COLORS.baseStroke;
+        s.style.strokeWidth = "0.6";
+      });
+
+      visitedSet.forEach(code => {
+        const nodes = getNodesForIso2(doc, code);
+        nodes.forEach(el => applyFill(el, COLORS.visitedFill));
+      });
+
+      const interactive = [];
+      doc.querySelectorAll("[id],[class],[name],[data-name]").forEach(el => interactive.push(el));
+      const uniq = Array.from(new Set(interactive));
+
+      uniq.forEach(el => {
+        el.style.cursor = "default";
+
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }, true);
+
+        el.addEventListener("mouseenter", (e) => {
+          const label = el.getAttribute("name") || el.getAttribute("data-name") || el.getAttribute("class") || el.id || "Country";
+          showTip(label, e.clientX, e.clientY);
+        });
+
+        el.addEventListener("mousemove", (e) => {
+          const label = el.getAttribute("name") || el.getAttribute("data-name") || el.getAttribute("class") || el.id || "Country";
+          showTip(label, e.clientX, e.clientY);
+        });
+
+        el.addEventListener("mouseleave", () => hideTip());
+      });
+
+    } catch (err) {
+      console.error("Map init failed:", err);
+    } finally {
+      obj.classList.remove("bento__mapSvgObject--loading");
+      obj.classList.add("bento__mapSvgObject--ready");
+    }
+  });
+})();
 </script>

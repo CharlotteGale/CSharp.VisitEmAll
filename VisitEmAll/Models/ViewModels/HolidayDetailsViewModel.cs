@@ -11,14 +11,15 @@ public class HolidayDetailsViewModel
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public decimal? TotalCost { get; set; }
-
     public List<HolidayDayViewModel> Days { get; set; } = new();
 
     public List<IFormFile> ImageFiles { get; set; } = new();
 
     public List<HolidayImage> Images { get; set; } = new();
 
-    // NEW — tells the view which inline form to show
+    public List<IFormFile> ImageFiles { get; set; } = new();
+    public List<HolidayImage> Images { get; set; } = new();
+
     public string? AddType { get; set; }
     public int? AddDayId { get; set; }
 }

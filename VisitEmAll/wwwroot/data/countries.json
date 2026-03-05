@@ -1,0 +1,2243 @@
+{
+  "AD": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "AD",
+    "country_code3": "AND",
+    "country_name": "Andorra",
+    "country_name_full": "Principality of Andorra",
+    "iso3": "020"
+  },
+  "AE": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "AE",
+    "country_code3": "ARE",
+    "country_name": "United Arab Emirates",
+    "country_name_full": "United Arab Emirates",
+    "iso3": "784"
+  },
+  "AF": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "AF",
+    "country_code3": "AFG",
+    "country_name": "Afghanistan",
+    "country_name_full": "Islamic Republic of Afghanistan",
+    "iso3": "004"
+  },
+  "AG": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "AG",
+    "country_code3": "ATG",
+    "country_name": "Antigua and Barbuda",
+    "country_name_full": "Antigua and Barbuda",
+    "iso3": "028"
+  },
+  "AI": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "AI",
+    "country_code3": "AIA",
+    "country_name": "Anguilla",
+    "country_name_full": "Anguilla",
+    "iso3": "660"
+  },
+  "AL": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "AL",
+    "country_code3": "ALB",
+    "country_name": "Albania",
+    "country_name_full": "Republic of Albania",
+    "iso3": "008"
+  },
+  "AM": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "AM",
+    "country_code3": "ARM",
+    "country_name": "Armenia",
+    "country_name_full": "Republic of Armenia",
+    "iso3": "051"
+  },
+  "AO": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "AO",
+    "country_code3": "AGO",
+    "country_name": "Angola",
+    "country_name_full": "Republic of Angola",
+    "iso3": "024"
+  },
+  "AQ": {
+    "continent_code": "AN",
+    "continent_name": "Antarctica",
+    "country_code2": "AQ",
+    "country_code3": "ATA",
+    "country_name": "Antarctica",
+    "country_name_full": "Antarctica (the territory South of 60 deg S)",
+    "iso3": "010"
+  },
+  "AR": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "AR",
+    "country_code3": "ARG",
+    "country_name": "Argentina",
+    "country_name_full": "Argentine Republic",
+    "iso3": "032"
+  },
+  "AS": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "AS",
+    "country_code3": "ASM",
+    "country_name": "American Samoa",
+    "country_name_full": "American Samoa",
+    "iso3": "016"
+  },
+  "AT": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "AT",
+    "country_code3": "AUT",
+    "country_name": "Austria",
+    "country_name_full": "Republic of Austria",
+    "iso3": "040"
+  },
+  "AU": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "AU",
+    "country_code3": "AUS",
+    "country_name": "Australia",
+    "country_name_full": "Commonwealth of Australia",
+    "iso3": "036"
+  },
+  "AW": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "AW",
+    "country_code3": "ABW",
+    "country_name": "Aruba",
+    "country_name_full": "Aruba",
+    "iso3": "533"
+  },
+  "AX": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "AX",
+    "country_code3": "ALA",
+    "country_name": "\u00c5land Islands",
+    "country_name_full": "\u00c5land Islands",
+    "iso3": "248"
+  },
+  "AZ": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "AZ",
+    "country_code3": "AZE",
+    "country_name": "Azerbaijan",
+    "country_name_full": "Republic of Azerbaijan",
+    "iso3": "031"
+  },
+  "BA": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "BA",
+    "country_code3": "BIH",
+    "country_name": "Bosnia and Herzegovina",
+    "country_name_full": "Bosnia and Herzegovina",
+    "iso3": "070"
+  },
+  "BB": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "BB",
+    "country_code3": "BRB",
+    "country_name": "Barbados",
+    "country_name_full": "Barbados",
+    "iso3": "052"
+  },
+  "BD": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "BD",
+    "country_code3": "BGD",
+    "country_name": "Bangladesh",
+    "country_name_full": "People's Republic of Bangladesh",
+    "iso3": "050"
+  },
+  "BE": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "BE",
+    "country_code3": "BEL",
+    "country_name": "Belgium",
+    "country_name_full": "Kingdom of Belgium",
+    "iso3": "056"
+  },
+  "BF": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "BF",
+    "country_code3": "BFA",
+    "country_name": "Burkina Faso",
+    "country_name_full": "Burkina Faso",
+    "iso3": "854"
+  },
+  "BG": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "BG",
+    "country_code3": "BGR",
+    "country_name": "Bulgaria",
+    "country_name_full": "Republic of Bulgaria",
+    "iso3": "100"
+  },
+  "BH": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "BH",
+    "country_code3": "BHR",
+    "country_name": "Bahrain",
+    "country_name_full": "Kingdom of Bahrain",
+    "iso3": "048"
+  },
+  "BI": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "BI",
+    "country_code3": "BDI",
+    "country_name": "Burundi",
+    "country_name_full": "Republic of Burundi",
+    "iso3": "108"
+  },
+  "BJ": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "BJ",
+    "country_code3": "BEN",
+    "country_name": "Benin",
+    "country_name_full": "Republic of Benin",
+    "iso3": "204"
+  },
+  "BL": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "BL",
+    "country_code3": "BLM",
+    "country_name": "Saint Barth\u00e9lemy",
+    "country_name_full": "Saint Barth\u00e9lemy",
+    "iso3": "652"
+  },
+  "BM": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "BM",
+    "country_code3": "BMU",
+    "country_name": "Bermuda",
+    "country_name_full": "Bermuda",
+    "iso3": "060"
+  },
+  "BN": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "BN",
+    "country_code3": "BRN",
+    "country_name": "Brunei Darussalam",
+    "country_name_full": "Brunei Darussalam",
+    "iso3": "096"
+  },
+  "BO": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "BO",
+    "country_code3": "BOL",
+    "country_name": "Bolivia",
+    "country_name_full": "Plurinational State of Bolivia",
+    "iso3": "068"
+  },
+  "BQ": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "BQ",
+    "country_code3": "BES",
+    "country_name": "Bonaire, Sint Eustatius and Saba",
+    "country_name_full": "Bonaire, Sint Eustatius and Saba",
+    "iso3": "535"
+  },
+  "BR": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "BR",
+    "country_code3": "BRA",
+    "country_name": "Brazil",
+    "country_name_full": "Federative Republic of Brazil",
+    "iso3": "076"
+  },
+  "BS": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "BS",
+    "country_code3": "BHS",
+    "country_name": "Bahamas",
+    "country_name_full": "Commonwealth of the Bahamas",
+    "iso3": "044"
+  },
+  "BT": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "BT",
+    "country_code3": "BTN",
+    "country_name": "Bhutan",
+    "country_name_full": "Kingdom of Bhutan",
+    "iso3": "064"
+  },
+  "BV": {
+    "continent_code": "AN",
+    "continent_name": "Antarctica",
+    "country_code2": "BV",
+    "country_code3": "BVT",
+    "country_name": "Bouvet Island (Bouvetoya)",
+    "country_name_full": "Bouvet Island (Bouvetoya)",
+    "iso3": "074"
+  },
+  "BW": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "BW",
+    "country_code3": "BWA",
+    "country_name": "Botswana",
+    "country_name_full": "Republic of Botswana",
+    "iso3": "072"
+  },
+  "BY": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "BY",
+    "country_code3": "BLR",
+    "country_name": "Belarus",
+    "country_name_full": "Republic of Belarus",
+    "iso3": "112"
+  },
+  "BZ": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "BZ",
+    "country_code3": "BLZ",
+    "country_name": "Belize",
+    "country_name_full": "Belize",
+    "iso3": "084"
+  },
+  "CA": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "CA",
+    "country_code3": "CAN",
+    "country_name": "Canada",
+    "country_name_full": "Canada",
+    "iso3": "124"
+  },
+  "CC": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "CC",
+    "country_code3": "CCK",
+    "country_name": "Cocos (Keeling) Islands",
+    "country_name_full": "Cocos (Keeling) Islands",
+    "iso3": "166"
+  },
+  "CD": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "CD",
+    "country_code3": "COD",
+    "country_name": "Congo",
+    "country_name_full": "Democratic Republic of the Congo",
+    "iso3": "180"
+  },
+  "CF": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "CF",
+    "country_code3": "CAF",
+    "country_name": "Central African Republic",
+    "country_name_full": "Central African Republic",
+    "iso3": "140"
+  },
+  "CG": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "CG",
+    "country_code3": "COG",
+    "country_name": "Congo",
+    "country_name_full": "Republic of the Congo",
+    "iso3": "178"
+  },
+  "CH": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "CH",
+    "country_code3": "CHE",
+    "country_name": "Switzerland",
+    "country_name_full": "Swiss Confederation",
+    "iso3": "756"
+  },
+  "CI": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "CI",
+    "country_code3": "CIV",
+    "country_name": "Cote d'Ivoire",
+    "country_name_full": "Republic of Cote d'Ivoire",
+    "iso3": "384"
+  },
+  "CK": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "CK",
+    "country_code3": "COK",
+    "country_name": "Cook Islands",
+    "country_name_full": "Cook Islands",
+    "iso3": "184"
+  },
+  "CL": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "CL",
+    "country_code3": "CHL",
+    "country_name": "Chile",
+    "country_name_full": "Republic of Chile",
+    "iso3": "152"
+  },
+  "CM": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "CM",
+    "country_code3": "CMR",
+    "country_name": "Cameroon",
+    "country_name_full": "Republic of Cameroon",
+    "iso3": "120"
+  },
+  "CN": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "CN",
+    "country_code3": "CHN",
+    "country_name": "China",
+    "country_name_full": "People's Republic of China",
+    "iso3": "156"
+  },
+  "CO": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "CO",
+    "country_code3": "COL",
+    "country_name": "Colombia",
+    "country_name_full": "Republic of Colombia",
+    "iso3": "170"
+  },
+  "CR": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "CR",
+    "country_code3": "CRI",
+    "country_name": "Costa Rica",
+    "country_name_full": "Republic of Costa Rica",
+    "iso3": "188"
+  },
+  "CU": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "CU",
+    "country_code3": "CUB",
+    "country_name": "Cuba",
+    "country_name_full": "Republic of Cuba",
+    "iso3": "192"
+  },
+  "CV": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "CV",
+    "country_code3": "CPV",
+    "country_name": "Cape Verde",
+    "country_name_full": "Republic of Cape Verde",
+    "iso3": "132"
+  },
+  "CW": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "CW",
+    "country_code3": "CUW",
+    "country_name": "Cura\u00e7ao",
+    "country_name_full": "Cura\u00e7ao",
+    "iso3": "531"
+  },
+  "CX": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "CX",
+    "country_code3": "CXR",
+    "country_name": "Christmas Island",
+    "country_name_full": "Christmas Island",
+    "iso3": "162"
+  },
+  "CY": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "CY",
+    "country_code3": "CYP",
+    "country_name": "Cyprus",
+    "country_name_full": "Republic of Cyprus",
+    "iso3": "196"
+  },
+  "CZ": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "CZ",
+    "country_code3": "CZE",
+    "country_name": "Czech Republic",
+    "country_name_full": "Czech Republic",
+    "iso3": "203"
+  },
+  "DE": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "DE",
+    "country_code3": "DEU",
+    "country_name": "Germany",
+    "country_name_full": "Federal Republic of Germany",
+    "iso3": "276"
+  },
+  "DJ": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "DJ",
+    "country_code3": "DJI",
+    "country_name": "Djibouti",
+    "country_name_full": "Republic of Djibouti",
+    "iso3": "262"
+  },
+  "DK": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "DK",
+    "country_code3": "DNK",
+    "country_name": "Denmark",
+    "country_name_full": "Kingdom of Denmark",
+    "iso3": "208"
+  },
+  "DM": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "DM",
+    "country_code3": "DMA",
+    "country_name": "Dominica",
+    "country_name_full": "Commonwealth of Dominica",
+    "iso3": "212"
+  },
+  "DO": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "DO",
+    "country_code3": "DOM",
+    "country_name": "Dominican Republic",
+    "country_name_full": "Dominican Republic",
+    "iso3": "214"
+  },
+  "DZ": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "DZ",
+    "country_code3": "DZA",
+    "country_name": "Algeria",
+    "country_name_full": "People's Democratic Republic of Algeria",
+    "iso3": "012"
+  },
+  "EC": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "EC",
+    "country_code3": "ECU",
+    "country_name": "Ecuador",
+    "country_name_full": "Republic of Ecuador",
+    "iso3": "218"
+  },
+  "EE": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "EE",
+    "country_code3": "EST",
+    "country_name": "Estonia",
+    "country_name_full": "Republic of Estonia",
+    "iso3": "233"
+  },
+  "EG": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "EG",
+    "country_code3": "EGY",
+    "country_name": "Egypt",
+    "country_name_full": "Arab Republic of Egypt",
+    "iso3": "818"
+  },
+  "EH": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "EH",
+    "country_code3": "ESH",
+    "country_name": "Western Sahara",
+    "country_name_full": "Western Sahara",
+    "iso3": "732"
+  },
+  "ER": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "ER",
+    "country_code3": "ERI",
+    "country_name": "Eritrea",
+    "country_name_full": "State of Eritrea",
+    "iso3": "232"
+  },
+  "ES": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "ES",
+    "country_code3": "ESP",
+    "country_name": "Spain",
+    "country_name_full": "Kingdom of Spain",
+    "iso3": "724"
+  },
+  "ET": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "ET",
+    "country_code3": "ETH",
+    "country_name": "Ethiopia",
+    "country_name_full": "Federal Democratic Republic of Ethiopia",
+    "iso3": "231"
+  },
+  "FI": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "FI",
+    "country_code3": "FIN",
+    "country_name": "Finland",
+    "country_name_full": "Republic of Finland",
+    "iso3": "246"
+  },
+  "FJ": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "FJ",
+    "country_code3": "FJI",
+    "country_name": "Fiji",
+    "country_name_full": "Republic of Fiji",
+    "iso3": "242"
+  },
+  "FK": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "FK",
+    "country_code3": "FLK",
+    "country_name": "Falkland Islands (Malvinas)",
+    "country_name_full": "Falkland Islands (Malvinas)",
+    "iso3": "238"
+  },
+  "FM": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "FM",
+    "country_code3": "FSM",
+    "country_name": "Micronesia",
+    "country_name_full": "Federated States of Micronesia",
+    "iso3": "583"
+  },
+  "FO": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "FO",
+    "country_code3": "FRO",
+    "country_name": "Faroe Islands",
+    "country_name_full": "Faroe Islands",
+    "iso3": "234"
+  },
+  "FR": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "FR",
+    "country_code3": "FRA",
+    "country_name": "France",
+    "country_name_full": "French Republic",
+    "iso3": "250"
+  },
+  "GA": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "GA",
+    "country_code3": "GAB",
+    "country_name": "Gabon",
+    "country_name_full": "Gabonese Republic",
+    "iso3": "266"
+  },
+  "GB": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "GB",
+    "country_code3": "GBR",
+    "country_name": "United Kingdom of Great Britain & Northern Ireland",
+    "country_name_full": "United Kingdom of Great Britain & Northern Ireland",
+    "iso3": "826"
+  },
+  "GD": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "GD",
+    "country_code3": "GRD",
+    "country_name": "Grenada",
+    "country_name_full": "Grenada",
+    "iso3": "308"
+  },
+  "GE": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "GE",
+    "country_code3": "GEO",
+    "country_name": "Georgia",
+    "country_name_full": "Georgia",
+    "iso3": "268"
+  },
+  "GF": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "GF",
+    "country_code3": "GUF",
+    "country_name": "French Guiana",
+    "country_name_full": "French Guiana",
+    "iso3": "254"
+  },
+  "GG": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "GG",
+    "country_code3": "GGY",
+    "country_name": "Guernsey",
+    "country_name_full": "Bailiwick of Guernsey",
+    "iso3": "831"
+  },
+  "GH": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "GH",
+    "country_code3": "GHA",
+    "country_name": "Ghana",
+    "country_name_full": "Republic of Ghana",
+    "iso3": "288"
+  },
+  "GI": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "GI",
+    "country_code3": "GIB",
+    "country_name": "Gibraltar",
+    "country_name_full": "Gibraltar",
+    "iso3": "292"
+  },
+  "GL": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "GL",
+    "country_code3": "GRL",
+    "country_name": "Greenland",
+    "country_name_full": "Greenland",
+    "iso3": "304"
+  },
+  "GM": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "GM",
+    "country_code3": "GMB",
+    "country_name": "Gambia",
+    "country_name_full": "Republic of the Gambia",
+    "iso3": "270"
+  },
+  "GN": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "GN",
+    "country_code3": "GIN",
+    "country_name": "Guinea",
+    "country_name_full": "Republic of Guinea",
+    "iso3": "324"
+  },
+  "GP": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "GP",
+    "country_code3": "GLP",
+    "country_name": "Guadeloupe",
+    "country_name_full": "Guadeloupe",
+    "iso3": "312"
+  },
+  "GQ": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "GQ",
+    "country_code3": "GNQ",
+    "country_name": "Equatorial Guinea",
+    "country_name_full": "Republic of Equatorial Guinea",
+    "iso3": "226"
+  },
+  "GR": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "GR",
+    "country_code3": "GRC",
+    "country_name": "Greece",
+    "country_name_full": "Hellenic Republic Greece",
+    "iso3": "300"
+  },
+  "GS": {
+    "continent_code": "AN",
+    "continent_name": "Antarctica",
+    "country_code2": "GS",
+    "country_code3": "SGS",
+    "country_name": "South Georgia and the South Sandwich Islands",
+    "country_name_full": "South Georgia and the South Sandwich Islands",
+    "iso3": "239"
+  },
+  "GT": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "GT",
+    "country_code3": "GTM",
+    "country_name": "Guatemala",
+    "country_name_full": "Republic of Guatemala",
+    "iso3": "320"
+  },
+  "GU": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "GU",
+    "country_code3": "GUM",
+    "country_name": "Guam",
+    "country_name_full": "Guam",
+    "iso3": "316"
+  },
+  "GW": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "GW",
+    "country_code3": "GNB",
+    "country_name": "Guinea-Bissau",
+    "country_name_full": "Republic of Guinea-Bissau",
+    "iso3": "624"
+  },
+  "GY": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "GY",
+    "country_code3": "GUY",
+    "country_name": "Guyana",
+    "country_name_full": "Co-operative Republic of Guyana",
+    "iso3": "328"
+  },
+  "HK": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "HK",
+    "country_code3": "HKG",
+    "country_name": "Hong Kong",
+    "country_name_full": "Hong Kong Special Administrative Region of China",
+    "iso3": "344"
+  },
+  "HM": {
+    "continent_code": "AN",
+    "continent_name": "Antarctica",
+    "country_code2": "HM",
+    "country_code3": "HMD",
+    "country_name": "Heard Island and McDonald Islands",
+    "country_name_full": "Heard Island and McDonald Islands",
+    "iso3": "334"
+  },
+  "HN": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "HN",
+    "country_code3": "HND",
+    "country_name": "Honduras",
+    "country_name_full": "Republic of Honduras",
+    "iso3": "340"
+  },
+  "HR": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "HR",
+    "country_code3": "HRV",
+    "country_name": "Croatia",
+    "country_name_full": "Republic of Croatia",
+    "iso3": "191"
+  },
+  "HT": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "HT",
+    "country_code3": "HTI",
+    "country_name": "Haiti",
+    "country_name_full": "Republic of Haiti",
+    "iso3": "332"
+  },
+  "HU": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "HU",
+    "country_code3": "HUN",
+    "country_name": "Hungary",
+    "country_name_full": "Hungary",
+    "iso3": "348"
+  },
+  "ID": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "ID",
+    "country_code3": "IDN",
+    "country_name": "Indonesia",
+    "country_name_full": "Republic of Indonesia",
+    "iso3": "360"
+  },
+  "IE": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "IE",
+    "country_code3": "IRL",
+    "country_name": "Ireland",
+    "country_name_full": "Ireland",
+    "iso3": "372"
+  },
+  "IL": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "IL",
+    "country_code3": "ISR",
+    "country_name": "Israel",
+    "country_name_full": "State of Israel",
+    "iso3": "376"
+  },
+  "IM": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "IM",
+    "country_code3": "IMN",
+    "country_name": "Isle of Man",
+    "country_name_full": "Isle of Man",
+    "iso3": "833"
+  },
+  "IN": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "IN",
+    "country_code3": "IND",
+    "country_name": "India",
+    "country_name_full": "Republic of India",
+    "iso3": "356"
+  },
+  "IO": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "IO",
+    "country_code3": "IOT",
+    "country_name": "British Indian Ocean Territory (Chagos Archipelago)",
+    "country_name_full": "British Indian Ocean Territory (Chagos Archipelago)",
+    "iso3": "086"
+  },
+  "IQ": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "IQ",
+    "country_code3": "IRQ",
+    "country_name": "Iraq",
+    "country_name_full": "Republic of Iraq",
+    "iso3": "368"
+  },
+  "IR": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "IR",
+    "country_code3": "IRN",
+    "country_name": "Iran",
+    "country_name_full": "Islamic Republic of Iran",
+    "iso3": "364"
+  },
+  "IS": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "IS",
+    "country_code3": "ISL",
+    "country_name": "Iceland",
+    "country_name_full": "Republic of Iceland",
+    "iso3": "352"
+  },
+  "IT": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "IT",
+    "country_code3": "ITA",
+    "country_name": "Italy",
+    "country_name_full": "Italian Republic",
+    "iso3": "380"
+  },
+  "JE": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "JE",
+    "country_code3": "JEY",
+    "country_name": "Jersey",
+    "country_name_full": "Bailiwick of Jersey",
+    "iso3": "832"
+  },
+  "JM": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "JM",
+    "country_code3": "JAM",
+    "country_name": "Jamaica",
+    "country_name_full": "Jamaica",
+    "iso3": "388"
+  },
+  "JO": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "JO",
+    "country_code3": "JOR",
+    "country_name": "Jordan",
+    "country_name_full": "Hashemite Kingdom of Jordan",
+    "iso3": "400"
+  },
+  "JP": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "JP",
+    "country_code3": "JPN",
+    "country_name": "Japan",
+    "country_name_full": "Japan",
+    "iso3": "392"
+  },
+  "KE": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "KE",
+    "country_code3": "KEN",
+    "country_name": "Kenya",
+    "country_name_full": "Republic of Kenya",
+    "iso3": "404"
+  },
+  "KG": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "KG",
+    "country_code3": "KGZ",
+    "country_name": "Kyrgyz Republic",
+    "country_name_full": "Kyrgyz Republic",
+    "iso3": "417"
+  },
+  "KH": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "KH",
+    "country_code3": "KHM",
+    "country_name": "Cambodia",
+    "country_name_full": "Kingdom of Cambodia",
+    "iso3": "116"
+  },
+  "KI": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "KI",
+    "country_code3": "KIR",
+    "country_name": "Kiribati",
+    "country_name_full": "Republic of Kiribati",
+    "iso3": "296"
+  },
+  "KM": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "KM",
+    "country_code3": "COM",
+    "country_name": "Comoros",
+    "country_name_full": "Union of the Comoros",
+    "iso3": "174"
+  },
+  "KN": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "KN",
+    "country_code3": "KNA",
+    "country_name": "Saint Kitts and Nevis",
+    "country_name_full": "Federation of Saint Kitts and Nevis",
+    "iso3": "659"
+  },
+  "KP": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "KP",
+    "country_code3": "PRK",
+    "country_name": "Korea",
+    "country_name_full": "Democratic People's Republic of Korea",
+    "iso3": "408"
+  },
+  "KR": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "KR",
+    "country_code3": "KOR",
+    "country_name": "Korea",
+    "country_name_full": "Republic of Korea",
+    "iso3": "410"
+  },
+  "KW": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "KW",
+    "country_code3": "KWT",
+    "country_name": "Kuwait",
+    "country_name_full": "State of Kuwait",
+    "iso3": "414"
+  },
+  "KY": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "KY",
+    "country_code3": "CYM",
+    "country_name": "Cayman Islands",
+    "country_name_full": "Cayman Islands",
+    "iso3": "136"
+  },
+  "KZ": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "KZ",
+    "country_code3": "KAZ",
+    "country_name": "Kazakhstan",
+    "country_name_full": "Republic of Kazakhstan",
+    "iso3": "398"
+  },
+  "LA": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "LA",
+    "country_code3": "LAO",
+    "country_name": "Lao People's Democratic Republic",
+    "country_name_full": "Lao People's Democratic Republic",
+    "iso3": "418"
+  },
+  "LB": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "LB",
+    "country_code3": "LBN",
+    "country_name": "Lebanon",
+    "country_name_full": "Lebanese Republic",
+    "iso3": "422"
+  },
+  "LC": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "LC",
+    "country_code3": "LCA",
+    "country_name": "Saint Lucia",
+    "country_name_full": "Saint Lucia",
+    "iso3": "662"
+  },
+  "LI": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "LI",
+    "country_code3": "LIE",
+    "country_name": "Liechtenstein",
+    "country_name_full": "Principality of Liechtenstein",
+    "iso3": "438"
+  },
+  "LK": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "LK",
+    "country_code3": "LKA",
+    "country_name": "Sri Lanka",
+    "country_name_full": "Democratic Socialist Republic of Sri Lanka",
+    "iso3": "144"
+  },
+  "LR": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "LR",
+    "country_code3": "LBR",
+    "country_name": "Liberia",
+    "country_name_full": "Republic of Liberia",
+    "iso3": "430"
+  },
+  "LS": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "LS",
+    "country_code3": "LSO",
+    "country_name": "Lesotho",
+    "country_name_full": "Kingdom of Lesotho",
+    "iso3": "426"
+  },
+  "LT": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "LT",
+    "country_code3": "LTU",
+    "country_name": "Lithuania",
+    "country_name_full": "Republic of Lithuania",
+    "iso3": "440"
+  },
+  "LU": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "LU",
+    "country_code3": "LUX",
+    "country_name": "Luxembourg",
+    "country_name_full": "Grand Duchy of Luxembourg",
+    "iso3": "442"
+  },
+  "LV": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "LV",
+    "country_code3": "LVA",
+    "country_name": "Latvia",
+    "country_name_full": "Republic of Latvia",
+    "iso3": "428"
+  },
+  "LY": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "LY",
+    "country_code3": "LBY",
+    "country_name": "Libya",
+    "country_name_full": "Libya",
+    "iso3": "434"
+  },
+  "MA": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "MA",
+    "country_code3": "MAR",
+    "country_name": "Morocco",
+    "country_name_full": "Kingdom of Morocco",
+    "iso3": "504"
+  },
+  "MC": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "MC",
+    "country_code3": "MCO",
+    "country_name": "Monaco",
+    "country_name_full": "Principality of Monaco",
+    "iso3": "492"
+  },
+  "MD": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "MD",
+    "country_code3": "MDA",
+    "country_name": "Moldova",
+    "country_name_full": "Republic of Moldova",
+    "iso3": "498"
+  },
+  "ME": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "ME",
+    "country_code3": "MNE",
+    "country_name": "Montenegro",
+    "country_name_full": "Montenegro",
+    "iso3": "499"
+  },
+  "MF": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "MF",
+    "country_code3": "MAF",
+    "country_name": "Saint Martin",
+    "country_name_full": "Saint Martin (French part)",
+    "iso3": "663"
+  },
+  "MG": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "MG",
+    "country_code3": "MDG",
+    "country_name": "Madagascar",
+    "country_name_full": "Republic of Madagascar",
+    "iso3": "450"
+  },
+  "MH": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "MH",
+    "country_code3": "MHL",
+    "country_name": "Marshall Islands",
+    "country_name_full": "Republic of the Marshall Islands",
+    "iso3": "584"
+  },
+  "MK": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "MK",
+    "country_code3": "MKD",
+    "country_name": "Macedonia",
+    "country_name_full": "Republic of Macedonia",
+    "iso3": "807"
+  },
+  "ML": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "ML",
+    "country_code3": "MLI",
+    "country_name": "Mali",
+    "country_name_full": "Republic of Mali",
+    "iso3": "466"
+  },
+  "MM": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "MM",
+    "country_code3": "MMR",
+    "country_name": "Myanmar",
+    "country_name_full": "Republic of the Union of Myanmar",
+    "iso3": "104"
+  },
+  "MN": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "MN",
+    "country_code3": "MNG",
+    "country_name": "Mongolia",
+    "country_name_full": "Mongolia",
+    "iso3": "496"
+  },
+  "MO": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "MO",
+    "country_code3": "MAC",
+    "country_name": "Macao",
+    "country_name_full": "Macao Special Administrative Region of China",
+    "iso3": "446"
+  },
+  "MP": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "MP",
+    "country_code3": "MNP",
+    "country_name": "Northern Mariana Islands",
+    "country_name_full": "Commonwealth of the Northern Mariana Islands",
+    "iso3": "580"
+  },
+  "MQ": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "MQ",
+    "country_code3": "MTQ",
+    "country_name": "Martinique",
+    "country_name_full": "Martinique",
+    "iso3": "474"
+  },
+  "MR": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "MR",
+    "country_code3": "MRT",
+    "country_name": "Mauritania",
+    "country_name_full": "Islamic Republic of Mauritania",
+    "iso3": "478"
+  },
+  "MS": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "MS",
+    "country_code3": "MSR",
+    "country_name": "Montserrat",
+    "country_name_full": "Montserrat",
+    "iso3": "500"
+  },
+  "MT": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "MT",
+    "country_code3": "MLT",
+    "country_name": "Malta",
+    "country_name_full": "Republic of Malta",
+    "iso3": "470"
+  },
+  "MU": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "MU",
+    "country_code3": "MUS",
+    "country_name": "Mauritius",
+    "country_name_full": "Republic of Mauritius",
+    "iso3": "480"
+  },
+  "MV": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "MV",
+    "country_code3": "MDV",
+    "country_name": "Maldives",
+    "country_name_full": "Republic of Maldives",
+    "iso3": "462"
+  },
+  "MW": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "MW",
+    "country_code3": "MWI",
+    "country_name": "Malawi",
+    "country_name_full": "Republic of Malawi",
+    "iso3": "454"
+  },
+  "MX": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "MX",
+    "country_code3": "MEX",
+    "country_name": "Mexico",
+    "country_name_full": "United Mexican States",
+    "iso3": "484"
+  },
+  "MY": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "MY",
+    "country_code3": "MYS",
+    "country_name": "Malaysia",
+    "country_name_full": "Malaysia",
+    "iso3": "458"
+  },
+  "MZ": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "MZ",
+    "country_code3": "MOZ",
+    "country_name": "Mozambique",
+    "country_name_full": "Republic of Mozambique",
+    "iso3": "508"
+  },
+  "NA": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "NA",
+    "country_code3": "NAM",
+    "country_name": "Namibia",
+    "country_name_full": "Republic of Namibia",
+    "iso3": "516"
+  },
+  "NC": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "NC",
+    "country_code3": "NCL",
+    "country_name": "New Caledonia",
+    "country_name_full": "New Caledonia",
+    "iso3": "540"
+  },
+  "NE": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "NE",
+    "country_code3": "NER",
+    "country_name": "Niger",
+    "country_name_full": "Republic of Niger",
+    "iso3": "562"
+  },
+  "NF": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "NF",
+    "country_code3": "NFK",
+    "country_name": "Norfolk Island",
+    "country_name_full": "Norfolk Island",
+    "iso3": "574"
+  },
+  "NG": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "NG",
+    "country_code3": "NGA",
+    "country_name": "Nigeria",
+    "country_name_full": "Federal Republic of Nigeria",
+    "iso3": "566"
+  },
+  "NI": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "NI",
+    "country_code3": "NIC",
+    "country_name": "Nicaragua",
+    "country_name_full": "Republic of Nicaragua",
+    "iso3": "558"
+  },
+  "NL": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "NL",
+    "country_code3": "NLD",
+    "country_name": "Netherlands",
+    "country_name_full": "Kingdom of the Netherlands",
+    "iso3": "528"
+  },
+  "NO": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "NO",
+    "country_code3": "NOR",
+    "country_name": "Norway",
+    "country_name_full": "Kingdom of Norway",
+    "iso3": "578"
+  },
+  "NP": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "NP",
+    "country_code3": "NPL",
+    "country_name": "Nepal",
+    "country_name_full": "Federal Democratic Republic of Nepal",
+    "iso3": "524"
+  },
+  "NR": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "NR",
+    "country_code3": "NRU",
+    "country_name": "Nauru",
+    "country_name_full": "Republic of Nauru",
+    "iso3": "520"
+  },
+  "NU": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "NU",
+    "country_code3": "NIU",
+    "country_name": "Niue",
+    "country_name_full": "Niue",
+    "iso3": "570"
+  },
+  "NZ": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "NZ",
+    "country_code3": "NZL",
+    "country_name": "New Zealand",
+    "country_name_full": "New Zealand",
+    "iso3": "554"
+  },
+  "OM": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "OM",
+    "country_code3": "OMN",
+    "country_name": "Oman",
+    "country_name_full": "Sultanate of Oman",
+    "iso3": "512"
+  },
+  "PA": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "PA",
+    "country_code3": "PAN",
+    "country_name": "Panama",
+    "country_name_full": "Republic of Panama",
+    "iso3": "591"
+  },
+  "PE": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "PE",
+    "country_code3": "PER",
+    "country_name": "Peru",
+    "country_name_full": "Republic of Peru",
+    "iso3": "604"
+  },
+  "PF": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "PF",
+    "country_code3": "PYF",
+    "country_name": "French Polynesia",
+    "country_name_full": "French Polynesia",
+    "iso3": "258"
+  },
+  "PG": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "PG",
+    "country_code3": "PNG",
+    "country_name": "Papua New Guinea",
+    "country_name_full": "Independent State of Papua New Guinea",
+    "iso3": "598"
+  },
+  "PH": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "PH",
+    "country_code3": "PHL",
+    "country_name": "Philippines",
+    "country_name_full": "Republic of the Philippines",
+    "iso3": "608"
+  },
+  "PK": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "PK",
+    "country_code3": "PAK",
+    "country_name": "Pakistan",
+    "country_name_full": "Islamic Republic of Pakistan",
+    "iso3": "586"
+  },
+  "PL": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "PL",
+    "country_code3": "POL",
+    "country_name": "Poland",
+    "country_name_full": "Republic of Poland",
+    "iso3": "616"
+  },
+  "PM": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "PM",
+    "country_code3": "SPM",
+    "country_name": "Saint Pierre and Miquelon",
+    "country_name_full": "Saint Pierre and Miquelon",
+    "iso3": "666"
+  },
+  "PN": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "PN",
+    "country_code3": "PCN",
+    "country_name": "Pitcairn Islands",
+    "country_name_full": "Pitcairn Islands",
+    "iso3": "612"
+  },
+  "PR": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "PR",
+    "country_code3": "PRI",
+    "country_name": "Puerto Rico",
+    "country_name_full": "Commonwealth of Puerto Rico",
+    "iso3": "630"
+  },
+  "PS": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "PS",
+    "country_code3": "PSE",
+    "country_name": "Palestinian Territory",
+    "country_name_full": "Occupied Palestinian Territory",
+    "iso3": "275"
+  },
+  "PT": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "PT",
+    "country_code3": "PRT",
+    "country_name": "Portugal",
+    "country_name_full": "Portuguese Republic",
+    "iso3": "620"
+  },
+  "PW": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "PW",
+    "country_code3": "PLW",
+    "country_name": "Palau",
+    "country_name_full": "Republic of Palau",
+    "iso3": "585"
+  },
+  "PY": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "PY",
+    "country_code3": "PRY",
+    "country_name": "Paraguay",
+    "country_name_full": "Republic of Paraguay",
+    "iso3": "600"
+  },
+  "QA": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "QA",
+    "country_code3": "QAT",
+    "country_name": "Qatar",
+    "country_name_full": "State of Qatar",
+    "iso3": "634"
+  },
+  "RE": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "RE",
+    "country_code3": "REU",
+    "country_name": "R\u00e9union",
+    "country_name_full": "R\u00e9union",
+    "iso3": "638"
+  },
+  "RO": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "RO",
+    "country_code3": "ROU",
+    "country_name": "Romania",
+    "country_name_full": "Romania",
+    "iso3": "642"
+  },
+  "RS": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "RS",
+    "country_code3": "SRB",
+    "country_name": "Serbia",
+    "country_name_full": "Republic of Serbia",
+    "iso3": "688"
+  },
+  "RU": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "RU",
+    "country_code3": "RUS",
+    "country_name": "Russian Federation",
+    "country_name_full": "Russian Federation",
+    "iso3": "643"
+  },
+  "RW": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "RW",
+    "country_code3": "RWA",
+    "country_name": "Rwanda",
+    "country_name_full": "Republic of Rwanda",
+    "iso3": "646"
+  },
+  "SA": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "SA",
+    "country_code3": "SAU",
+    "country_name": "Saudi Arabia",
+    "country_name_full": "Kingdom of Saudi Arabia",
+    "iso3": "682"
+  },
+  "SB": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "SB",
+    "country_code3": "SLB",
+    "country_name": "Solomon Islands",
+    "country_name_full": "Solomon Islands",
+    "iso3": "090"
+  },
+  "SC": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SC",
+    "country_code3": "SYC",
+    "country_name": "Seychelles",
+    "country_name_full": "Republic of Seychelles",
+    "iso3": "690"
+  },
+  "SD": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SD",
+    "country_code3": "SDN",
+    "country_name": "Sudan",
+    "country_name_full": "Republic of Sudan",
+    "iso3": "729"
+  },
+  "SE": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "SE",
+    "country_code3": "SWE",
+    "country_name": "Sweden",
+    "country_name_full": "Kingdom of Sweden",
+    "iso3": "752"
+  },
+  "SG": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "SG",
+    "country_code3": "SGP",
+    "country_name": "Singapore",
+    "country_name_full": "Republic of Singapore",
+    "iso3": "702"
+  },
+  "SH": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SH",
+    "country_code3": "SHN",
+    "country_name": "Saint Helena, Ascension and Tristan da Cunha",
+    "country_name_full": "Saint Helena, Ascension and Tristan da Cunha",
+    "iso3": "654"
+  },
+  "SI": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "SI",
+    "country_code3": "SVN",
+    "country_name": "Slovenia",
+    "country_name_full": "Republic of Slovenia",
+    "iso3": "705"
+  },
+  "SJ": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "SJ",
+    "country_code3": "SJM",
+    "country_name": "Svalbard & Jan Mayen Islands",
+    "country_name_full": "Svalbard & Jan Mayen Islands",
+    "iso3": "744"
+  },
+  "SK": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "SK",
+    "country_code3": "SVK",
+    "country_name": "Slovakia (Slovak Republic)",
+    "country_name_full": "Slovakia (Slovak Republic)",
+    "iso3": "703"
+  },
+  "SL": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SL",
+    "country_code3": "SLE",
+    "country_name": "Sierra Leone",
+    "country_name_full": "Republic of Sierra Leone",
+    "iso3": "694"
+  },
+  "SM": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "SM",
+    "country_code3": "SMR",
+    "country_name": "San Marino",
+    "country_name_full": "Republic of San Marino",
+    "iso3": "674"
+  },
+  "SN": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SN",
+    "country_code3": "SEN",
+    "country_name": "Senegal",
+    "country_name_full": "Republic of Senegal",
+    "iso3": "686"
+  },
+  "SO": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SO",
+    "country_code3": "SOM",
+    "country_name": "Somalia",
+    "country_name_full": "Somali Republic",
+    "iso3": "706"
+  },
+  "SR": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "SR",
+    "country_code3": "SUR",
+    "country_name": "Suriname",
+    "country_name_full": "Republic of Suriname",
+    "iso3": "740"
+  },
+  "SS": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SS",
+    "country_code3": "SSD",
+    "country_name": "South Sudan",
+    "country_name_full": "Republic of South Sudan",
+    "iso3": "728"
+  },
+  "ST": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "ST",
+    "country_code3": "STP",
+    "country_name": "Sao Tome and Principe",
+    "country_name_full": "Democratic Republic of Sao Tome and Principe",
+    "iso3": "678"
+  },
+  "SV": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "SV",
+    "country_code3": "SLV",
+    "country_name": "El Salvador",
+    "country_name_full": "Republic of El Salvador",
+    "iso3": "222"
+  },
+  "SX": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "SX",
+    "country_code3": "SXM",
+    "country_name": "Sint Maarten (Dutch part)",
+    "country_name_full": "Sint Maarten (Dutch part)",
+    "iso3": "534"
+  },
+  "SY": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "SY",
+    "country_code3": "SYR",
+    "country_name": "Syrian Arab Republic",
+    "country_name_full": "Syrian Arab Republic",
+    "iso3": "760"
+  },
+  "SZ": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "SZ",
+    "country_code3": "SWZ",
+    "country_name": "Swaziland",
+    "country_name_full": "Kingdom of Swaziland",
+    "iso3": "748"
+  },
+  "TC": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "TC",
+    "country_code3": "TCA",
+    "country_name": "Turks and Caicos Islands",
+    "country_name_full": "Turks and Caicos Islands",
+    "iso3": "796"
+  },
+  "TD": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "TD",
+    "country_code3": "TCD",
+    "country_name": "Chad",
+    "country_name_full": "Republic of Chad",
+    "iso3": "148"
+  },
+  "TF": {
+    "continent_code": "AN",
+    "continent_name": "Antarctica",
+    "country_code2": "TF",
+    "country_code3": "ATF",
+    "country_name": "French Southern Territories",
+    "country_name_full": "French Southern Territories",
+    "iso3": "260"
+  },
+  "TG": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "TG",
+    "country_code3": "TGO",
+    "country_name": "Togo",
+    "country_name_full": "Togolese Republic",
+    "iso3": "768"
+  },
+  "TH": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "TH",
+    "country_code3": "THA",
+    "country_name": "Thailand",
+    "country_name_full": "Kingdom of Thailand",
+    "iso3": "764"
+  },
+  "TJ": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "TJ",
+    "country_code3": "TJK",
+    "country_name": "Tajikistan",
+    "country_name_full": "Republic of Tajikistan",
+    "iso3": "762"
+  },
+  "TK": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "TK",
+    "country_code3": "TKL",
+    "country_name": "Tokelau",
+    "country_name_full": "Tokelau",
+    "iso3": "772"
+  },
+  "TL": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "TL",
+    "country_code3": "TLS",
+    "country_name": "Timor-Leste",
+    "country_name_full": "Democratic Republic of Timor-Leste",
+    "iso3": "626"
+  },
+  "TM": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "TM",
+    "country_code3": "TKM",
+    "country_name": "Turkmenistan",
+    "country_name_full": "Turkmenistan",
+    "iso3": "795"
+  },
+  "TN": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "TN",
+    "country_code3": "TUN",
+    "country_name": "Tunisia",
+    "country_name_full": "Tunisian Republic",
+    "iso3": "788"
+  },
+  "TO": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "TO",
+    "country_code3": "TON",
+    "country_name": "Tonga",
+    "country_name_full": "Kingdom of Tonga",
+    "iso3": "776"
+  },
+  "TR": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "TR",
+    "country_code3": "TUR",
+    "country_name": "Turkey",
+    "country_name_full": "Republic of Turkey",
+    "iso3": "792"
+  },
+  "TT": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "TT",
+    "country_code3": "TTO",
+    "country_name": "Trinidad and Tobago",
+    "country_name_full": "Republic of Trinidad and Tobago",
+    "iso3": "780"
+  },
+  "TV": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "TV",
+    "country_code3": "TUV",
+    "country_name": "Tuvalu",
+    "country_name_full": "Tuvalu",
+    "iso3": "798"
+  },
+  "TW": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "TW",
+    "country_code3": "TWN",
+    "country_name": "Taiwan",
+    "country_name_full": "Taiwan, Province of China",
+    "iso3": "158"
+  },
+  "TZ": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "TZ",
+    "country_code3": "TZA",
+    "country_name": "Tanzania",
+    "country_name_full": "United Republic of Tanzania",
+    "iso3": "834"
+  },
+  "UA": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "UA",
+    "country_code3": "UKR",
+    "country_name": "Ukraine",
+    "country_name_full": "Ukraine",
+    "iso3": "804"
+  },
+  "UG": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "UG",
+    "country_code3": "UGA",
+    "country_name": "Uganda",
+    "country_name_full": "Republic of Uganda",
+    "iso3": "800"
+  },
+  "UM": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "UM",
+    "country_code3": "UMI",
+    "country_name": "United States Minor Outlying Islands",
+    "country_name_full": "United States Minor Outlying Islands",
+    "iso3": "581"
+  },
+  "US": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "US",
+    "country_code3": "USA",
+    "country_name": "United States of America",
+    "country_name_full": "United States of America",
+    "iso3": "840"
+  },
+  "UY": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "UY",
+    "country_code3": "URY",
+    "country_name": "Uruguay",
+    "country_name_full": "Eastern Republic of Uruguay",
+    "iso3": "858"
+  },
+  "UZ": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "UZ",
+    "country_code3": "UZB",
+    "country_name": "Uzbekistan",
+    "country_name_full": "Republic of Uzbekistan",
+    "iso3": "860"
+  },
+  "VA": {
+    "continent_code": "EU",
+    "continent_name": "Europe",
+    "country_code2": "VA",
+    "country_code3": "VAT",
+    "country_name": "Holy See (Vatican City State)",
+    "country_name_full": "Holy See (Vatican City State)",
+    "iso3": "336"
+  },
+  "VC": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "VC",
+    "country_code3": "VCT",
+    "country_name": "Saint Vincent and the Grenadines",
+    "country_name_full": "Saint Vincent and the Grenadines",
+    "iso3": "670"
+  },
+  "VE": {
+    "continent_code": "SA",
+    "continent_name": "South America",
+    "country_code2": "VE",
+    "country_code3": "VEN",
+    "country_name": "Venezuela",
+    "country_name_full": "Bolivarian Republic of Venezuela",
+    "iso3": "862"
+  },
+  "VG": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "VG",
+    "country_code3": "VGB",
+    "country_name": "British Virgin Islands",
+    "country_name_full": "British Virgin Islands",
+    "iso3": "092"
+  },
+  "VI": {
+    "continent_code": "NA",
+    "continent_name": "North America",
+    "country_code2": "VI",
+    "country_code3": "VIR",
+    "country_name": "United States Virgin Islands",
+    "country_name_full": "United States Virgin Islands",
+    "iso3": "850"
+  },
+  "VN": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "VN",
+    "country_code3": "VNM",
+    "country_name": "Vietnam",
+    "country_name_full": "Socialist Republic of Vietnam",
+    "iso3": "704"
+  },
+  "VU": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "VU",
+    "country_code3": "VUT",
+    "country_name": "Vanuatu",
+    "country_name_full": "Republic of Vanuatu",
+    "iso3": "548"
+  },
+  "WF": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "WF",
+    "country_code3": "WLF",
+    "country_name": "Wallis and Futuna",
+    "country_name_full": "Wallis and Futuna",
+    "iso3": "876"
+  },
+  "WS": {
+    "continent_code": "OC",
+    "continent_name": "Oceania",
+    "country_code2": "WS",
+    "country_code3": "WSM",
+    "country_name": "Samoa",
+    "country_name_full": "Independent State of Samoa",
+    "iso3": "882"
+  },
+  "YE": {
+    "continent_code": "AS",
+    "continent_name": "Asia",
+    "country_code2": "YE",
+    "country_code3": "YEM",
+    "country_name": "Yemen",
+    "country_name_full": "Yemen",
+    "iso3": "887"
+  },
+  "YT": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "YT",
+    "country_code3": "MYT",
+    "country_name": "Mayotte",
+    "country_name_full": "Mayotte",
+    "iso3": "175"
+  },
+  "ZA": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "ZA",
+    "country_code3": "ZAF",
+    "country_name": "South Africa",
+    "country_name_full": "Republic of South Africa",
+    "iso3": "710"
+  },
+  "ZM": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "ZM",
+    "country_code3": "ZMB",
+    "country_name": "Zambia",
+    "country_name_full": "Republic of Zambia",
+    "iso3": "894"
+  },
+  "ZW": {
+    "continent_code": "AF",
+    "continent_name": "Africa",
+    "country_code2": "ZW",
+    "country_code3": "ZWE",
+    "country_name": "Zimbabwe",
+    "country_name_full": "Republic of Zimbabwe",
+    "iso3": "716"
+  }
+}

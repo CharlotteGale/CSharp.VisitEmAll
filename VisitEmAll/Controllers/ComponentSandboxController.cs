@@ -20,8 +20,8 @@ public class ComponentSandboxController : Controller
             MostVisitedCountryCode = "JP",
             UpcomingTrips = new()
             {
-                new DashboardViewModel.TripCard { Id=1, Title="Japan Trip", Location="Tokyo", ThumbnailUrl=null, StartDate=null, EndDate=null },
-                new DashboardViewModel.TripCard { Id=2, Title="Paris Weekend", Location="Paris", ThumbnailUrl=null, StartDate=null, EndDate=null }
+                new DashboardViewModel.TripCard { Id=1, Title="Japan Trip", Location="Tokyo", HeroImageUrl=null, StartDate=null, EndDate=null },
+                new DashboardViewModel.TripCard { Id=2, Title="Paris Weekend", Location="Paris", HeroImageUrl=null, StartDate=null, EndDate=null }
             }
         };
 
