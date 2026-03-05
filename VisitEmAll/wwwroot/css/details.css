@@ -1,17 +1,21 @@
+/* ============================================================
+    GLOBAL BASE
+   ============================================================ */
 html, body {
     background-color: white !important;
     color: #222 !important;
 }
 
+/* ============================================================
+    HERO + DETAILS
+   ============================================================ */
 .hero-image img {
     width: 100%;
     height: 300px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 16px;
 }
 
-
-/* Title + location */
 .details-title {
     font-size: 2.4rem;
     font-weight: 700;
@@ -24,45 +28,103 @@ html, body {
     margin-bottom: 30px;
 }
 
-/* Generic card styling (no shadows) */
-.summary-card,
-.section-card,
-.map-card {
-    padding: 25px;
-    border-radius: 12px;
-    
+.card-summary h2 {
+    margin-bottom: 22px;   /* adjust to taste */
 }
 
-/* Card-specific colours */
-.card-summary, .card-travel-tips{
+.card-summary strong {
+    font-size: 1.4rem;    /* makes the labels stand out */
+    font-weight: 500;
+}
+
+/* ============================================================
+    CARD BASE STYLES
+   ============================================================ */
+.summary-card,
+.section-card {
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.card-summary {
+    height: 295px;
+    border-radius: 16px;
+    overflow: hidden;
+
+    /* Replace the flat background with a vertical gradient */
+    background: linear-gradient(
+        to bottom,
+        #fcf2dcdf 50%,        
+        #f5e4c2 100%,        
+        #f7e1b0cd 100%       
+    );
+}
+
+
+.card-travel-tips {
+    max-height: 260px;
     background-color: #fcf2dcdf;
 }
 
 .card-activities {
-    background-color: #CCDDDC;
+    height: 295px;
+    border-radius: 16px;
+    background: linear-gradient(
+        to bottom,
+        #CCDDDC 50%,    
+        #b7c9c8 90%,  
+        #9fb5b4 110%    
+    );
+    position: relative;
+    overflow: hidden;
+}
+
+.activities-scroll {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #7a8a8a transparent;
+    -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
 
 .card-itinerary {
-    background-color: #EBF1F1;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(
+        to bottom,
+        #EBF1F1 0%,     
+        #d6e0e0 60%,    
+        #c0cecea9 80%   
+    );
 }
 
 
-/* Map box */
-.map-placeholder {
-    width: 100%;
-    height: 250px;
-    background: #eaeaea;
-    border-radius: 10px;
+
+/* ============================================================
+    ACTIVITIES SCROLL AREA + SCROLLBAR
+   ============================================================ */
+.activities-scroll {
+    max-height: 200px;
+    overflow: hidden;       
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #7a8a8a transparent;
+    position: relative;
 }
 
-/* Activities + Tips lists */
-
-/* Shared base style for all Add buttons */
+/* ============================================================
+    ADD BUTTONS
+   ============================================================ */
 .btn-add-activity,
 .btn-add-restaurant,
 .btn-add-accommodation {
     background: #ffffff;
-    border: 2px solid #394949;  
+    border: 2px solid #394949;
     color: #394949;
     padding: 6px 12px;
     font-size: 0.9rem;
@@ -70,16 +132,17 @@ html, body {
     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-/* Hover*/
 .btn-add-activity:hover,
 .btn-add-restaurant:hover,
 .btn-add-accommodation:hover {
-    background: #394949;   
-    color: #ffffff;      
-    border-color: #394949; 
+    background: #394949;
+    color: #ffffff;
+    border-color: #394949;
 }
 
-
+/* ============================================================
+    LISTS (Activities, Tips)
+   ============================================================ */
 .activity-list,
 .tips-list {
     list-style: none;
@@ -92,7 +155,6 @@ html, body {
     padding: 10px 12px;
     background: #fafafa;
     border-radius: 8px;
-    
 }
 
 .activity-title {
@@ -103,13 +165,14 @@ html, body {
     margin-bottom: 2px;
 }
 
-
 .tips-list li {
     padding: 6px 0;
     border-bottom: 1px solid #5b5b5b;
 }
 
-/* Itinerary timeline */
+/* ============================================================
+    ITINERARY TIMELINE
+   ============================================================ */
 .timeline {
     list-style: none;
     padding: 0;
@@ -121,9 +184,7 @@ html, body {
     padding: 10px 12px;
     background: #fafafa;
     border-radius: 8px;
-    
 }
-
 
 .time {
     font-weight: 600;
@@ -149,12 +210,3 @@ html, body {
     font-size: 0.9rem;
     color: #666;
 }
-
-/* Photos */
-.photo-placeholder {
-    width: 100%;
-    height: 200px;
-    background: #eaeaea;
-    border-radius: 10px;
-}
-
