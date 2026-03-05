@@ -1,60 +1,182 @@
 ﻿@using VisitEmAll.Models
-@{
-    ViewData["Title"] = Model.Name + "'s Dashboard";
+@using VisitEmAll.ViewModels;
+@model VisitEmAll.ViewModels.DashboardViewModel;
+
+
+@* @{
+  ViewData["Title"] = Model.Name + "'s Dashboard";
+
     var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
     var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
-    var isOwn = (bool)(ViewData["IsOwnDashboard"] ?? false);
-}
 
-<h1>@(isOwn ? "My Dashboard" : Model.Name + "'s Dashboard")</h1>
+  var currentUserId = ViewData["CurrentUserId"] as int?;
 
-@if(isOwn)
-{
-    <a href="/holidays/create">Add Holiday</a>
-}
+  var likedHolidayIds = ViewData["LikedHolidayIds"] as List<int> ?? new List<int>();
+  var likedHolidays = ViewData["LikedHolidays"] as List<Holiday> ?? new List<Holiday>();
+} *@
 
-<h2>Upcoming Holidays</h2>
+<h1>@(Model.IsOwnDashboard ? "My Holidays" : Model.User.Name + "'s Holidays")</h1>
+<h3>@Model.User.HomeTown</h3>
+<br />
 
-@if (!upcomingHolidays.Any())
-{
-    <p>No upcoming holidays.</p>
-}
-else
-{
-    <div class="holiday-grid">
-        @foreach (var holiday in upcomingHolidays)
+<div class="stats-container">
+@await Component.InvokeAsync("TravelStats", new { dashboard = Model.TravelStats })
+</div>
+<div class="holiday-container">
+
+    <!-- UPCOMING HOLIDAYS -->
+    <div class="upcoming-holidays-container">
+
+    <div class="upcoming-holidays-header" id = "upcomingholidays">
+      <div class="row">
+        <div class="col">
+          <h2>@Model.User.Name's Upcoming Holidays</h2>
+        </div>
+
+        @if (Model.IsOwnDashboard)
         {
-            <a href="/holidays/@holiday.Id">
-                <div class="holiday-card">
-                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
-                        alt="@holiday.Title" />
-                    <h3>@holiday.Title</h3>
-                    <p>@holiday.StartDate?.Year</p>
-                </div>
-            </a>
+          <div class="col d-flex flex-column justify-content-end align-items-end">
+            <a class="add-holiday-btn" href="/holidays/create">Add Holiday</a>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="upcoming-holidays-grid">
+      @if (!Model.UpcomingHolidays.Any())
+      {
+        <p>No upcoming holidays.</p>
+      }
+      else
+      {
+        @foreach (var holiday in Model.UpcomingHolidays)
+        {
+          <div class="upcoming-holidays-card" style="width: 18rem;">
+            <div class="card-body">
+
+                            <a href="/holidays/@holiday.Id">
+                                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                      src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                      alt="@holiday.Title" />
+                            </a>
+
+                            <h5 class="upcoming-holidays-title">@holiday.Title</h5>
+                            <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+
+              @if (!Model.IsOwnDashboard)
+              {
+                <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
+                      class="like-form">
+                  <button type="submit" class="heart-btn">
+                    @if (Model.LikedHolidayIds.Contains(holiday.Id))
+                    {
+                      <span class="heart liked">❤️</span>
+                    }
+                    else
+                    {
+                      <span class="heart">🤍</span>
+                    }
+                  </button>
+                </form>
+              }
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+  <!-- LIKED HOLIDAYS / HOLIDAY INSPO -->
+  <div class="liked-holidays-container">
+    @if (Model.IsOwnDashboard)
+    {
+      <div class="liked-holidays-header" id = "holidayinspo">
+        <h2>Holiday Inspo</h2>
+      </div>
+      <div class="liked-holidays-grid">
+        @if (!Model.LikedHolidays.Any())
+        {
+          <p>You haven't liked any holidays yet.</p>
+        }
+        else
+        {
+          @foreach (var holiday in Model.LikedHolidays)
+          {
+            <div class="liked-holidays-card" style="width: 18rem;">
+              <div class="card-body">
+
+                                <a href="/holidays/@holiday.Id">
+                                    <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                          src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                          alt="@holiday.Title" />
+                                </a>
+
+                                <h5 class="liked-holidays-title">@holiday.Title</h5>
+                                <p class="liked-holidays-user">by @holiday.User.Name</p>
+                                  <form method="post" action="/holidays/@holiday.Id/unlike" class="like-form">
+                                      <button type="submit" class="heart-btn">
+                                          <span class="heart liked">❤️</span>
+                                      </button>
+                                  </form>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
         }
     </div>
-}
 
-<h2>Past Holidays</h2>
+    <!-- PAST HOLIDAYS -->
+    <div class="past-holidays-container">
 
-@if (!pastHolidays.Any())
-{
-    <p>No past holidays.</p>
-}
-else
-{
-    <div class="holiday-grid">
-        @foreach (var holiday in pastHolidays)
+      <div class="past-holidays-header" id = "pastholidays">
+        <h2>@Model.User.Name's Past Holidays</h2>
+      </div>
+
+      <div class="past-holidays-grid">
+        @if (!Model.PastHolidays.Any())
         {
-            <a href="/holidays/@holiday.Id">
-                <div class="holiday-card">
-                    <img src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.jpg" : holiday.ThumbnailUrl)"
-                        alt="@holiday.Title" />
-                    <h3>@holiday.Title</h3>
-                    <p>@holiday.StartDate?.Year</p>
-                </div>
-            </a>
+          <p>No past holidays.</p>
         }
+        else
+        {
+          @foreach (var holiday in Model.PastHolidays)
+          {
+            <div class="past-holidays-card" style="width: 18rem;">
+              <div class="card-body">
+
+                            <a href="/holidays/@holiday.Id">
+                                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                      src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                      alt="@holiday.Title" />
+                            </a>
+
+                            <h5 class="past-holidays-title">@holiday.Title</h5>
+                            <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+
+                @if (!Model.IsOwnDashboard)
+                {
+                  <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
+                        class="like-form">
+                    <button type="submit" class="heart-btn">
+                      @if (Model.LikedHolidayIds.Contains(holiday.Id))
+                      {
+                        <span class="heart liked">❤️</span>
+                      }
+                      else
+                      {
+                        <span class="heart">🤍</span>
+                      }
+                    </button>
+                  </form>
+                }
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
     </div>
-}
+
+</div>

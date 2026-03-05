@@ -19,6 +19,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.Configure<IISServerOptions>(options => { options.MaxRequestBodySize = 100_000_000; });
+
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options => { options.MultipartBodyLengthLimit = 100_000_000; });
+
 builder.Services.AddScoped<VisitEmAll.ActionFilters.AuthenticationFilter>();
 builder.Services.AddScoped<VisitEmAll.Services.FriendshipService>();
 

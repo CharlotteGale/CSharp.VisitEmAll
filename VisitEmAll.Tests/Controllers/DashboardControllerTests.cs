@@ -22,20 +22,24 @@ public class DashboardControllerTests : NUnitTestBase
     [TearDown]
     public void LocalTearDown()
     {
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
         _controller?.Dispose();
     }
 
     [Test]
-    public void Index_WhenNotLoggedIn_RedirectsToRoot()
+    public async Task Index_WhenNotLoggedIn_RedirectsToRoot()
     {
-        var result = _controller.Index() as RedirectResult;
+        _controller.HttpContext.Session.Remove("User_Id");
+
+        var result = await _controller.Index(null) as RedirectToActionResult;
 
         Assert.That(result, Is.Not.Null);
-        Assert.That(result!.Url, Is.EqualTo("/"));
+        Assert.That(result!.ActionName, Is.EqualTo("Login"));
     }
 
     [Test]
-    public void Index_WhenLoggedIn_SetsViewData_ForCurrentUserAndHolidays()
+    public async Task Index_WhenLoggedIn_SetsViewData_ForCurrentUserAndHolidays()
     {
         var user = new User
         {
@@ -46,7 +50,7 @@ public class DashboardControllerTests : NUnitTestBase
         _context.Users.Add(user);
         _context.SaveChanges();
 
-        _controller.HttpContext.Session.SetInt32("User_Id", user.Id); 
+        _controller.HttpContext.Session.SetInt32("User_Id", user.Id);
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -56,32 +60,31 @@ public class DashboardControllerTests : NUnitTestBase
         );
         _context.SaveChanges();
 
-        var result = _controller.Index() as ViewResult;
+        var result = await _controller.Index(null) as ViewResult;
 
         Assert.That(result, Is.Not.Null);
 
-        var currentUser = _controller.ViewData["CurrentUser"] as User;
-        Assert.That(currentUser, Is.Not.Null);
-        Assert.That(currentUser!.Id, Is.EqualTo(user.Id));
+        var vm = result.Model as DashboardViewModel;
+        Assert.That(vm, Is.Not.Null, "Controller should return a DashboardViewModel");
 
-        var upcoming = _controller.ViewData["UpcomingHolidays"] as List<Holiday>;
-        var past = _controller.ViewData["PastHolidays"] as List<Holiday>;
+        Assert.That(vm.User, Is.Not.Null);
+        Assert.That(vm.User.Id, Is.EqualTo(user.Id));
 
-        Assert.That(upcoming, Is.Not.Null);
-        Assert.That(past, Is.Not.Null);
+        Assert.That(vm.UpcomingHolidays, Is.Not.Null);
+        Assert.That(vm.PastHolidays, Is.Not.Null);
 
-        Assert.That(upcoming!.Any(h => h.Title == "Upcoming"), Is.True);
-        Assert.That(upcoming.Any(h => h.Title == "Past"), Is.False);
+        Assert.That(vm.UpcomingHolidays.Any(h => h.Title == "Upcoming"), Is.True);
+        Assert.That(vm.UpcomingHolidays.Any(h => h.Title == "Past"), Is.False);
 
-        Assert.That(past!.Any(h => h.Title == "Past"), Is.True);
-        Assert.That(past.Any(h => h.Title == "Upcoming"), Is.False);
+        Assert.That(vm.PastHolidays.Any(h => h.Title == "Past"), Is.True);
+        Assert.That(vm.PastHolidays.Any(h => h.Title == "Upcoming"), Is.False);
     }
 
     [Test]
-    public void Index_OnlyIncludesCurrentUsersHolidays()
+    public async Task Index_OnlyIncludesCurrentUsersHolidays()
     {
-        var u1 = new User { Name="U1", Email=$"u1{Guid.NewGuid()}@x.com", Password="Password1!" };
-        var u2 = new User { Name="U2", Email=$"u2{Guid.NewGuid()}@x.com", Password="Password1!" };
+        var u1 = new User { Name = "U1", Email = $"u1{Guid.NewGuid()}@x.com", Password = "Password1!" };
+        var u2 = new User { Name = "U2", Email = $"u2{Guid.NewGuid()}@x.com", Password = "Password1!" };
         _context.Users.AddRange(u1, u2);
         _context.SaveChanges();
 
@@ -95,11 +98,13 @@ public class DashboardControllerTests : NUnitTestBase
         );
         _context.SaveChanges();
 
-        _controller.Index();
+        var result = await _controller.Index(null) as ViewResult;
+        var vm = result?.Model as DashboardViewModel;
 
-        var upcoming = _controller.ViewData["UpcomingHolidays"] as List<Holiday>;
-        Assert.That(upcoming, Is.Not.Null);
-        Assert.That(upcoming!.Any(h => h.Title == "U1 Holiday"), Is.True);
-        Assert.That(upcoming.Any(h => h.Title == "U2 Holiday"), Is.False);
+        Assert.That(vm, Is.Not.Null, "The model should be a DashboardViewModel");
+
+        Assert.That(vm.UpcomingHolidays, Is.Not.Null);
+        Assert.That(vm.UpcomingHolidays.Any(h => h.Title == "U1 Holiday"), Is.True, "Should include User 1's holiday");
+        Assert.That(vm.UpcomingHolidays.Any(h => h.Title == "U2 Holiday"), Is.False, "Should NOT include User 2's holiday");
     }
 }

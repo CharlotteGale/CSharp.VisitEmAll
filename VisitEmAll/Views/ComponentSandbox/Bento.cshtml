@@ -1,0 +1,13 @@
+@model VisitEmAll.ViewModels.TravelStatsViewModel
+
+<h1>Component Sandbox</h1>
+
+<hr />
+
+<h2>TravelStats (micro component)</h2>
+@await Component.InvokeAsync("TravelStats", new { dashboard = Model })
+
+<hr />
+
+<h2>TravelBento (macro component)</h2>
+@await Component.InvokeAsync("TravelBento", new { dashboard = Model })

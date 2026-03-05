@@ -17,6 +17,9 @@ appsettings.**.json
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# Uploaded Holiday Images
+wwwroot/uploads/holidayImages/**/*
+
 # Mono auto generated files
 mono_crash.*
 
@@ -481,3 +484,9 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# ignore the Acebook CSS site file
+*site_acebook.css*
+
+
+

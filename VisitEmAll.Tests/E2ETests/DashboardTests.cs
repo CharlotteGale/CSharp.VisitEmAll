@@ -21,18 +21,18 @@ public class DashboardTests : PageTest
 
         await Page.GotoAsync($"{BaseUrl}/Auth/SignUp");
 
-        await Page.FillAsync("input[name='Name']", "PW User");
-        await Page.FillAsync("input[name='Email']", uniqueEmail);
-        await Page.FillAsync("input[name='Password']", "Password1!");
-        await Page.FillAsync("input[name='ConfirmPassword']", "Password1!");
+        await Page.FillAsync("#Name", "PW User");
+        await Page.FillAsync("#Email", uniqueEmail);
+        await Page.FillAsync("#Password", "Password1!");
+        await Page.FillAsync("#ConfirmPassword", "Password1!");
 
-        await Page.ClickAsync("button[type='submit']");
+        await Page.ClickAsync("#signup-submit");
 
-        await Page.WaitForURLAsync("**/Auth/Login");
+        await Page.WaitForURLAsync(new Regex("Auth/Login/?", RegexOptions.IgnoreCase));
 
-        await Page.FillAsync("input[name='Email']", uniqueEmail);
-        await Page.FillAsync("input[name='Password']", "Password1!");
-        await Page.ClickAsync("button[type='submit']");
+        await Page.FillAsync("#email", uniqueEmail);
+        await Page.FillAsync("#password", "Password1!");
+        await Page.ClickAsync(".auth-submit-btn");
 
         await Page.WaitForURLAsync("**/dashboard");
 

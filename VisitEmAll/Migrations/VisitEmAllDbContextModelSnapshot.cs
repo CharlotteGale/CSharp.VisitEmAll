@@ -50,6 +50,33 @@ namespace VisitEmAll.Migrations
                     b.ToTable("Activity");
                 });
 
+            modelBuilder.Entity("VisitEmAll.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Continent")
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("Iso2")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
             modelBuilder.Entity("VisitEmAll.Models.DayItem", b =>
                 {
                     b.Property<int>("Id")
@@ -131,11 +158,17 @@ namespace VisitEmAll.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateOnly?>("EndDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("HeroImageUrl")
+                        .HasColumnType("text");
 
                     b.Property<string>("Location")
                         .HasMaxLength(200)
@@ -161,6 +194,8 @@ namespace VisitEmAll.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CountryId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Holidays");
@@ -185,6 +220,28 @@ namespace VisitEmAll.Migrations
                     b.HasIndex("HolidayId");
 
                     b.ToTable("HolidayDays");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.HolidayImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("HolidayId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HolidayId");
+
+                    b.ToTable("HolidayImages");
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.User", b =>
@@ -216,6 +273,21 @@ namespace VisitEmAll.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.UserLikedHoliday", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HolidayId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "HolidayId");
+
+                    b.HasIndex("HolidayId");
+
+                    b.ToTable("UserLikedHolidays");
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.DayAccommodation", b =>
@@ -290,11 +362,17 @@ namespace VisitEmAll.Migrations
 
             modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
                 {
+                    b.HasOne("VisitEmAll.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
                     b.HasOne("VisitEmAll.Models.User", "User")
                         .WithMany("Holidays")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Country");
 
                     b.Navigation("User");
                 });
@@ -310,9 +388,43 @@ namespace VisitEmAll.Migrations
                     b.Navigation("Holiday");
                 });
 
+            modelBuilder.Entity("VisitEmAll.Models.HolidayImage", b =>
+                {
+                    b.HasOne("VisitEmAll.Models.Holiday", "Holiday")
+                        .WithMany("Images")
+                        .HasForeignKey("HolidayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Holiday");
+                });
+
+            modelBuilder.Entity("VisitEmAll.Models.UserLikedHoliday", b =>
+                {
+                    b.HasOne("VisitEmAll.Models.Holiday", "Holiday")
+                        .WithMany("LikedByUsers")
+                        .HasForeignKey("HolidayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VisitEmAll.Models.User", "User")
+                        .WithMany("LikedHolidays")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Holiday");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("VisitEmAll.Models.Holiday", b =>
                 {
                     b.Navigation("Days");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("LikedByUsers");
                 });
 
             modelBuilder.Entity("VisitEmAll.Models.HolidayDay", b =>
@@ -325,6 +437,8 @@ namespace VisitEmAll.Migrations
                     b.Navigation("Activities");
 
                     b.Navigation("Holidays");
+
+                    b.Navigation("LikedHolidays");
                 });
 #pragma warning restore 612, 618
         }
