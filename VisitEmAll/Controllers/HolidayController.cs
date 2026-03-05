@@ -114,12 +114,13 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
     _db.Holidays.Add(holiday);
     await _db.SaveChangesAsync();
 
-    TempData["Success"] = "Holiday created successfully!";
-    return RedirectToAction("Index", "Dashboard");
-  }
-  // ---------------------------
-  // EDIT HOLIDAY (GET)
-  // ---------------------------
+        TempData["Success"] = "Holiday created successfully!";
+        return RedirectToAction("Details", "Holidays", new { id = holiday.Id });
+
+    }
+    // ---------------------------
+    // EDIT HOLIDAY (GET)
+    // ---------------------------
 
   [HttpGet("/holidays/{id:int}/edit")]
   public async Task<IActionResult> EditHoliday(int id)
