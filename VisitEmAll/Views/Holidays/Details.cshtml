@@ -10,28 +10,29 @@
 @{
     var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("User_Id");
 }
-@if (!string.IsNullOrEmpty(Model.HeroImageUrl))
-{
-    <div class="hero-image">
-        <img src="@Model.HeroImageUrl" alt="Hero Image" />
-    </div>
-}
+
 <div class="container py-4">
-    <h1 class="details-title">@Model.Title</h1>
+    <!-- TITLE & LOCATION -->
     @if (!string.IsNullOrEmpty(Model.Location))
     {
+        <h1 class="details-title">@Model.Title</h1>
         <p class="details-location">@Model.Location</p>
     }
-    <!-- SUMMARY + ACTIVITIES -->
     <div class="row g-4 mb-4">
-        <!-- Summary -->
+        <!-- HERO BANNER -->
+        <div class="col-md-6">
+            @if (!string.IsNullOrEmpty(Model.HeroImageUrl))
+            {
+                <div class="hero-image">
+                    <img src="@Model.HeroImageUrl" alt="Hero Image" />
+                </div>
+            }
+        </div>
+        <!-- TRIP SUMMARY -->
         <div class="col-md-6">
             <div class="summary-card card-summary p-4">
                 <h2>Trip Summary</h2>
-                @if (!string.IsNullOrEmpty(Model.Location))
-                {
-                    <p><strong>Location:</strong> @Model.Location</p>
-                }
+                <p><strong>Location:</strong> @Model.Location</p>
                 <p><strong>Plan:</strong> @Model.Days.Count Day Itinerary</p>
                 @if (Model.StartDate.HasValue || Model.EndDate.HasValue)
                 {
@@ -50,37 +51,11 @@
                 }
             </div>
         </div>
-        <!-- Activities -->
-        <div class="col-md-6">
-            <div class="section-card card-activities p-4">
-                <h2>Activities</h2>
-                <div class="activities-scroll">
-                    <ul class="activity-list">
-                        @foreach (var day in Model.Days)
-                        {
-                            foreach (var item in day.Items.Where(i => i.ItemType == "Activity"))
-                            {
-                                <li class="activities-item">
-                                    <span class="activity-title">@item.Name</span>
-                                    @if (!string.IsNullOrEmpty(item.Location))
-                                    {
-                                        <span class="location"> - @item.Location</span>
-                                    }
-                                    @if (!string.IsNullOrEmpty(item.Notes))
-                                    {
-                                        <div class="notes">@item.Notes</div>
-                                    }
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
+
 
 <h1 class="details-title">Itinerary</h1>
-
     <!-- DAY SECTIONS -->
     @foreach (var day in Model.Days)
     {
@@ -310,6 +285,9 @@
         
     }
             
+    
+    
+    
     <!-- PHOTOS -->
 <h1 class="details-title">Photos</h1>
     <div class="row mb-4">
