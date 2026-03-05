@@ -1,222 +1,174 @@
 ﻿@using VisitEmAll.Models
 
 @{
-  ViewData["Title"] = Model.Name + "'s Dashboard";
+    ViewData["Title"] = Model.Name + "'s Dashboard";
 
-  var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
-  var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
 
-  var currentUserId = ViewData["CurrentUserId"] as int?;
-  var isOwn = Model.Id == currentUserId;
+    var currentUserId = ViewData["CurrentUserId"] as int?;
+    var isOwn = Model.Id == currentUserId;
 
-  var likedHolidayIds = ViewData["LikedHolidayIds"] as List<int> ?? new List<int>();
-  var likedHolidays = ViewData["LikedHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var likedHolidayIds = ViewData["LikedHolidayIds"] as List<int> ?? new List<int>();
+    var likedHolidays = ViewData["LikedHolidays"] as List<Holiday> ?? new List<Holiday>();
 }
 
-<h1>@(isOwn ? "My Dashboard" : Model.Name + "'s Dashboard")</h1>
+<h1>@(isOwn ? "My Holidays" : Model.Name + "'s Holidays")</h1>
 <h3>@Model.HomeTown</h3>
 <br />
 
 <div class="holiday-container">
 
-  <!-- UPCOMING HOLIDAYS -->
-  <div class="upcoming-holidays-container">
+    <!-- UPCOMING HOLIDAYS -->
+    <div class="upcoming-holidays-container">
 
-    <div class="upcoming-holidays-header">
-      <div class="row">
-        <div class="col">
-          <h2>@Model.Name's Upcoming Holidays</h2>
+        <div class="upcoming-holidays-header" id="upcomingholidays">
+            <div class="row">
+                <div class="col">
+                    <h2>@Model.Name's Upcoming Holidays</h2>
+                </div>
+
+                @if (isOwn)
+                {
+                    <div class="col d-flex flex-column justify-content-end align-items-end">
+                        <a class="add-holiday-btn" href="/holidays/create">Add Holiday</a>
+                    </div>
+                }
+            </div>
         </div>
 
+        <div class="upcoming-holidays-grid">
+            @if (!upcomingHolidays.Any())
+            {
+                <p>No upcoming holidays.</p>
+            }
+            else
+            {
+                @foreach (var holiday in upcomingHolidays)
+                {
+                    <div class="upcoming-holidays-card" style="width: 18rem;">
+                        <div class="card-body">
+
+                            <a href="/holidays/@holiday.Id">
+                                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                      src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                      alt="@holiday.Title" />
+                            </a>
+
+                            <h5 class="upcoming-holidays-title">@holiday.Title</h5>
+                            <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+
+                            @if (!isOwn)
+                            {
+                                <form method="post" action="/holidays/@holiday.Id/@(likedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
+                                      class="like-form">
+                                    <button type="submit" class="heart-btn">
+                                        @if (likedHolidayIds.Contains(holiday.Id))
+                                        {
+                                            <span class="heart liked">❤️</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="heart">🤍</span>
+                                        }
+                                    </button>
+                                </form>
+                            }
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- LIKED HOLIDAYS / HOLIDAY INSPO -->
+    <div class="liked-holidays-container">
         @if (isOwn)
         {
-          <div class="col d-flex flex-column justify-content-end align-items-end">
-            <a class="add-holiday-btn" href="/holidays/create">Add Holiday</a>
-          </div>
-        }
-      </div>
-    </div>
-
-    <div class="upcoming-holidays-grid">
-      @if (!upcomingHolidays.Any())
-      {
-        <p>No upcoming holidays.</p>
-      }
-      else
-      {
-        @foreach (var holiday in upcomingHolidays)
-        {
-          <div class="upcoming-holidays-card" style="width: 18rem;">
-            <div class="card-body">
-
-              <a href="/holidays/@holiday.Id">
-                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "img-default" : "img-cover")"
-                     src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.png" : holiday.ThumbnailUrl)"
-                     alt="@holiday.Title" />
-              </a>
-
-              <h5 class="upcoming-holidays-title">@holiday.Title</h5>
-              <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
-
-              @if (!isOwn)
-              {
-                <form method="post"                              action="/holidays/@holiday.Id/@(likedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
-                      class="like-form">
-                  <button type="submit" class="heart-btn">
-                    @if (likedHolidayIds.Contains(holiday.Id))
-                    {
-                      <span class="heart liked">❤️</span>
-                    }
-                    else
-                    {
-                      <span class="heart">🤍</span>
-                    }
-                  </button>
-                </form>
-              }
-
+            <div class="liked-holidays-header" id="holidayinspo">
+                <h2>Holiday Inspo</h2>
             </div>
-          </div>
-        }
-      }
-    </div>
-  </div>
 
-  <!-- PAST HOLIDAYS -->
-  <div class="past-holidays-container">
-
-    <div class="past-holidays-header">
-      <h2>@Model.Name's Past Holidays</h2>
-    </div>
-
-    <div class="past-holidays-grid">
-      @if (!pastHolidays.Any())
-      {
-        <p>No past holidays.</p>
-      }
-      else
-      {
-        @foreach (var holiday in pastHolidays)
-        {
-          <div class="past-holidays-card" style="width: 18rem;">
-            <div class="card-body">
-
-              <a href="/holidays/@holiday.Id">
-                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "img-default" : "img-cover")"
-                     src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.png" : holiday.ThumbnailUrl)"
-                     alt="@holiday.Title" />
-              </a>
-
-              <h5 class="past-holidays-title">@holiday.Title</h5>
-              <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
-
-              @if (!isOwn)
-              {
-                <form method="post"        action="/holidays/@holiday.Id/@(likedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
-                      class="like-form">
-                  <button type="submit" class="heart-btn">
-                    @if (likedHolidayIds.Contains(holiday.Id))
+            <div class="liked-holidays-grid">
+                @if (!likedHolidays.Any())
+                {
+                    <p>You haven't liked any holidays yet.</p>
+                }
+                else
+                {
+                    @foreach (var holiday in likedHolidays)
                     {
-                      <span class="heart liked">❤️</span>
-                    }
-                    else
-                    {
-                      <span class="heart">🤍</span>
-                    }
-                  </button>
-                </form>
-              }
+                        <div class="liked-holidays-card" style="width: 18rem;">
+                            <div class="card-body">
 
+                                <a href="/holidays/@holiday.Id">
+                                    <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                          src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                          alt="@holiday.Title" />
+                                </a>
+
+                                <h5 class="liked-holidays-title">@holiday.Title</h5>
+                                <p class="liked-holidays-user">by @holiday.User.Name</p>
+
+                            </div>
+                        </div>
+                    }
+                }
             </div>
-          </div>
         }
-      }
     </div>
-  </div>
 
-  <!-- LIKED HOLIDAYS / HOLIDAY INSPO -->
-  @if (isOwn)
-  {
-    <div class="liked-holidays-container" style="margin-top: 3rem;">
-      <h2>Holiday Inspo</h2>
+    <!-- PAST HOLIDAYS -->
+    <div class="past-holidays-container">
 
-      @if (!likedHolidays.Any())
-      {
-        <p>You haven't liked any holidays yet.</p>
-      }
-      else
-      {
-        <div class="liked-holidays-grid">
-          @foreach (var holiday in likedHolidays)
-          {
-            <div class="liked-holidays-card" style="width: 18rem;">
-              <div class="card-body">
-
-                <a href="/holidays/@holiday.Id">
-                  <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "img-default" : "img-cover")"
-                       src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.png" : holiday.ThumbnailUrl)"
-                       alt="@holiday.Title" />
-                </a>
-
-                <h5 class="liked-holidays-title">@holiday.Title</h5>
-                <p class="liked-holidays-user">by @holiday.User.Name</p>
-
-                <form method="post" action="/holidays/@holiday.Id/unlike" class="like-form">
-                  <button type="submit" class="heart-btn">
-                    <span class="heart liked">❤️</span>
-                  </button>
-                </form>
-
-              </div>
-            </div>
-          }
+        <div class="past-holidays-header" id="pastholidays">
+            <h2>@Model.Name's Past Holidays</h2>
         </div>
-      }
+
+        <div class="past-holidays-grid">
+            @if (!pastHolidays.Any())
+            {
+                <p>No past holidays.</p>
+            }
+            else
+            {
+                @foreach (var holiday in pastHolidays)
+                {
+                    <div class="past-holidays-card" style="width: 18rem;">
+                        <div class="card-body">
+
+                            <a href="/holidays/@holiday.Id">
+                                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                      src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                      alt="@holiday.Title" />
+                            </a>
+
+                            <h5 class="past-holidays-title">@holiday.Title</h5>
+                            <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+
+                            @if (!isOwn)
+                            {
+                                <form method="post" action="/holidays/@holiday.Id/@(likedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
+                                      class="like-form">
+                                    <button type="submit" class="heart-btn">
+                                        @if (likedHolidayIds.Contains(holiday.Id))
+                                        {
+                                            <span class="heart liked">❤️</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="heart">🤍</span>
+                                        }
+                                    </button>
+                                </form>
+                            }
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
     </div>
-  }
 
 </div>
-
-<style>
-  .heart-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    font-size: 1.8rem;
-  }
-
-  .heart {
-    transition: transform 0.2s ease;
-  }
-
-  .heart:hover {
-    transform: scale(1.2);
-  }
-
-  .heart.liked {
-    color: red;
-  }
-
-  .liked-holidays-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-
-  .liked-holidays-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .liked-holidays-title {
-    margin-top: 0.5rem;
-    font-weight: bold;
-  }
-
-  .liked-holidays-user {
-    font-size: 0.9rem;
-    color: #666;
-  }
-</style>

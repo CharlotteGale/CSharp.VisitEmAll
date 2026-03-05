@@ -19,12 +19,7 @@ public class CreateHolidayViewModel
     [DataType(DataType.Date)]
     public DateOnly? EndDate { get; set; }
 
-    [MaxLength(200)]
-
     public decimal? TotalCost { get; set; }
-
-    public string? ThumbnailUrl { get; set; }
-
     public List<ActivityInput> Activities { get; set; } = new();
 
     public class ActivityInput
@@ -32,5 +27,6 @@ public class CreateHolidayViewModel
         [MaxLength(150)]
         public string? Name { get; set; }
     }
-    public string? HeroImageUrl { get; set; }
+    public IFormFile? HeroImageFile { get; set; }
+    public string? ExistingHeroImage { get; set; }
 }

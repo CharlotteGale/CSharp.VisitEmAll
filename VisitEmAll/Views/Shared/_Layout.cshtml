@@ -1,4 +1,5 @@
 ﻿@inject VisitEmAll.Services.FriendshipService FriendshipService;
+@using VisitEmAll.Models
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,9 +35,33 @@
             <!-- LEFT SIDE NAV (visible only when logged in) -->
             <ul class="navbar-nav flex-grow-1">
               <li class="nav-item">
-                <a class="nav-link @(currentPath.Contains("/dashboard") ? "nav-link-active" : "")" asp-controller="Dashboard" asp-action="Index"
+                <a class="nav-link @(currentPath.Contains("/home") ? "nav-link-active" : "")" asp-controller="Home" asp-action="Index"
                 asp-route-id="">Home</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link @(currentPath.Contains("/dashboard") ? "nav-link-active" : "")" asp-controller="Dashboard" asp-action="Index"
+                asp-route-id="">My Holidays</a>
+              </li>
+                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                {<li class="nav-item">                
+                <a class="nav-link nav-sub" href="#upcomingholidays" 
+                >Upcoming Holidays</a>
+                </li>
+                }
+                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                {<li class="nav-item">                
+                <a class="nav-link nav-sub" href="#holidayinspo" 
+                >Holiday Inspo</a>
+                </li>
+                }
+                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                {<li class="nav-item">                
+                <a class="nav-link nav-sub" href="#pastholidays" 
+                >Past Holidays</a>
+                </li>
+                }
+
+
               <li class="nav-item">
                 <a class="nav-link d-inline-flex align-items-center @(currentPath.Contains("/friends") ? "nav-link-active" : "")"
                   asp-controller="Friends" asp-action="Index" id="friendsNavLink">
