@@ -114,7 +114,11 @@
 
                                 <h5 class="liked-holidays-title">@holiday.Title</h5>
                                 <p class="liked-holidays-user">by @holiday.User.Name</p>
-
+                                  <form method="post" action="/holidays/@holiday.Id/unlike" class="like-form">
+                                      <button type="submit" class="heart-btn">
+                                          <span class="heart liked">❤️</span>
+                                      </button>
+                                  </form>
                             </div>
                         </div>
                     }
