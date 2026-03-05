@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitEmAll.Models;
+using VisitEmAll.ViewModels;
 
 namespace VisitEmAll.Controllers;
 
@@ -33,17 +34,6 @@ public class DashboardController : Controller
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var upcomingHolidays = user.Holidays
-            .Where(h => h.StartDate >= today)
-            .OrderBy(h => h.StartDate)
-            .ToList();
-
-        var pastHolidays = user.Holidays
-            .Where(h => h.StartDate < today)
-            .OrderByDescending(h => h.StartDate)
-            .ToList();
-
-
         var likedHolidays = await _context.UserLikedHolidays
             .Where(x => x.UserId == currentUserId)
             .Include(x => x.Holiday)
@@ -56,16 +46,31 @@ public class DashboardController : Controller
         .Select(x => x.HolidayId) 
         .ToListAsync();
 
-        ViewData["CurrentUser"] = user; 
-        ViewData["IsOwnDashboard"] = targetUserId == currentUserId;
-        ViewData["UpcomingHolidays"] = upcomingHolidays;
-        ViewData["PastHolidays"] = pastHolidays;
-        ViewData["LikedHolidays"] = likedHolidays;
-        ViewData["LikedHolidayIds"] = likedHolidayIds;
+        var vm = new DashboardViewModel
+        {
+            User = user,
+            IsOwnDashboard = targetUserId == currentUserId,
+            CurrentUserId = currentUserId.Value,
+            UpcomingHolidays = user.Holidays
+            .Where(h => h.StartDate >= today)
+            .OrderBy(h => h.StartDate)
+            .ToList(),
+            PastHolidays = user.Holidays
+            .Where(h => h.StartDate < today)
+            .OrderByDescending(h => h.StartDate)
+            .ToList(),
+            LikedHolidays = likedHolidays,
+            LikedHolidayIds = likedHolidayIds,
+            TravelStats = TravelStatsViewModel.FromHolidays(user.Holidays.ToList())
+        };
 
-
-
-        return View(user);
+        // ViewData["CurrentUser"] = user; 
+        // ViewData["IsOwnDashboard"] = targetUserId == currentUserId;
+        // ViewData["UpcomingHolidays"] = upcomingHolidays;
+        // ViewData["PastHolidays"] = pastHolidays;
+        // ViewData["LikedHolidays"] = likedHolidays;
+        // ViewData["LikedHolidayIds"] = likedHolidayIds; 
+        return View(vm);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

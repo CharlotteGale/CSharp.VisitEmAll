@@ -94,6 +94,7 @@ public class HolidaysController : Controller
             UserId = userId.Value,
             Title = vm.Title,
             Location = vm.Location,
+            CountryId = vm.CountryId,
             StartDate = vm.StartDate,
             EndDate = vm.EndDate,
             TotalCost = vm.TotalCost,
@@ -114,7 +115,8 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
         await _db.SaveChangesAsync();
 
         TempData["Success"] = "Holiday created successfully!";
-        return RedirectToAction("Index", "Dashboard");
+        return RedirectToAction("Details", "Holidays", new { id = holiday.Id });
+
     }
     // ---------------------------
     // EDIT HOLIDAY (GET)
@@ -422,6 +424,5 @@ if (vm.StartDate.HasValue && vm.EndDate.HasValue)
 
             return Redirect(Request.Headers["Referer"].ToString());
         }
-
 
 }

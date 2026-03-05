@@ -16,7 +16,7 @@
     <header class="fixed-top">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Dashboard" asp-action="Index"
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"
                 asp-route-id="">PinPals</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
@@ -42,19 +42,19 @@
                 <a class="nav-link @(currentPath.Contains("/dashboard") ? "nav-link-active" : "")" asp-controller="Dashboard" asp-action="Index"
                 asp-route-id="">My Holidays</a>
               </li>
-                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                @if (currentPath.Contains("/dashboard")  && Model.IsOwnDashboard)
                 {<li class="nav-item">                
                 <a class="nav-link nav-sub" href="#upcomingholidays" 
                 >Upcoming Holidays</a>
                 </li>
                 }
-                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                @if (currentPath.Contains("/dashboard")  && Model.IsOwnDashboard)
                 {<li class="nav-item">                
                 <a class="nav-link nav-sub" href="#holidayinspo" 
                 >Holiday Inspo</a>
                 </li>
                 }
-                @if (currentPath.Contains("/dashboard")  && currentUserId==Model.Id) 
+                @if (currentPath.Contains("/dashboard")  && Model.IsOwnDashboard) 
                 {<li class="nav-item">                
                 <a class="nav-link nav-sub" href="#pastholidays" 
                 >Past Holidays</a>
