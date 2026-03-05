@@ -30,7 +30,7 @@ public class ComponentSandboxControllerTests : NUnitTestBase
     public void Bento_ReturnsViewWithPopulatedModel()
     {
         var result = _controller.Bento() as ViewResult;
-        var vm = result?.Model as DashboardViewModel;
+        var vm = result?.Model as TravelStatsViewModel;
 
         Assert.That(result, Is.Not.Null);
         Assert.That(vm, Is.Not.Null);

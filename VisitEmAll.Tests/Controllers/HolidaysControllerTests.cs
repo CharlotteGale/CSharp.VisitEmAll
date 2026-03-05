@@ -98,8 +98,8 @@ public class HolidaysControllerTests : NUnitTestBase
 
         var result = await _controller.Create(vm) as RedirectToActionResult;
 
-        Assert.That(result?.ActionName, Is.EqualTo("Index"));
-        Assert.That(result?.ControllerName, Is.EqualTo("Dashboard"));
+        Assert.That(result?.ActionName, Is.EqualTo("Details"));
+        Assert.That(result?.ControllerName, Is.EqualTo("Holidays"));
 
         var savedHoliday = _context.Holidays.FirstOrDefault(h => h.Title == uniqueTitle);
         Assert.That(savedHoliday, Is.Not.Null);
