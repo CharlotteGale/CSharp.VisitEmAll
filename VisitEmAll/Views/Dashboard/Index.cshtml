@@ -6,8 +6,8 @@
 @* @{
   ViewData["Title"] = Model.Name + "'s Dashboard";
 
-  var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
-  var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
+    var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
 
   var currentUserId = ViewData["CurrentUserId"] as int?;
 
@@ -24,8 +24,8 @@
 </div>
 <div class="holiday-container">
 
-  <!-- UPCOMING HOLIDAYS -->
-  <div class="upcoming-holidays-container">
+    <!-- UPCOMING HOLIDAYS -->
+    <div class="upcoming-holidays-container">
 
     <div class="upcoming-holidays-header" id = "upcomingholidays">
       <div class="row">
@@ -54,15 +54,14 @@
           <div class="upcoming-holidays-card" style="width: 18rem;">
             <div class="card-body">
 
-              <a href="/holidays/@holiday.Id">
-                <img
-                class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "img-default" : "img-cover")"
-                src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.png" : holiday.ThumbnailUrl)"
-                alt="@holiday.Title" />
-              </a>
+                            <a href="/holidays/@holiday.Id">
+                                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                      src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                      alt="@holiday.Title" />
+                            </a>
 
-              <h5 class="upcoming-holidays-title">@holiday.Title</h5>
-              <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+                            <h5 class="upcoming-holidays-title">@holiday.Title</h5>
+                            <p class="upcoming-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
 
               @if (!Model.IsOwnDashboard)
               {
@@ -81,12 +80,12 @@
                 </form>
               }
 
-            </div>
-          </div>
-        }
-      }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
     </div>
-  </div>
 
   <!-- LIKED HOLIDAYS / HOLIDAY INSPO -->
   <div class="liked-holidays-container">
@@ -107,28 +106,21 @@
             <div class="liked-holidays-card" style="width: 18rem;">
               <div class="card-body">
 
-                <a href="/holidays/@holiday.Id">
-                  <img
-                  class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "img-default" : "img-cover")"
-                  src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.png" : holiday.ThumbnailUrl)"
-                  alt="@holiday.Title" />
-                </a>
+                                <a href="/holidays/@holiday.Id">
+                                    <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                          src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                          alt="@holiday.Title" />
+                                </a>
 
-                <h5 class="liked-holidays-title">@holiday.Title</h5>
-                <p class="liked-holidays-user">by @holiday.User.Name</p>
+                                <h5 class="liked-holidays-title">@holiday.Title</h5>
+                                <p class="liked-holidays-user">by @holiday.User.Name</p>
 
-                <form method="post" action="/holidays/@holiday.Id/unlike" class="like-form">
-                  <button type="submit" class="heart-btn">
-                    <span class="heart liked">❤️</span>
-                  </button>
-                </form>
-
-              </div>
+                            </div>
+                        </div>
+                    }
+                }
             </div>
-          }      
-      }
-      </div>
-      }
+        }
     </div>
 
     <!-- PAST HOLIDAYS -->
@@ -150,15 +142,14 @@
             <div class="past-holidays-card" style="width: 18rem;">
               <div class="card-body">
 
-                <a href="/holidays/@holiday.Id">
-                  <img
-                  class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "img-default" : "img-cover")"
-                  src="@(string.IsNullOrEmpty(holiday.ThumbnailUrl) ? "/images/default-thumbnail.png" : holiday.ThumbnailUrl)"
-                  alt="@holiday.Title" />
-                </a>
+                            <a href="/holidays/@holiday.Id">
+                                <img class="holiday-card-img-top @(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "img-default" : "img-cover")"
+                                      src="@(string.IsNullOrEmpty(holiday.HeroImageUrl) ? "/images/default-thumbnail.png" : holiday.HeroImageUrl)"
+                                      alt="@holiday.Title" />
+                            </a>
 
-                <h5 class="past-holidays-title">@holiday.Title</h5>
-                <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
+                            <h5 class="past-holidays-title">@holiday.Title</h5>
+                            <p class="past-holidays-dates">@holiday.StartDate - @holiday.EndDate</p>
 
                 @if (!Model.IsOwnDashboard)
                 {
@@ -177,10 +168,11 @@
                   </form>
                 }
 
-              </div>
-            </div>
-          }
-        }
-      </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
     </div>
-  </div>
+
+</div>
