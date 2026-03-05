@@ -8,7 +8,7 @@ public class HomeControllerTests : NUnitTestBase
     [SetUp]
     public void LocalSetUp()
     {
-        _controller = new HomeController();
+        _controller = new HomeController(_context);
 
         var httpContext = new DefaultHttpContext();
         httpContext.Session = new MockHttpSession();
@@ -28,11 +28,11 @@ public class HomeControllerTests : NUnitTestBase
     }
 
     [Test]
-    public void Index_FirstTimeLanding_ShowsLoginForm()
+    public async Task Index_FirstTimeLanding_ShowsLoginForm()
     {
         _controller.HttpContext.Session.Clear();
 
-        var result = _controller.Index() as RedirectToActionResult;
+        var result = await _controller.Index() as RedirectToActionResult;
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result.ActionName, Is.EqualTo("Login"));
@@ -40,15 +40,18 @@ public class HomeControllerTests : NUnitTestBase
     }
 
     [Test]
-    public void Index_WhenLoggedIn_RedirectsToDashboard()
+    public async Task Index_WhenLoggedIn_ReturnsViewModel()
     {
         _controller.HttpContext.Session.SetInt32("User_Id", 1);
 
-        var result = _controller.Index() as RedirectToActionResult;
+        var result = await _controller.Index() as ViewResult;
 
-        Assert.That(result!.ActionName, Is.EqualTo("Index"));
-        Assert.That(result.ControllerName, Is.EqualTo("Dashboard"));
-    }
+        Assert.That(result, Is.Not.Null, "The action should return a ViewResult.");
+    
+        var model = result.Model as TravelStatsViewModel;
+        Assert.That(model, Is.Not.Null, "The model should be of type TravelStatsViewModel.");
+        Assert.That(model.TripsCount, Is.GreaterThanOrEqualTo(0));
+        }
 
     [Test]
     public void Privacy_ReturnsView()

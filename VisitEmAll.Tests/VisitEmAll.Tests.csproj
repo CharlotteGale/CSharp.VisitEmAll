@@ -36,5 +36,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\VisitEmAll\wwwroot\data\countries.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>wwwroot\data\countries.json</Link>
+    </None>
+  </ItemGroup>
   
 </Project>
