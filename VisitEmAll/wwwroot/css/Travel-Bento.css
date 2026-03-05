@@ -1,35 +1,4 @@
-:root{
-  --bg: #F6F4F1;
-  --card: #FFFFFF;
-  --ink: #0E2B2F;
-  --muted: rgba(14,43,47,.65);
-  --line: rgba(14,43,47,.10);
-
-  --radius: 26px;
-  --radius-lg: 32px;
-
-  --hero: #072B30;
-
-  /* Pastel palette */
-  --pink: #E4ACB2;
-  --sand: #EABCA8;
-  --cream: #FAEDCD;
-  --green: #CCD5AE;
-  --mist: #99BAB9;
-
-  --borderSoft: rgba(14,43,47,0.06);
-  --shadowSoft: 0 22px 55px rgba(14,43,47,0.08);
-  --highlight: inset 0 1px 0 rgba(255,255,255,0.7);
-}
-
 *{ box-sizing:border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-}
 
 .countup{ font-variant-numeric: tabular-nums; }
 
