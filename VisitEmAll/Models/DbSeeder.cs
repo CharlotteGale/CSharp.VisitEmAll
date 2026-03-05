@@ -46,7 +46,7 @@ public static class DbSeeder
                      && !string.IsNullOrWhiteSpace(x.ContinentName))
             .Select(x => new Country
             {
-                Name = NormalizeCountryName(x.CountryName.Trim()),   // ✅ USE NORMALIZER
+                Name = NormalizeCountryName(x.CountryName.Trim()),
                 Iso2 = x.CountryCode2.Trim().ToUpperInvariant(),
                 Continent = x.ContinentName.Trim()
             })
@@ -79,31 +79,36 @@ public static class DbSeeder
             return null;
         }
 
-        // === HOLIDAYS ===
-        var holidays = new List<Holiday>
-        {
-            new() { UserId = users[0].Id, Title = "Summer in Milan", Location = "Milan, Italy", StartDate = new DateOnly(2027, 7, 10), EndDate = new DateOnly(2027, 7, 11), ThumbnailUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisemxwmpiTl47rBO0_7NP4wV_VCBBKOTqtqnSg5gvxqfQQD42BSg6QbJ8v-P7gJm3jquguXAkLDzmuuJ2qbtR9azz7yvVstgIvt1o3BpPrWFmcppvnVF25OQVwFJZbYLM6j4hYvzNkUSk/w640-h480/ouael-ben-salah-0xe2FGo7Vc0-unsplash.jpg" },
-            new() { UserId = users[0].Id, Title = "Autumn in San Francisco", Location = "San Francisco, USA", StartDate = new DateOnly(2027, 9, 10), EndDate = new DateOnly(2027, 9, 15), ThumbnailUrl = "https://www.extranomical.com/wp-content/uploads/2023/10/Background-2-min.jpg" },
-            new() { UserId = users[0].Id, Title = "Winter in Oslo", Location = "Oslo, Norway", StartDate = new DateOnly(2027, 12, 12), EndDate = new DateOnly(2027, 12, 20), ThumbnailUrl = "https://www.visitoslo.com/cdn-cgi/image/width=1400,fit=contain,height=560,quality=75/contentassets/80f6dac873a74838906e8a1db8979380/vinter-i-oslo-roseslottet.jpg" },
-            new() { UserId = users[0].Id, Title = "Spring in Barcelona", Location = "Barcelona, Spain", StartDate = new DateOnly(2027, 3, 10), EndDate = new DateOnly(2027, 3, 21), ThumbnailUrl = "https://www.keyinnapartments.com/blog/wp-content/uploads/elementor/thumbs/barcelona-en-abril-r2zppi1sw0joadkkbjq45xzn9nkezwmerzj3at9goo.jpg" },
+    // === HOLIDAYS === \\
+    var holidays = new List<Holiday>
 
-            new() { UserId = users[0].Id, Title = "Summer in Santorini", Location = "Santorini, Greece", StartDate = new DateOnly(2024, 7, 10), EndDate = new DateOnly(2024, 7, 11), ThumbnailUrl = "https://wanderlusters.com/wp-content/uploads/2017/08/oia-sunset-santorini-pixabay-e1503505848463.jpg" },
-            new() { UserId = users[0].Id, Title = "Autumn in NYC", Location = "New York, USA", StartDate = new DateOnly(2024, 9, 10), EndDate = new DateOnly(2024, 9, 15), ThumbnailUrl = "https://media.timeout.com/images/106310594/750/562/image.jpg" },
-            new() { UserId = users[0].Id, Title = "Winter in Andorra", Location = "Andorra", StartDate = new DateOnly(2024, 12, 12), EndDate = new DateOnly(2024, 12, 20), ThumbnailUrl = "https://media.cntraveller.com/photos/67503ed5119c1824f31b8898/16:10/w_2560%2Cc_limit/ordino.jpg" },
-            new() { UserId = users[0].Id, Title = "Spring in Sapporo", Location = "Sapporo, Japan", StartDate = new DateOnly(2024, 3, 10), EndDate = new DateOnly(2024, 3, 21), ThumbnailUrl = "https://visit.sapporo.travel/wp2022/wp-content/uploads/2024/10/spring-s02-img01.jpg" },
-
-            new() { UserId = users[1].Id, Title = "Skiing in the Alps", Location = "Chamonix, France", StartDate = new DateOnly(2024, 12, 15), EndDate = new DateOnly(2024, 12, 16) },
-            new() { UserId = users[3].Id, Title = "Tokyo Adventure", Location = "Japan", StartDate = new DateOnly(2025, 3, 5), EndDate = new DateOnly(2025, 3, 6) },
-            new() { UserId = users[4].Id, Title = "Weekend in Rome", Location = "Rome, Italy", StartDate = new DateOnly(2024, 5, 12), EndDate = new DateOnly(2024, 5, 13) },
-            new() { UserId = users[6].Id, Title = "Hiking in the Highlands", Location = "Scotland", StartDate = new DateOnly(2024, 8, 1), EndDate = new DateOnly(2024, 8, 2) }
-        };
-
-        // Set CountryId before saving holidays
-        foreach (var h in holidays)
-            h.CountryId = PickCountryId(h.Location);
-
-        context.Holidays.AddRange(holidays);
-        context.SaveChanges();
+    { new Holiday { UserId = users[0].Id, Title = "Summer in Milan", Location = "Milan, Italy", StartDate = new DateOnly(2027, 7, 10), EndDate = new DateOnly(2027, 7, 11), HeroImageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisemxwmpiTl47rBO0_7NP4wV_VCBBKOTqtqnSg5gvxqfQQD42BSg6QbJ8v-P7gJm3jquguXAkLDzmuuJ2qbtR9azz7yvVstgIvt1o3BpPrWFmcppvnVF25OQVwFJZbYLM6j4hYvzNkUSk/w640-h480/ouael-ben-salah-0xe2FGo7Vc0-unsplash.jpg" },
+      new Holiday { UserId = users[0].Id, Title = "Autumn in San Francisco", Location = "San Francisco, USA", StartDate = new DateOnly(2027, 9, 10), EndDate = new DateOnly(2027, 9, 15), HeroImageUrl = "https://www.extranomical.com/wp-content/uploads/2023/10/Background-2-min.jpg"},
+      new Holiday { UserId = users[0].Id, Title = "Winter in Oslo", Location = "Oslo, Norway", StartDate = new DateOnly(2026, 12, 12), EndDate = new DateOnly(2026, 12, 20), HeroImageUrl = "https://www.visitoslo.com/cdn-cgi/image/width=1400,fit=contain,height=560,quality=75/contentassets/80f6dac873a74838906e8a1db8979380/vinter-i-oslo-roseslottet.jpg" },
+      new Holiday { UserId = users[0].Id, Title = "Spring in Barcelona", Location = "Barcelona, Spain", StartDate = new DateOnly(2026, 4, 10), EndDate = new DateOnly(2026, 3, 21), HeroImageUrl = "https://www.keyinnapartments.com/blog/wp-content/uploads/elementor/thumbs/barcelona-en-abril-r2zppi1sw0joadkkbjq45xzn9nkezwmerzj3at9goo.jpg"},
+      new Holiday { UserId = users[0].Id, Title = "Stephanie's wedding", Location = "Venice, Italy", StartDate = new DateOnly(2026, 5, 10), EndDate = new DateOnly(2026, 7, 11), HeroImageUrl = "https://ca-times.brightspotcdn.com/dims4/default/c88daa7/2147483647/strip/true/crop/911x664+0+0/resize/1200x875!/quality/75/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fce%2F4a%2F760b0166432abb7344c95f8e054c%2Fvenice-venue-hero.jpg" },
+      new Holiday { UserId = users[0].Id, Title = "South African safari", Location = "Cape Town, South Africa", StartDate = new DateOnly(2023, 2, 10), EndDate = new DateOnly(2023, 9, 15), HeroImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuq5_Jbl0Qgu-t6nA3Oc-C_HfnFrd0kb1k5Q&s" },
+      new Holiday { UserId = users[0].Id, Title = "Girls trip to Mallorca", Location = "Mallorca, Spain", StartDate = new DateOnly(2023, 8, 10), EndDate = new DateOnly(2023, 3, 21), HeroImageUrl = "https://mallorca.com/user/pages/04.travel-info/02.ports/02.mallorca-ports/hafen-mallorca.jpg"},
+      new Holiday { UserId = users[0].Id, Title = "London Fashion Week", Location = "London, England", StartDate = new DateOnly(2025, 7, 10), EndDate = new DateOnly(2025, 7, 11) , HeroImageUrl = "https://media.timeout.com/images/106039811/image.jpg" },
+      new Holiday { UserId = users[0].Id, Title = "Backpacking in Thailand", Location = "Bangkok, Thailand", StartDate = new DateOnly(2025, 9, 10), EndDate = new DateOnly(2025, 9, 15), HeroImageUrl = "https://cdn.sanity.io/images/nxpteyfv/goguides/ef78949372c00ebd066b2cc40557b5688f903890-1600x1067.jpg" },
+      new Holiday { UserId = users[0].Id, Title = "Surfing in Australia", Location = "Bondi Beach, Australia", StartDate = new DateOnly(2025, 12, 12), EndDate = new DateOnly(2025, 12, 20) , HeroImageUrl = "https://upload.wikimedia.org/wikipedia/commons/8/86/Bells_beach_surfers.JPG"},
+      new Holiday { UserId = users[0].Id, Title = "Watching a Broadway show, NYC", Location = "Manhattan, USA", StartDate = new DateOnly(2025, 3, 10), EndDate = new DateOnly(2025, 3, 21), HeroImageUrl = "https://blog.spothero.com/wp-content/uploads/2013/10/broadway-parking.jpg"},
+      new Holiday { UserId = users[0].Id, Title = "Canal boating, Amsterdam", Location = "Amsterdam, The Netherlands", StartDate = new DateOnly(2024, 7, 10), EndDate = new DateOnly(2024, 7, 11), HeroImageUrl = "https://www.blueboat.nl/wp-content/uploads/2021/08/CCC_main-960x600.jpg"},
+      new Holiday { UserId = users[0].Id, Title = "Guitar shopping in Sapporo", Location = "Sapporo, Japan", StartDate = new DateOnly(2024, 9, 10), EndDate = new DateOnly(2024, 9, 15), HeroImageUrl = "https://visit.sapporo.travel/wp2022/wp-content/uploads/2024/10/spring-s02-img01.jpg" },
+      new Holiday { UserId = users[0].Id, Title = "Ski trip to Vancouver", Location = "Vancouver, Canada", StartDate = new DateOnly(2024, 12, 12), EndDate = new DateOnly(2024, 12, 20), HeroImageUrl = "https://www.vancouverplanner.com/wp-content/uploads/2020/04/grouse-mountain-2-1024x640.jpeg"},
+      new Holiday { UserId = users[0].Id, Title = "Oktoberfest in Hamburg", Location = "Hamburg, Germany", StartDate = new DateOnly(2024, 3, 10), EndDate = new DateOnly(2024, 3, 21), HeroImageUrl = "https://tischreservierung-oktoberfest.de/wp-content/uploads/2018/01/human-3237513_1920.jpg" },
+      new Holiday { UserId = users[1].Id, Title = "Skiing in the Alps", Location = "Chamonix, France", StartDate = new DateOnly(2024, 12, 15), EndDate = new DateOnly(2024, 12, 16), HeroImageUrl = "https://cdn.prod.website-files.com/5f5777504c01823e93e92c7b/619778bdcf885c9bb9739f57_AdobeStock_122648427.jpg" },
+      new Holiday { UserId = users[3].Id, Title = "Tokyo Adventure", Location = "Japan", StartDate = new DateOnly(2025, 3, 5), EndDate = new DateOnly(2025, 3, 6), HeroImageUrl = "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_6000,h_3375,c_limit/tokyoGettyImages-1031467664.jpeg"  },
+      new Holiday { UserId = users[4].Id, Title = "Weekend in Rome", Location = "Rome, Italy", StartDate = new DateOnly(2024, 5, 12), EndDate = new DateOnly(2024, 5, 13), HeroImageUrl = "https://a.loveholidays.com/media-library/~production/73842e65d182c5ddce219a66da2cf5d0036e7954-4683x3122.jpg"  },
+      new Holiday { UserId = users[6].Id, Title = "Hiking in the Highlands", Location = "Scotland", StartDate = new DateOnly(2024, 8, 1), EndDate = new DateOnly(2024, 8, 2), HeroImageUrl = "https://wanderlusters.com/wp-content/uploads/2018/10/Scottish-Highlands-Hiking-Guide-1155x770.jpg"  }
+    };
+      
+     // Set CountryId before saving holidays
+     foreach (var h in holidays)
+       h.CountryId = PickCountryId(h.Location);
+      
+    context.Holidays.AddRange(holidays);
+    context.SaveChanges();
 
         // === HOLIDAY DAYS ===
         var holidayDays = new List<HolidayDay>();

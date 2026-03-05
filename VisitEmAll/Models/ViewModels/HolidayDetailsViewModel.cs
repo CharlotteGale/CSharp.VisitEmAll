@@ -10,10 +10,8 @@ public class HolidayDetailsViewModel
     public DateOnly? StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public decimal? TotalCost { get; set; }
-
     public List<HolidayDayViewModel> Days { get; set; } = new();
 
-    // NEW — tells the view which inline form to show
     public string? AddType { get; set; }
     public int? AddDayId { get; set; }
 }
