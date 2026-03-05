@@ -2,18 +2,9 @@
 @using VisitEmAll.ViewModels;
 @model VisitEmAll.ViewModels.DashboardViewModel;
 
-
-@* @{
-  ViewData["Title"] = Model.Name + "'s Dashboard";
-
-    var upcomingHolidays = ViewData["UpcomingHolidays"] as List<Holiday> ?? new List<Holiday>();
-    var pastHolidays = ViewData["PastHolidays"] as List<Holiday> ?? new List<Holiday>();
-
-  var currentUserId = ViewData["CurrentUserId"] as int?;
-
-  var likedHolidayIds = ViewData["LikedHolidayIds"] as List<int> ?? new List<int>();
-  var likedHolidays = ViewData["LikedHolidays"] as List<Holiday> ?? new List<Holiday>();
-} *@
+<style>
+    html { scroll-behavior: smooth; }
+</style>
 
 <h1>@(Model.IsOwnDashboard ? "My Holidays" : Model.User.Name + "'s Holidays")</h1>
 <h3>@Model.User.HomeTown</h3>
@@ -30,7 +21,7 @@
     <div class="upcoming-holidays-header" id = "upcomingholidays">
       <div class="row">
         <div class="col">
-          <h2>@Model.User.Name's Upcoming Holidays</h2>
+          <h2>@(Model.IsOwnDashboard ? "My Upcoming Holidays" : Model.User.Name + "'s Upcoming Holidays")</h2>
         </div>
 
         @if (Model.IsOwnDashboard)
@@ -67,6 +58,7 @@
               {
                 <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
                       class="like-form">
+                  <input type="hidden" name="returnFragment" value="upcomingholidays" />    
                   <button type="submit" class="heart-btn">
                     @if (Model.LikedHolidayIds.Contains(holiday.Id))
                     {
@@ -92,7 +84,7 @@
     @if (Model.IsOwnDashboard)
     {
       <div class="liked-holidays-header" id = "holidayinspo">
-        <h2>Holiday Inspo</h2>
+        <h2>My Holiday Inspo</h2>
       </div>
       <div class="liked-holidays-grid">
         @if (!Model.LikedHolidays.Any())
@@ -115,6 +107,7 @@
                                 <h5 class="liked-holidays-title">@holiday.Title</h5>
                                 <p class="liked-holidays-user">by @holiday.User.Name</p>
                                   <form method="post" action="/holidays/@holiday.Id/unlike" class="like-form">
+                                  <input type="hidden" name="returnFragment" value="holidayinspo" />
                                       <button type="submit" class="heart-btn">
                                           <span class="heart liked">❤️</span>
                                       </button>
@@ -131,7 +124,7 @@
     <div class="past-holidays-container">
 
       <div class="past-holidays-header" id = "pastholidays">
-        <h2>@Model.User.Name's Past Holidays</h2>
+        <h2>@(Model.IsOwnDashboard ? "My Past Holidays" : Model.User.Name + "'s Past Holidays")</h2>
       </div>
 
       <div class="past-holidays-grid">
@@ -159,6 +152,7 @@
                 {
                   <form method="post" action="/holidays/@holiday.Id/@(Model.LikedHolidayIds.Contains(holiday.Id) ? "unlike" : "like")"
                         class="like-form">
+                    <input type="hidden" name="returnFragment" value="pastholidays" />    
                     <button type="submit" class="heart-btn">
                       @if (Model.LikedHolidayIds.Contains(holiday.Id))
                       {
