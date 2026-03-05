@@ -314,7 +314,7 @@
   <!-- PHOTOS -->
   <div class="row mb-4">
     <div class="col-12">
-      <div class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary p-4 rounded">
+      <div class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary rounded">
         <h2>Photos</h2>
         <form id="uploadForm" asp-action="AddImages" method="post" enctype="multipart/form-data">
           <input type="hidden" asp-for="HolidayId" />
@@ -334,12 +334,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             }
-            <input asp-for="ImageFiles" type="file" accept="image/*" multiple class="form-control" />
+            <div class="photo-input-group d-flex align-items-center gap-3 mb-4">
+              <input asp-for="ImageFiles" 
+                    type="file" 
+                    accept="image/*" 
+                    multiple 
+                    class="form-control photos-form-field" 
+                    id="ImageFiles" />
+              <button type="submit" class="btn btn-primary photo-upload-btn" id="uploadBtn">
+                <i class="bi bi-cloud-upload"></i> Upload Photos
+              </button>
+            </div>
             <div id="sizeError" class="text-danger mt-1" style="display:none;">
               Total size exceeds 50MB. Please select fewer or smaller images.
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Upload Photos</button>
         </form>
 
         <script>
@@ -408,22 +417,26 @@
                     items.forEach(el => {
                       el.classList.remove('active', 'item-wing-left', 'item-wing-right');
                       el.classList.remove('carousel-item-next', 'carousel-item-prev', 'carousel-item-start', 'carousel-item-end');
-                  });
-                  items[targetIndex].classList.add('active');
+                    });
 
-                  if (total > 1) {
+                    items[targetIndex].classList.add('active');
+
+                    if (total > 1) {
                       const prevIndex = (targetIndex - 1 + total) % total;
                       const nextIndex = (targetIndex + 1) % total;
-                    if (total === 2) {
-                      items[nextIndex].classList.add('item-wing-right');
+                      const offset = -(targetIndex * 100);
+                      
+                      inner.style.transform = `translateX(${offset}%)`;
+                      if (total === 2) {
+                        items[nextIndex].classList.add('item-wing-right');
+                      } else {
+                        items[prevIndex].classList.add('item-wing-left');
+                        items[nextIndex].classList.add('item-wing-right');
+                      }
                     } else {
-                      items[prevIndex].classList.add('item-wing-left');
-                      items[nextIndex].classList.add('item-wing-right');
+                      inner.style.transform = `translateX(0)`;
+                      items[0].style.opacity = "1";
                     }
-                  }
-
-                    const offset = -(targetIndex * 100);
-                    inner.style.transform = `translateX(${offset}%)`;
                   };
 
                   carousel.addEventListener('slide.bs.carousel', function (e) {

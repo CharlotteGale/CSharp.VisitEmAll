@@ -231,16 +231,55 @@ html {
     PHOTO CAROUSEL
    ============================================================ */
 .photo-carousel-card {
-  height: 700px !important;
+  height: 750px !important;
   background: #f8f9fa;
   border-radius: 15px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-bottom: 50px;
 }
 
 .photo-carousel-card.empty {
   height: auto !important;
+}
+
+.photo-input-group{
+  padding: 10px 0;
+  margin-bottom: 30px;
+}
+
+.photos-form-field{
+  width: 25%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+}
+
+.photos-form-field::file-selector-button {
+  background-color: #E4ACB2;
+  color: white;
+  border: 1px solid #7a9a99;
+  border-radius: 50px;
+  padding: 8px 16px;
+  margin-right: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.photos-form-field::file-selector-button:hover {
+  background-color: #99BAB9;
+  border-color: #99BAB9;
+}
+
+.photo-upload-btn {
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .carousel-inner {
@@ -251,6 +290,12 @@ html {
   overflow: visible !important; 
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
+}
+
+.carousel-inner:has(> .carousel-item:only-child) {
+  width: 100% !important;
+  transform: none !important; 
+  justify-content: center;
 }
 
 .carousel-item {
@@ -267,9 +312,9 @@ html {
 }
 
 .carousel-item.active {
-  opacity: 1;
-  transform: scale(1.1);
-  z-index: 5;
+  display: flex !important;
+  opacity: 1 !important;
+  transform: scale(1.1) !important; /* Force the scale */
 }
 
 .item-wing-right,
