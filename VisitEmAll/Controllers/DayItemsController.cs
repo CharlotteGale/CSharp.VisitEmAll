@@ -26,7 +26,7 @@ public class DayItemsController : Controller
         _db.DayItems.Add(vm);   
         await _db.SaveChangesAsync();
 
-        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
+        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId }, fragment: $"day-{day.Id}");
     }
 
     [HttpPost("/day-items/{dayId:int}/restaurants/create")]
@@ -39,7 +39,7 @@ public class DayItemsController : Controller
         _db.DayItems.Add(vm);
         await _db.SaveChangesAsync();
 
-        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
+        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId }, fragment: $"day-{day.Id}");
     }
 
     [HttpPost("/day-items/{dayId:int}/accommodations/create")]
@@ -52,7 +52,7 @@ public class DayItemsController : Controller
         _db.DayItems.Add(vm);
         await _db.SaveChangesAsync();
 
-        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId });
+        return RedirectToAction("Details", "Holidays", new { id = day.HolidayId }, fragment: $"day-{day.Id}");
     }
     // -------------------------------------
     // UPDATE ACTIVITY / RESTURANT / ACCOM 
@@ -76,7 +76,7 @@ public class DayItemsController : Controller
         await _db.SaveChangesAsync();
 
         var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
-        return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+        return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId }, fragment: $"day-{day.Id}");
     }
 
     // -------------------------------------
@@ -94,7 +94,7 @@ public class DayItemsController : Controller
         _db.DayItems.Remove(item);
         await _db.SaveChangesAsync();
 
-        return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+        return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId }, fragment: $"day-{day.Id}");
     }
 
         [HttpPost("/day-items/{id:int}/edit-inline")]
@@ -106,7 +106,7 @@ public class DayItemsController : Controller
             TempData["EditingItemId"] = id;
 
             var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
-            return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+            return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId }, fragment: $"day-{day.Id}");
         }
 
         [HttpPost("/day-items/{id:int}/cancel-inline")]
@@ -119,7 +119,7 @@ public class DayItemsController : Controller
             if (item == null) return NotFound();
 
             var day = await _db.HolidayDays.FindAsync(item.HolidayDayId);
-            return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId });
+            return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId }, fragment: $"day-{day.Id}");
         }
 
 }
