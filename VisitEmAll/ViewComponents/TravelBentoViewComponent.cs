@@ -5,9 +5,9 @@ namespace VisitEmAll.ViewComponents;
 
 public class TravelBentoViewComponent : ViewComponent
 {
-    public Task<IViewComponentResult> InvokeAsync(DashboardViewModel dashboard)
+    public Task<IViewComponentResult> InvokeAsync(TravelStatsViewModel dashboard)
     {
-        dashboard ??= new DashboardViewModel();
+        dashboard ??= new TravelStatsViewModel();
         return Task.FromResult<IViewComponentResult>(View(dashboard));
     }
 }

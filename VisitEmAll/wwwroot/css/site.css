@@ -251,7 +251,8 @@ header.fixed-top::after {
 .holiday-container,
 .upcoming-holidays-container,
 .past-holidays-container,
-.liked-holidays-container {
+.liked-holidays-container, 
+.stats-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 20px;
@@ -259,6 +260,11 @@ header.fixed-top::after {
   display: block;
   overflow: visible;
 }
+
+.stats-container {
+ margin: 18px;
+}
+
 
 .upcoming-holidays-header,
 .past-holidays-header,

@@ -4,9 +4,9 @@ using VisitEmAll.ViewModels;
 namespace VisitEmAll.ViewComponents;
 public class TravelStatsViewComponent : ViewComponent
 {
-    public Task<IViewComponentResult> InvokeAsync(DashboardViewModel dashboard)
+    public Task<IViewComponentResult> InvokeAsync(TravelStatsViewModel dashboard)
     {
-        dashboard ??= new DashboardViewModel();
+        dashboard ??= new TravelStatsViewModel();
 
         var vm = new TravelStatsCardViewModel
         {

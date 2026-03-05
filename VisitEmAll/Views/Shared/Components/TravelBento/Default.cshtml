@@ -1,4 +1,4 @@
-@model VisitEmAll.ViewModels.DashboardViewModel
+@model VisitEmAll.ViewModels.TravelStatsViewModel
 @using Microsoft.EntityFrameworkCore
 @inject VisitEmAll.Models.VisitEmAllDbContext Db
 
@@ -53,7 +53,7 @@
     (int)Math.Clamp(((t - tier.Min) / (double)(nextTarget - tier.Min)) * 100.0, 0, 100);
 
   // Upcoming list excluding spotlight trip
-  var upcomingRest = (Model.UpcomingTrips ?? new List<DashboardViewModel.TripCard>())
+  var upcomingRest = (Model.UpcomingTrips ?? new List<TravelStatsViewModel.TripCard>())
     .Skip(nextTrip == null ? 0 : 1)
     .Take(3)
     .ToList();
