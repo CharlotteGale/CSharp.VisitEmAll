@@ -102,8 +102,6 @@
       #c0cecea9 80%);
 }
 
-
-
 /* ============================================================
     ACTIVITIES SCROLL AREA + SCROLLBAR
    ============================================================ */
@@ -140,6 +138,47 @@
   color: #ffffff;
   border-color: #394949;
 }
+
+.holiday-submit-btn, 
+.holiday-cancel-btn {
+  width: auto;
+  height: auto;
+  padding: 0.75rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.holiday-submit-btn {
+  background: var(--green);
+  color: white;
+  border: solid 2px var(--green);
+  text-decoration: none;
+}
+
+.holiday-submit-btn:hover {
+  background: var(--card);
+  color: var(--green);
+  border: solid 2px var(--green);
+  transform: translateY(-4px);
+}
+
+.holiday-cancel-btn {
+  background: var(--card);
+  color: var(--mist);
+  border: solid 2px var(--mist);
+  text-decoration: none;
+}
+
+.holiday-cancel-btn:hover {
+  background: var(--mist);
+  color: var(--card);
+  border: solid 2px var(--card);
+  transform: translateY(-4px);
+}
+
+
 
 /* ============================================================
     LISTS (Activities, Tips)
@@ -235,7 +274,7 @@
 }
 
 .photos-form-field {
-  width: 25%;
+  width: 30%;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   border: 1px solid #ced4da;
@@ -243,22 +282,24 @@
 }
 
 .photos-form-field::file-selector-button {
-  background-color: var(--sand);
+  background-color: var(--pink);
   color: white;
-  border: 1px solid var(--sand);
+  border: 1px solid var(--mist); 
   border-radius: 50px;
   padding: 8px 16px;
   margin-right: 15px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   font-weight: 600;
   font-size: 0.85rem;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.photos-form-field::file-selector-button:hover {
-  background-color: var(--mist);
+.photos-form-field:hover::file-selector-button {
+  background-color: var(--ink);
   border-color: var(--mist);
-  color: var(--ink);
+  transform: translateY(-4px);
 }
 
 .photo-upload-btn {

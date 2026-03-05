@@ -465,11 +465,11 @@
   @if (currentUserId == Model.OwnerUserId)
   {
     <div class="mt-4">
-      <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="btn btn-success me-2">Edit Holiday</a>
+      <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="holiday-submit-btn">Edit Holiday</a>
 
             <form asp-action="DeleteHoliday" asp-route-id="@Model.HolidayId" method="post" class="d-inline">
                 @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-danger"
+                <button type="submit" class="holiday-cancel-btn"
                         onclick="return confirm('Are you sure you want to delete this holiday?');">
                     Remove Holiday
                 </button>
