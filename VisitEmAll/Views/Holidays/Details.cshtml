@@ -419,33 +419,35 @@
                         }
                     };
 
-                    carousel.addEventListener('slide.bs.carousel', function (e) {
-                        updateLayout(e.to);
-                    });
-                    updateLayout(0);
-                    });
-                </script>
-                </div>
-            }
-            else
-            {
-                <div class="col-12 text-center py-5 border rounded bg-light">
-                <i class="bi bi-images d-block mb-2 fs-1 text-muted"></i>
-                <p class="text-muted">No photos yet. Use the upload tool above to add some!</p>
-                </div>
-            }
+                  carousel.addEventListener('slide.bs.carousel', function (e) {
+                    updateLayout(e.to);
+                  });
+                  updateLayout(0);
+                });
+              </script>
             </div>
+          }
+          else
+          {
+            <div class="col-12 text-center py-5 border rounded bg-light">
+              <i class="bi bi-images d-block mb-2 fs-1 text-muted"></i>
+              <p class="text-muted">No photos yet.</p>
+            </div>
+          }
         </div>
-        </div>
+      </div>
     </div>
-        <!-- OWNER ACTIONS -->
-    @if (currentUserId == Model.OwnerUserId)
-    {
-        <div class="mt-4">
-            <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="btn btn-success me-2">Edit Holiday</a>
+  </div>
+
+  <!-- OWNER ACTIONS -->
+  @if (currentUserId == Model.OwnerUserId)
+  {
+    <div class="mt-4">
+      <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="holiday-submit-btn">Edit Holiday</a>
+
             <form asp-action="DeleteHoliday" asp-route-id="@Model.HolidayId" method="post" class="d-inline">
                 @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-danger"
+                <button type="submit" class="holiday-cancel-btn"
                         onclick="return confirm('Are you sure you want to delete this holiday?');">
                     Remove Holiday
                 </button>
