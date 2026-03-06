@@ -297,6 +297,8 @@
     <div
       class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary rounded">
       <h2 class="card-header">Photos</h2>
+      @if (currentUserId == Model.OwnerUserId)
+      {
       <form id="uploadForm" asp-action="AddImages" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="HolidayId" />
         <div class="mb-3">
@@ -327,6 +329,7 @@
           </div>
         </div>
       </form>
+      }
 
       <script>
               document.getElementById('ImageFiles').addEventListener('change', function () {
