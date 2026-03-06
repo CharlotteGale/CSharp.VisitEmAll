@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 using VisitEmAll.Models;
 
@@ -76,6 +77,14 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
         logger.LogInformation("Database migrations applied successfully.");
 
+        if (!context.Countries.Any())
+        {
+            logger.LogInformation("Countries table is empty, seeding countries...");
+            var env = services.GetRequiredService<IWebHostEnvironment>();
+            CountriesSeeder.Seed(context, env.WebRootPath);
+            logger.LogInformation("Countries seeded successfully.");
+        }
+
         if (args.Contains("--seed"))
         {
             logger.LogWarning("Seed flag detected. Wiping and reseeding database...");
@@ -92,3 +101,59 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+public static class CountriesSeeder
+{
+    public static void Seed(VisitEmAllDbContext context, string webRootPath)
+    {
+        var jsonPath = Path.Combine(webRootPath, "data", "countries.json");
+        if (!File.Exists(jsonPath))
+            throw new FileNotFoundException($"countries.json not found at {jsonPath}");
+
+        var json = File.ReadAllText(jsonPath);
+        var dict = JsonSerializer.Deserialize<Dictionary<string, CountryRow>>(json)
+                   ?? new Dictionary<string, CountryRow>();
+
+        var toAdd = dict.Values
+            .Where(x => !string.IsNullOrWhiteSpace(x.CountryName)
+                     && !string.IsNullOrWhiteSpace(x.CountryCode2)
+                     && !string.IsNullOrWhiteSpace(x.ContinentName))
+            .Select(x => new Country
+            {
+                Name = NormalizeCountryName(x.CountryName.Trim()),
+                Iso2 = x.CountryCode2.Trim().ToUpperInvariant(),
+                Continent = x.ContinentName.Trim()
+            })
+            .GroupBy(c => c.Iso2)
+            .Select(g => g.First())
+            .ToList();
+
+        context.Countries.AddRange(toAdd);
+        context.SaveChanges();
+    }
+
+    private sealed record CountryRow(
+    [property: JsonPropertyName("country_name")]
+        string CountryName,
+    [property: JsonPropertyName("country_code2")]
+        string CountryCode2,
+    [property: JsonPropertyName("continent_name")]
+        string ContinentName
+);
+
+    private static string NormalizeCountryName(string name)
+    {
+        return name switch
+        {
+            "United Kingdom of Great Britain & Northern Ireland" => "United Kingdom",
+            "United States of America" => "United States",
+            "Russian Federation" => "Russia",
+            "Viet Nam" => "Vietnam",
+            "Iran (Islamic Republic of)" => "Iran",
+            "Korea, Republic of" => "South Korea",
+            "Korea (Republic of)" => "South Korea",
+            "Korea, Democratic People's Republic of" => "North Korea",
+            _ => name
+        };
+    }
+}
