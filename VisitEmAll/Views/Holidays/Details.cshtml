@@ -58,10 +58,9 @@
 <h1 class="details-title">Itinerary</h1>
 <div class="row g-4 mb-4">
     <div class="col-md-6">
-        @* id="day-@day.DayId" in Model.Days  *@
         @foreach (var day in Model.Days)
         {
-            <div class="section-card card-itinerary p-4">
+            <div class="section-card card-itinerary p-4" id="day-@day.DayId">
                 <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
                 <!-- ADD BUTTONS -->
                 @if (currentUserId == Model.OwnerUserId)
@@ -248,7 +247,9 @@
                     </ul>
                 }
             </div>
+        
         }
+
     </div>
     <!-- ACTIVITIES -->
     @{
