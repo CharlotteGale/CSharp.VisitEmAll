@@ -31,7 +31,7 @@
         <!-- TRIP SUMMARY -->
         <div class="col-md-6">
             <div class="summary-card card-summary p-4">
-                <h2>Trip Summary</h2>
+                <h2 class="card-header">Trip Summary</h2>
                 <p><strong>Location:</strong> @Model.Location</p>
                 <p><strong>Plan:</strong> @Model.Days.Count Day Itinerary</p>
                 @if (Model.StartDate.HasValue || Model.EndDate.HasValue)
@@ -61,7 +61,7 @@
         @foreach (var day in Model.Days)
         {
             <div class="section-card card-itinerary p-4" id="day-@day.DayId">
-                <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
+                <h3 class="day-header">@day.Date.ToString("dddd, dd MMM yyyy")</h3>
                 <!-- ADD BUTTONS -->
                 @if (currentUserId == Model.OwnerUserId)
                 {
@@ -104,8 +104,8 @@
                                 <label>Notes</label>
                                 <textarea class="form-control" name="Notes"></textarea>
                             </div>
-                            <button class="btn btn-success btn-sm">Save</button>
-                            <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-secondary btn-sm">
+                            <button class="btn btn-save-edit btn-sm">Save</button>
+                            <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-cancel-delete  btn-sm">
                                 Cancel
                             </a>
                         </form>
@@ -131,8 +131,8 @@
                                 <label>Notes</label>
                                 <textarea class="form-control" name="Notes"></textarea>
                             </div>
-                            <button class="btn btn-success btn-sm">Save</button>
-                            <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-secondary btn-sm">
+                            <button class="btn btn-save-edit btn-sm">Save</button>
+                            <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-cancel-delete  btn-sm">
                                 Cancel
                             </a>
                         </form>
@@ -158,8 +158,8 @@
                                 <label>Notes</label>
                                 <textarea class="form-control" name="Notes"></textarea>
                             </div>
-                            <button class="btn btn-success btn-sm">Save</button>
-                            <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-secondary btn-sm">
+                            <button class="btn btn-save-edit btn-sm">Save</button>
+                            <a asp-action="Details" asp-route-id="@Model.HolidayId" class="btn btn-cancel-delete  btn-sm">
                                 Cancel
                             </a>
                         </form>
@@ -200,12 +200,12 @@
                                             <!-- EDIT BUTTON -->
                                             <form method="post" asp-controller="DayItems" asp-action="EditInline" asp-route-id="@item.Id"
                                                     class="d-inline">
-                                                <button type="submit" class="btn btn-outline-dark btn-sm me-2">Edit</button>
+                                                <button type="submit" class="btn btn-save-edit btn-sm me-2">Edit</button>
                                             </form>
                                             <!-- DELETE BUTTON -->
                                             <form asp-controller="DayItems" asp-action="DeleteItem" asp-route-id="@item.Id" method="post"
                                                     class="d-inline">
-                                                <button class="btn btn btn-outline-danger btn-sm"
+                                                <button class="btn btn btn-cancel-delete btn-sm"
                                                         onclick="return confirm('Delete this item?');">
                                                     Delete
                                                 </button>
@@ -235,11 +235,11 @@
                                                         class="form-control form-control-sm" />
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-success btn-sm mt-2 me-2">Save</button>
+                                        <button type="submit" class="btn btn-save-edit btn-sm mt-2 me-2">Save</button>
                                     </form>
                                     <form method="post" asp-controller="DayItems" asp-action="CancelInline" asp-route-id="@item.Id"
                                             class="d-inline">
-                                        <button type="submit" class="btn btn-outline-dark btn-sm mt-2">Cancel</button>
+                                        <button type="submit" class="btn btn-save-edit btn-sm mt-2">Cancel</button>
                                     </form>
                                 }
                             </li>
@@ -258,7 +258,7 @@
 
     <div class="col-md-6">
         <div class="section-card card-activities p-4">
-            <h2>Activities</h2>
+            <h2 class="card-header">Activities</h2>
 
             <div class="activities-scroll">
                 @if (!hasActivities)
@@ -298,7 +298,7 @@
     <div class="col-12">
         <div
             class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary rounded">
-            <h2>Photos</h2>
+            <h2 class="card-header">Photos</h2>
             <form id="uploadForm" asp-action="AddImages" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="HolidayId" />
                 <div class="mb-3">
