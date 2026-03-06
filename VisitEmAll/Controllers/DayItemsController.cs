@@ -109,6 +109,9 @@ public class DayItemsController : Controller
             return RedirectToAction("Details", "Holidays", new { id = day!.HolidayId }, fragment: $"day-{day.Id}");
         }
 
+    // -------------------------------------
+    // CANCEL ACTIVITY / RESTURANT / ACCOM
+    // -------------------------------------
         [HttpPost("/day-items/{id:int}/cancel-inline")]
         public async Task<IActionResult> CancelInline(int id)
         {
