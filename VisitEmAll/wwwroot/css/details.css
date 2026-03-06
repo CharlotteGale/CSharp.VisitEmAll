@@ -1,6 +1,6 @@
 /* ============================================================
-    HERO + DETAILS
-   ============================================================ */
+HERO + DETAILS
+============================================================ */
 .hero-image img {
   width: 100%;
   height: 300px;
@@ -22,18 +22,16 @@
 
 .card-summary h2 {
   margin-bottom: 22px;
-  /* adjust to taste */
 }
 
 .card-summary strong {
   font-size: 1.4rem;
-  /* makes the labels stand out */
   font-weight: 500;
 }
 
 /* ============================================================
-    CARD BASE STYLES
-   ============================================================ */
+CARD BASE STYLES
+============================================================ */
 .summary-card,
 .section-card,
 .map-card,
@@ -57,14 +55,24 @@
   height: 300px;
   border-radius: 16px;
   overflow: hidden;
-
-  /* Replace the flat background with a vertical gradient */
   background: linear-gradient(to bottom,
       #fcf2dcdf 50%,
       #f5e4c2 100%,
       #f7e1b0cd 100%);
 }
 
+.card-header,
+.day-header {
+  color: var(--ink);
+  font-size: 1.75rem;
+  font-style: italic;
+  padding-bottom: 8px;
+  margin-top: 1rem;
+}
+
+.day-header {
+  font-size: 1.5rem;
+}
 
 .card-travel-tips {
   max-height: 260px;
@@ -72,66 +80,50 @@
 }
 
 .card-activities {
-    min-height: 385px;   
-    height: auto;       
-    border-radius: 16px;
-    background: linear-gradient(
-        to bottom,
-        #CCDDDC 50%,
-        #b7c9c8 90%,
-        #9fb5b4 110%
-    );
-    position: relative;
-    overflow: visible;   /* MUST be visible for growth */
+  min-height: 385px;
+  height: auto;
+  border-radius: 16px;
+  background: linear-gradient(to bottom,
+      #CCDDDC 50%,
+      #b7c9c8 90%,
+      #9fb5b4 110%);
+  position: relative;
+  overflow: visible;
 }
 
-
-/* .activities-scroll {
-    max-height: 200px;
-    overflow-y: auto;
-    padding-right: 6px;
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    scrollbar-color: #7a8a8a transparent;
-    -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-}
- */
 .card-itinerary {
-    border-radius: 16px;
-    overflow: hidden;
-    background: linear-gradient(
-        to bottom,
-        #EBF1F1 0%,     
-        #d6e0e0 60%,    
-        #c0cecea9 80%   
-    );
-  margin-bottom:20px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(to bottom,
+      #EBF1F1 0%,
+      #d6e0e0 60%,
+      #c0cecea9 80%);
+  margin-bottom: 20px;
 }
 
-
 /* ============================================================
-    ACTIVITIES SCROLL AREA + SCROLLBAR
-   ============================================================ */
+ACTIVITIES SCROLL AREA + SCROLLBAR
+============================================================ */
 .activities-scroll {
-    max-height: none;    /* remove the cap */
-    height: auto;        /* allow natural expansion */
-    overflow: visible;   /* no scroll unless you want it */
-    padding-right: 6px;
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    scrollbar-color: #7a8a8a transparent;
+  max-height: none;
+  height: auto;
+  overflow: visible;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #7a8a8a transparent;
 }
 
 /* ============================================================
-    ADD BUTTONS
-   ============================================================ */
+ADD BUTTONS
+============================================================ */
 .btn-add-activity,
 .btn-add-restaurant,
-.btn-add-accommodation {
-  background: #ffffff;
-  border: 2px solid #394949;
-  color: #394949;
+.btn-add-accommodation,
+.btn-save-edit {
+  background: var(--mist);
+  color: var(--card);
+  border-color: var(--mist);
   padding: 6px 12px;
   font-size: 0.9rem;
   border-radius: 6px;
@@ -140,13 +132,31 @@
 
 .btn-add-activity:hover,
 .btn-add-restaurant:hover,
-.btn-add-accommodation:hover {
-  background: #394949;
-  color: #ffffff;
-  border-color: #394949;
+.btn-add-accommodation:hover,
+.btn-save-edit:hover {
+  background: var(--card);
+  border: 2px solid var(--mist);
+  color: var(--mist);
 }
 
-.holiday-submit-btn, 
+.btn-cancel-delete {
+  background: var(--card);
+  border: 2px solid var(--sand);
+  color: var(--sand);
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-cancel-delete:hover {
+  background: var(--sand);
+  border: 2px solid var(--sand);
+  color: var(--card);
+}
+
+.holiday-submit-btn,
 .holiday-cancel-btn {
   width: auto;
   height: auto;
@@ -158,38 +168,36 @@
 }
 
 .holiday-submit-btn {
-  background: var(--green);
-  color: white;
-  border: solid 2px var(--green);
+  background: var(--mist);
+  color: var(--card);
+  border-color: var(--mist);
   text-decoration: none;
 }
 
 .holiday-submit-btn:hover {
   background: var(--card);
-  color: var(--green);
-  border: solid 2px var(--green);
+  border: 2px solid var(--mist);
+  color: var(--mist);
   transform: translateY(-4px);
 }
 
 .holiday-cancel-btn {
   background: var(--card);
-  color: var(--mist);
-  border: solid 2px var(--mist);
+  border: 2px solid var(--sand);
+  color: var(--sand);
   text-decoration: none;
 }
 
 .holiday-cancel-btn:hover {
-  background: var(--mist);
+  background: var(--sand);
+  border: 2px solid var(--sand);
   color: var(--card);
-  border: solid 2px var(--card);
   transform: translateY(-4px);
 }
 
-
-
 /* ============================================================
-    LISTS (Activities, Tips)
-   ============================================================ */
+LISTS (Activities, Tips)
+============================================================ */
 .activity-list,
 .tips-list {
   list-style: none;
@@ -218,8 +226,8 @@
 }
 
 /* ============================================================
-    ITINERARY TIMELINE
-   ============================================================ */
+ITINERARY TIMELINE
+============================================================ */
 .timeline {
   list-style: none;
   padding: 0;
@@ -259,8 +267,8 @@
 }
 
 /* ============================================================
-    PHOTO CAROUSEL
-   ============================================================ */
+PHOTO CAROUSEL
+============================================================ */
 .photo-carousel-card {
   height: 750px !important;
   background: var(--card);
@@ -291,7 +299,7 @@
 .photos-form-field::file-selector-button {
   background-color: var(--pink);
   color: white;
-  border: 1px solid var(--mist); 
+  border: 1px solid var(--mist);
   border-radius: 50px;
   padding: 8px 16px;
   margin-right: 15px;
@@ -319,7 +327,7 @@
   border: none;
 }
 
-.photo-upload-btn:hover{
+.photo-upload-btn:hover {
   background: var(--card);
   color: var(--mist);
   border: solid 2px var(--mist);
@@ -359,7 +367,6 @@
   display: flex !important;
   opacity: 1 !important;
   transform: scale(1.1) !important;
-  /* Force the scale */
 }
 
 .item-wing-right,

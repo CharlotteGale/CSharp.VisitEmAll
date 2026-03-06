@@ -1,25 +1,22 @@
-/* ====================== */
-/* BASE */
-/* ====================== */
+/* ====================== /
+/ BASE /
+/ ====================== */
 :root {
   --bg: #F6F4F1;
   --card: #F8F9FA;
   --ink: #0E2B2F;
   --muted: rgba(14, 43, 47, .65);
   --line: rgba(14, 43, 47, .10);
-
   --radius: 26px;
   --radius-lg: 32px;
-
   --hero: #072B30;
 
-  /* Pastel palette */
+  /*Pastel palette */ 
   --pink: #E4ACB2;
   --sand: #EABCA8;
   --cream: #FAEDCD;
   --green: #CCD5AE;
   --mist: #99BAB9;
-
   --borderSoft: rgba(14, 43, 47, 0.06);
   --shadowSoft: 0 22px 55px rgba(14, 43, 47, 0.08);
   --highlight: inset 0 1px 0 rgba(255, 255, 255, 0.7);
@@ -28,10 +25,10 @@
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
 body {
-  margin: 0;
   padding-top: 5rem;
   overflow-x: visible;
   margin-bottom: 60px;
@@ -46,17 +43,15 @@ html {
   scroll-behavior: smooth;
 }
 
-* {
-  box-sizing: border-box;
-}
+*{box-sizing: border-box;}
 
 .countup {
   font-variant-numeric: tabular-nums;
 }
 
-/* ====================== */
-/* DEFAULTS */
-/* ====================== */
+/* ====================== /
+/ DEFAULTS /
+/ ====================== */
 
 /* BUTTON SHAPE AND SIZE */
 .auth-submit-btn,
@@ -79,9 +74,42 @@ html {
   font-size: 1rem;
 }
 
-/* ====================== */
-/* NAVBAR */
-/* ====================== */
+/* HEADERS */
+.holiday-title,
+.friend-page-title,
+.details-title {
+  color: var(--mist);
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.holiday-subtitle,
+.details-location {
+  color: var(--mist);
+  font-size: 1.25rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.holiday-subsection,
+.details-subsection {
+  color: var(--mist);
+  font-size: 2rem;
+  padding-bottom: 8px;
+  margin-top: 1rem;
+}
+
+.friend-section-title {
+  color: var(--mist);
+  font-size: 1.5rem;
+  padding-bottom: 4px;
+  margin-top: 0.5rem;
+}
+
+/* ====================== /
+/ NAVBAR /
+/ ====================== */
 header.fixed-top {
   background-color: var(--bg);
   border-bottom: none !important;
@@ -124,9 +152,7 @@ header.fixed-top::after {
 }
 
 .nav-link.nav-sub {
-  /* font-style: oblique; */
   font-weight: 300;
-
 }
 
 .nav-link-active {
@@ -159,10 +185,9 @@ header.fixed-top::after {
   color: var(--pink) !important;
 }
 
-/* ====================== */
-/* AUTH PAGES */
-/* ====================== */
-
+/* ====================== /
+/ AUTH PAGES /
+/ ====================== */
 .auth-wrapper {
   min-height: 90vh;
   display: flex;
@@ -263,20 +288,14 @@ header.fixed-top::after {
   transform: translateY(-4px);
 }
 
-/* ========================================================================== */
-/* FRIENDS */
-/* ========================================================================== */
-
+/* ========================================================================== /
+/ FRIENDS /
+/ ========================================================================== */
 .friend-container {
+  min-height: 90vh;
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
-}
-
-.friend-page-title {
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 2rem;
 }
 
 .friend-layout-grid {
@@ -303,13 +322,6 @@ header.fixed-top::after {
 .friend-section--divider {
   padding-top: 1.5rem;
   border-top: 1px solid var(--line);
-}
-
-.friend-section-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--ink);
 }
 
 .friend-card {
@@ -388,7 +400,6 @@ header.fixed-top::after {
   color: var(--mist);
 }
 
-/* Buttons & Badges */
 .friend-actions {
   display: flex;
   align-items: center;
@@ -460,10 +471,9 @@ header.fixed-top::after {
   gap: 0.5rem;
 }
 
-/* ========================================================================== */
-/* PROFILE - HOLIDAYS */
-/* ========================================================================== */
-
+/* ========================================================================== /
+/ PROFILE - HOLIDAYS /
+/ ========================================================================== */
 .holiday-container,
 .upcoming-holidays-container,
 .past-holidays-container,
@@ -475,6 +485,10 @@ header.fixed-top::after {
   position: relative;
   display: block;
   overflow: visible;
+}
+
+.holiday-container {
+  min-height: 90vh;
 }
 
 .stats-container {
@@ -530,8 +544,8 @@ header.fixed-top::after {
   overflow: hidden;
 }
 
-.upcoming-holidays-card:hover, 
-.past-holidays-card:hover, 
+.upcoming-holidays-card:hover,
+.past-holidays-card:hover,
 .liked-holidays-card:hover {
   transform: translateY(-4px);
 }
@@ -580,7 +594,6 @@ header.fixed-top::after {
   padding: 1.5rem;
 }
 
-
 @media (max-width: 768px) {
   html {
     font-size: 16px;
@@ -592,8 +605,7 @@ header.fixed-top::after {
   }
 }
 
-/* LIKED HOLIDAYS/HOLIDAY INSPO */
-
+/* LIKED HOLIDAYS/HOLIDAY INSPO */ 
 .heart-btn {
   background: none;
   border: none;
@@ -613,23 +625,6 @@ header.fixed-top::after {
 .heart.liked {
   color: red;
 }
-
-/* .liked-holidays-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  } */
-
-/* .liked-holidays-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .liked-holidays-title {
-    margin-top: 0.5rem;
-    font-weight: bold;
-  } */
 
 .liked-holidays-user {
   padding-left: 1rem;

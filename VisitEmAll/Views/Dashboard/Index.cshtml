@@ -6,8 +6,8 @@
     html { scroll-behavior: smooth; }
 </style>
 
-<h1>@(Model.IsOwnDashboard ? "My Holidays" : Model.User.Name + "'s Holidays")</h1>
-<h3>@Model.User.HomeTown</h3>
+<h1 class="holiday-title">@(Model.IsOwnDashboard ? "My Holidays" : Model.User.Name + "'s Holidays")</h1>
+<h3 class="holiday-subtitle">@Model.User.HomeTown</h3>
 <br />
 
 
@@ -19,7 +19,7 @@
     <div class="upcoming-holidays-header" id = "upcomingholidays">
       <div class="row">
         <div class="col">
-          <h2>@(Model.IsOwnDashboard ? "My Upcoming Holidays" : Model.User.Name + "'s Upcoming Holidays")</h2>
+          <h2 class="holiday-subsection">@(Model.IsOwnDashboard ? "My Upcoming Holidays" : Model.User.Name + "'s Upcoming Holidays")</h2>
         </div>
 
         @if (Model.IsOwnDashboard)
@@ -82,7 +82,7 @@
     @if (Model.IsOwnDashboard)
     {
       <div class="liked-holidays-header" id = "holidayinspo">
-        <h2>My Holiday Inspo</h2>
+        <h2 class="holiday-subsection">My Holiday Inspo</h2>
       </div>
       <div class="liked-holidays-grid">
         @if (!Model.LikedHolidays.Any())
@@ -122,7 +122,7 @@
     <div class="past-holidays-container">
 
       <div class="past-holidays-header" id = "pastholidays">
-        <h2>@(Model.IsOwnDashboard ? "My Past Holidays" : Model.User.Name + "'s Past Holidays")</h2>
+        <h2 class="holiday-subsection">@(Model.IsOwnDashboard ? "My Past Holidays" : Model.User.Name + "'s Past Holidays")</h2>
       </div>
 
       <div class="past-holidays-grid">
