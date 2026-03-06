@@ -286,7 +286,7 @@
           <p class="bento__kicker bento__kicker--onTint">Quick actions</p>
 
           <div class="bento__big">Keep it moving</div>
-          <div class="bento__small">Fast shortcuts for a clean demo flow.</div>
+          <div class="bento__small">Fast shortcuts for a clean travel flow.</div>
 
           <div class="bento__list bento__mt">
             <a class="bento__card" href="@addTripUrl">
@@ -294,7 +294,6 @@
                 <div class="bento__cardTitle">+ Add a trip</div>
                 <div class="bento__cardSub">Country + dates + thumbnail.</div>
               </div>
-              <div class="bento__thumb" aria-hidden="true"></div>
             </a>
 
             <a class="bento__card" href="@tripsUrl">
@@ -302,7 +301,6 @@
                 <div class="bento__cardTitle">View all trips</div>
                 <div class="bento__cardSub">Edit, update, and plan.</div>
               </div>
-              <div class="bento__thumb" aria-hidden="true"></div>
             </a>
 
             <a class="bento__card" href="@friendsUrl">
@@ -310,7 +308,6 @@
                 <div class="bento__cardTitle">Find new friends</div>
                 <div class="bento__cardSub">Get new holiday inspo</div>
               </div>
-              <div class="bento__thumb" aria-hidden="true"></div>
             </a>
           </div>
         </div>
@@ -385,7 +382,7 @@
           </div>
         </section>
 
-        <a class="bento__tile bento__tile--sideBottom bento__tileLink @personaClass" href="/insights" aria-label="Travel personality">
+        <a class="bento__tile bento__tile--sideBottom bento__tileLink @personaClass" aria-label="Travel personality">
           <div class="bento__tileInner bento__personaSimple">
             <p class="bento__kicker bento__kicker--onAccent">Personality</p>
 
@@ -566,8 +563,8 @@ function normalizeAndFitSvg(doc) {
     const h = maxY - minY;
 
     //padding here for zoom
-    const padX = w * 0.12;  
-    const padY = h * 0.18; 
+    const padX = w * 0.05;  
+    const padY = h * 0; 
 
     svg.setAttribute(
       "viewBox",

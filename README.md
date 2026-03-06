@@ -1,83 +1,90 @@
-# Visit 'Em All
+# PinPals
+## The Social Travel Hub
+PinPals (formerly VisitEmAll) is a fullstack web application for globetrotters who want to share their journeys and find inspiration through their social circle. Unlike a standard travel blog, PinPals focuses on the interactive "Pin" mechanic: "traveling" to a friend’s profile, liking their trips, and watching them automatically populate your own inspiration board.
 
-## Quick Start
-First, clone this repository. Then:
+### Key Features
+- Bento Box Stats: A sleek, modern dashboard providing a high-level snapshot of your travel stats.
 
-- Install the .NET Entity Framework CLI
-    * `dotnet tool install --global dotnet-ef`
-- Create the database/s
-    * `createdb visitemall_csharp_development`
-    * `createdb visitemall_csharp_test`
-- Run the migration to create the tables
-    * `cd` into `/VisitEmAll`
-  * `dotnet ef database update`
-  * `DATABASE_NAME=visitemall_csharp_development dotnet ef database update`
-- Start the application, with the development database
-  * `DATABASE_NAME=visitemall_csharp_development dotnet watch run`
-- Go to `http://localhost:5287/`
+- Social Connectivity: Search for pals and "travel" to their profile pages.
 
-## Running Tests
+- Holiday Inspo: Dynamic "Like" system handled via JS DOM manipulation that pins friend's trips to your banner.
 
-- Start the application, with the default (test) database
-    * `dotnet watch run`
-- Open a second terminal session and run the tests (in the root)
-    * `dotnet test`
+- Full-Stack Power: Built with ASP.NET Core, Entity Framework, and Bootstrap 5.
 
-## Updating the Database
+### Project Structure
+**/Controllers:** Handles the logic for Holidays, Dashboards, and Social connections.
 
-Changes are applied to the database programatically, using files called _migrations_, which live in the `/Migrations` directory.        
-The process is as follows...
+**/Models:** Defines the data schema (Users, Holidays, Likes).
 
-- To create a new table
-  * First, create the model
-  * Then go to VisitEmAllDbContext
-  * And add this `public DbSet<MODEL_NAME>? MODEL_NAME { get; set; }` 
-- Generate the migration file
-  * `cd` into `/VisitEmAll`
-  * Decide what you want to call the migration file
-  * > Note: It's best to use good descriptive names
-  * Then do `dotnet ef migrations add ` followed by the name you chose
-- Run the migration
-  * `dotnet ef database update`
+**/Views:** Razor pages styled with Bootstrap for dynamic content renderin
+
+
+### Setup & Installation
+**Prerequisites**   
+- .NET 10.0 SDK
+- PostgreSQL 
+
+**Local Development**   
+1. Clone the repository.
+
+2. Install the Entity Framework CLI:
+
+```Bash
+dotnet tool install --global dotnet-ef
+```
+3. Initialize Databases:
+
+```Bash
+createdb visitemall_csharp_development
+createdb visitemall_csharp_test
+```
+4. Run Migrations & Launch:
+
+```Bash
+cd VisitEmAll
+DATABASE_NAME=visitemall_csharp_development dotnet ef database update
+DATABASE_NAME=visitemall_csharp_development dotnet watch run
+```
+> *Access the app at: `http://localhost:5287/`*
+
+
+### Testing & Database Seeding
+**Automated Migrations**
+> Note: The application includes a DbSeeder. The server automatically handles migrations and data seeding for the Test Database, ensuring a consistent state for every test run.
+
+**Running Tests**
+1. Start the app with the default (test) database: `dotnet watch run`
+
+2. Open a second terminal and run: dotnet test
+
+**Test Frameworks:**
+
+- Playwright: (Inherits PlaywrightTestBase) for End-to-End browser testing.
+
+- NUnit: (Inherits NUnitTestBase) for unit and integration logic.
+
+- *Both bases handle Setup/Teardown to keep the DB clean.*
+
 
 ## Local Configuration
 
 ### Setting Up `appsettings.Development.json`
-> Note: This is your secrets file and must always be in `.gitignore`
+To connect to your local database, you must create an `appsettings.Development.json` in the `/VisitEmAll` directory (this file is git-ignored for security).
 
-In removing the secrets, there is now a small config step that's need to connect to your database.
-
-- Add `appsettings.Development.json` to `/VisitEmAll` from the project root
-    * `touch VisitEmAll/appsettings.Development.json` 
-- Add the `"ConnectionStrings"` to `appsettings.Development.json`.      
-    * It should look like this:
 ```json
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
   "ConnectionStrings": {
     "DefaultConnection": "Host=localhost;Username=<YOUR USERNAME>;Password=1234;Database=visitemall_csharp_test"
   }
-}
 ```
-> Note: If you're unsure what your username should be, type `whoami` into the terminal and copy & paste that in place of `<YOUR USERNAME>`
-> Note: There is an `example.appsettings.Development.json` in `VisitEmAll/` that should **not be deleted** and contains this infromation too
+> *Tip: Type `whoami` in your terminal to find your username.*
 
-## BaseTest Classes & Test Configuration
+### Database Workflow (Migrations)
+When adding new features or tables:
 
-For the new configuration to work, you will need to create a `VisitEmAll.Test/appsettings.Test.json` using the `example.appsettings.Development.json` as a guide.  
-```bash
-touch VisitEmAll.Test/appsettings.Test.json
-```
+1. Create/Update the Model in `/Models`.
 
-For new tests the TestBase classes can be inherited.
+2. Register the DbSet in `VisitEmAllDbContext.cs`.
 
-Playwright tests will inherit from `PlaywrightTestBase`, which is in turn inheriting from `PageTest`.
+3. Generate Migration: `dotnet ef migrations add NameOfYourMigration`
 
-NUnit tests will inherit from `NUnitTestBase`.
-
-Both TestBase classes are handling the setup and teardown for each and every test, ensuring the test database stays clean.
+4. Apply Changes: `dotnet ef database update`
