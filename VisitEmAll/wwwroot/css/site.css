@@ -28,10 +28,10 @@
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
 body {
-  margin: 0;
   padding-top: 5rem;
   overflow-x: visible;
   margin-bottom: 60px;
@@ -77,6 +77,40 @@ html {
   border-radius: 8px;
   border: 1px solid #ced4da;
   font-size: 1rem;
+}
+
+/* HEADERS */
+
+.holiday-title,
+.friend-page-title,
+.details-title {
+  color: var(--mist);
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.holiday-subtitle,
+.details-location {
+  color: var(--mist);
+  font-size: 1.25rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.holiday-subsection, 
+.details-subsection {
+  color: var(--mist);
+  font-size: 2rem;
+  padding-bottom: 8px;
+  margin-top: 1rem;
+}
+
+.friend-section-title {
+  color: var(--mist);
+  font-size: 1.5rem;
+  padding-bottom: 4px;
+  margin-top: 0.5rem;
 }
 
 /* ====================== */
@@ -268,15 +302,10 @@ header.fixed-top::after {
 /* ========================================================================== */
 
 .friend-container {
+  min-height: 90vh;
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
-}
-
-.friend-page-title {
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 2rem;
 }
 
 .friend-layout-grid {
@@ -305,12 +334,6 @@ header.fixed-top::after {
   border-top: 1px solid var(--line);
 }
 
-.friend-section-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--ink);
-}
 
 .friend-card {
   background: var(--card);
@@ -477,6 +500,10 @@ header.fixed-top::after {
   overflow: visible;
 }
 
+.holiday-container {
+  min-height: 90vh;
+}
+
 .stats-container {
   margin: 18px;
 }
@@ -530,8 +557,8 @@ header.fixed-top::after {
   overflow: hidden;
 }
 
-.upcoming-holidays-card:hover, 
-.past-holidays-card:hover, 
+.upcoming-holidays-card:hover,
+.past-holidays-card:hover,
 .liked-holidays-card:hover {
   transform: translateY(-4px);
 }

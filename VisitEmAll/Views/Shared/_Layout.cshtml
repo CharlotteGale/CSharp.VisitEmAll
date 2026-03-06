@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="~/VisitEmAll.styles.css" asp-append-version="true" />
     @RenderSection("Styles", required: false)   <!-- testing separation of css sheets -->
 </head>
-<body>
+<body class="site-wrapper">
     <header class="fixed-top">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
             <div class="container-fluid">
@@ -97,7 +97,7 @@
   </header>
 
   <div class="container">
-    <main role="main" class="pb-3">
+    <main role="main" class="content pb-3">
       @RenderBody()
     </main>
   </div>

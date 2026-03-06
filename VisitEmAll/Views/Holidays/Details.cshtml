@@ -17,295 +17,261 @@
   </div>
 }
 <div class="container py-4">
-    <h1 class="details-title">@Model.Title</h1>
-    @if (!string.IsNullOrEmpty(Model.Location))
-    {
-        <p class="details-location">@Model.Location</p>
-    }
-    <!-- SUMMARY + ACTIVITIES -->
-    <div class="row g-4 mb-4">
-        <!-- Summary -->
-        <div class="col-md-6">
-            <div class="summary-card card-summary p-4">
-                <h2>Trip Summary</h2>
-                @if (!string.IsNullOrEmpty(Model.Location))
-                {
-                    <p><strong>Location:</strong> @Model.Location</p>
-                }
-                <p><strong>Plan:</strong> @Model.Days.Count Day Itinerary</p>
-                @if (Model.StartDate.HasValue || Model.EndDate.HasValue)
-                {
-                    <p><strong>Dates:</strong>
-                        @Model.StartDate?.ToString("dd MMMM yyyy")
-                        @if (Model.StartDate.HasValue && Model.EndDate.HasValue)
-                        {
-                            @(" - ")
-                        }
-                        @Model.EndDate?.ToString("dd MMMM yyyy")
-                    </p>
-                }
-                @if (Model.TotalCost.HasValue)
-                {
-                    <p><strong>Total Cost:</strong> £@Model.TotalCost.Value.ToString("0.00")</p>
-                }
-            </div>
-        </div>
-        <!-- Activities -->
-        <div class="col-md-6">
-            <div class="section-card card-activities p-4">
-                <h2>Activities</h2>
-                <div class="activities-scroll">
-                    <ul class="activity-list">
-                        @foreach (var day in Model.Days)
-                        {
-                            foreach (var item in day.Items.Where(i => i.ItemType == "Activity"))
-                            {
-                                <li class="activities-item">
-                                    <span class="activity-title">@item.Name</span>
-                                    @if (!string.IsNullOrEmpty(item.Location))
-                                    {
-                                        <span class="location"> - @item.Location</span>
-                                    }
-                                    @if (!string.IsNullOrEmpty(item.Notes))
-                                    {
-                                        <div class="notes">@item.Notes</div>
-                                    }
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
+  <h1 class="details-title">@Model.Title</h1>
+  @if (!string.IsNullOrEmpty(Model.Location))
+  {
+    <h3 class="details-location">@Model.Location</h3>
+  }
+  <!-- SUMMARY + ACTIVITIES -->
+  <div class="row g-4 mb-4">
+    <!-- Summary -->
+    <div class="col-md-6">
+      <div class="summary-card card-summary p-4">
+        <h2 class="card-header">Trip Summary</h2>
+        @if (!string.IsNullOrEmpty(Model.Location))
+        {
+          <p><strong>Location:</strong> @Model.Location</p>
+        }
+        <p><strong>Plan:</strong> @Model.Days.Count Day Itinerary</p>
+        @if (Model.StartDate.HasValue || Model.EndDate.HasValue)
+        {
+          <p><strong>Dates:</strong>
+            @Model.StartDate?.ToString("dd MMMM yyyy")
+            @if (Model.StartDate.HasValue && Model.EndDate.HasValue)
+            {
+              @(" - ")
+            }
+            @Model.EndDate?.ToString("dd MMMM yyyy")
+          </p>
+        }
+        @if (Model.TotalCost.HasValue)
+        {
+          <p><strong>Total Cost:</strong> £@Model.TotalCost.Value.ToString("0.00")</p>
+        }
+      </div>
     </div>
+    <!-- Activities -->
+    <div class="col-md-6">
+      <div class="section-card card-activities p-4">
+        <h2 class="card-header">Activities</h2>
+        <div class="activities-scroll">
+          <ul class="activity-list">
+            @foreach (var day in Model.Days)
+            {
+              foreach (var item in day.Items.Where(i => i.ItemType == "Activity"))
+              {
+                <li class="activities-item">
+                  <span class="activity-title">@item.Name</span>
+                  @if (!string.IsNullOrEmpty(item.Location))
+                  {
+                    <span class="location"> - @item.Location</span>
+                  }
+                  @if (!string.IsNullOrEmpty(item.Notes))
+                  {
+                    <div class="notes">@item.Notes</div>
+                  }
+                </li>
+              }
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h1 class="details-title">Itinerary</h1>
+  <h1 class="details-subsection">Itinerary</h1>
 
-    <!-- DAY SECTIONS -->
-    @foreach (var day in Model.Days)
-    {
-        <div class="row g-4 mb-4">
-            <div class="col-md-6" id="day-@day.DayId">
-                <div class="section-card card-itinerary p-4">
-                    <h3>@day.Date.ToString("dddd, dd MMM yyyy")</h3>
-                    <!-- ADD BUTTONS -->
+  <!-- DAY SECTIONS -->
+  @foreach (var day in Model.Days)
+  {
+    <div class="row g-4 mb-4">
+      <div class="col-md-6" id="day-@day.DayId">
+        <div class="section-card card-itinerary p-4">
+          <h3 class="day-header">@day.Date.ToString("dddd, dd MMM yyyy")</h3>
+          <!-- ADD BUTTONS -->
+          @if (currentUserId == Model.OwnerUserId)
+          {
+            <div class="mb-3">
+              <a asp-action="Details"   asp-route-id="@Model.HolidayId"          asp-route-addType="Activity"
+                 asp-route-dayId="@day.DayId" class="btn btn-sm btn-add-activity">
+                Add Activity
+              </a>
+              <a asp-action="Details"   asp-route-id="@Model.HolidayId"          asp-route-addType="Restaurant"
+                 asp-route-dayId="@day.DayId" class="btn btn-sm btn-add-restaurant">
+                Add Restaurant
+              </a>
+              <a asp-action="Details"    asp-route-id="@Model.HolidayId"           asp-route-addType="Accommodation"
+                 asp-route-dayId="@day.DayId"  class="btn btn-sm btn-add-accommodation">
+                Add Accommodation
+              </a>
+            </div>
+          }
+          <!-- INLINE ADD FORM -->
+          @if (Model.AddDayId == day.DayId)
+          {
+            if (Model.AddType == "Activity")
+            {
+              <form asp-controller="DayItems"                           asp-action="CreateActivity"             asp-route-dayId="@day.DayId"                        method="post"
+                    class="border p-3 rounded mb-3">
+                <h5>Add Activity</h5>
+                <div class="mb-2">
+                  <label>Name</label>
+                  <input class="form-control" name="Name" required />
+                </div>
+                <div class="mb-2">
+                  <label>Time</label>
+                  <input class="form-control" type="time" name="Time" />
+                </div>
+                <div class="mb-2">
+                  <label>Location</label>
+                  <input class="form-control" name="Location" />
+                </div>
+                <div class="mb-2">
+                  <label>Notes</label>
+                  <textarea class="form-control" name="Notes"></textarea>
+                </div>
+                <button class="btn-save-edit btn btn-sm">Save</button>
+                <a asp-action="Details"                       asp-route-id="@Model.HolidayId"                                   class="btn-cancel-delete btn btn-sm">
+                  Cancel
+                </a>
+              </form>
+            }
+            if (Model.AddType == "Restaurant")
+            {
+              <form asp-controller="DayItems"      asp-action="CreateRestaurant"                 asp-route-dayId="@day.DayId"                            method="post"
+                    class="border p-3 rounded mb-3">
+                <h5>Add Restaurant</h5>
+                <div class="mb-2">
+                  <label>Name</label>
+                  <input class="form-control" name="Name" required />
+                </div>
+                <div class="mb-2">
+                  <label>Time</label>
+                  <input class="form-control" type="time" name="Time" />
+                </div>
+                <div class="mb-2">
+                  <label>Location</label>
+                  <input class="form-control" name="Location" />
+                </div>
+                <div class="mb-2">
+                  <label>Notes</label>
+                  <textarea class="form-control" name="Notes"></textarea>
+                </div>
+                <button class="btn btn-save-edit btn-sm">Save</button>
+                <a asp-action="Details"                          asp-route-id="@Model.HolidayId"             class="btn btn-cancel-delete btn-sm">
+                  Cancel
+                </a>
+              </form>
+            }
+            if (Model.AddType == "Accommodation")
+            {
+              <form asp-controller="DayItems"                                 asp-action="CreateAccommodation"                    asp-route-dayId="@day.DayId"      method="post"
+                    class="border p-3 rounded mb-3">
+                <h5>Add Accommodation</h5>
+                <div class="mb-2">
+                  <label>Name</label>
+                  <input class="form-control" name="Name" required />
+                </div>
+                <div class="mb-2">
+                  <label>Time</label>
+                  <input class="form-control" type="time" name="Time" />
+                </div>
+                <div class="mb-2">
+                  <label>Location</label>
+                  <input class="form-control" name="Location" />
+                </div>
+                <div class="mb-2">
+                  <label>Notes</label>
+                  <textarea class="form-control" name="Notes"></textarea>
+                </div>
+                <button class="btn btn-save-edit btn-sm">Save</button>
+                <a asp-action="Details"     asp-route-id="@Model.HolidayId"                class="btn btn-cancel-delete btn-sm">
+                  Cancel
+                </a>
+              </form>
+            }
+          }
+          <!-- TIMELINE -->
+          @if (!day.Items.Any())
+          {
+            <p>No items planned for this day.</p>
+          }
+          else
+          {
+            <ul class="timeline">
+              @foreach (var item in day.Items)
+              {
+                <li class="timeline-item">
+                  @{
+                    var editing = TempData["EditingItemId"] != null &&
+                                (int)TempData["EditingItemId"] == item.Id;
+                  }
+                  @if (!editing)
+                  {
+                    <!-- DISPLAY MODE -->
+                    <span class="time">@((item.Time?.ToString("HH:mm") ?? "--:--"))</span>
+                    <span class="item-title">@item.Name</span>
+                    <span class="item-type">(@item.ItemType)</span>
+                    @if (!string.IsNullOrEmpty(item.Location))
+                    {
+                      <span class="location"> - @item.Location</span>
+                    }
+                    @if (!string.IsNullOrEmpty(item.Notes))
+                    {
+                      <div class="notes">@item.Notes</div>
+                    }
                     @if (currentUserId == Model.OwnerUserId)
                     {
-                    <div class="mb-3">
-                    <a asp-action="Details"
-                    asp-route-id="@Model.HolidayId"
-                    asp-route-addType="Activity"
-                    asp-route-dayId="@day.DayId"
-                    class="btn btn-sm btn-add-activity">
-                        Add Activity
-                    </a>
-                    <a asp-action="Details"
-                    asp-route-id="@Model.HolidayId"
-                    asp-route-addType="Restaurant"
-                    asp-route-dayId="@day.DayId"
-                    class="btn btn-sm btn-add-restaurant">
-                        Add Restaurant
-                    </a>
-                    <a asp-action="Details"
-                    asp-route-id="@Model.HolidayId"
-                    asp-route-addType="Accommodation"
-                    asp-route-dayId="@day.DayId"
-                    class="btn btn-sm btn-add-accommodation">
-                        Add Accommodation
-                    </a>
+                      <div class="item-actions mt-2">
+                        <!-- EDIT BUTTON -->
+                        <form method="post"                  asp-controller="DayItems"                asp-action="EditInline"              asp-route-id="@item.Id"
+                              class="d-inline">
+                          <button type="submit" class="btn btn-save-edit btn-sm me-2">Edit</button>
+                        </form>
+                        <!-- DELETE BUTTON -->
+                        <form asp-controller="DayItems"                 asp-action="DeleteItem"                asp-route-id="@item.Id"              method="post"
+                              class="d-inline">
+                          <button class="btn btn-cancel-delete btn-sm"                                   onclick="return confirm('Delete this item?');">
+                            Delete
+                          </button>
+                        </form>
+                      </div>
+                    }
+                  }
+                  else
+                  {
+                    <form asp-controller="DayItems"         asp-action="UpdateItem"                        asp-route-id="@item.Id"                                       method="post"
+                          class="edit-inline-form mt-2 d-inline">
+                      <div class="row g-2">
+                        <div class="col-3">
+                          <input type="time" name="time" value="@item.Time" class="form-control form-control-sm" />
                         </div>
-                    }
-                    <!-- INLINE ADD FORM -->
-                    @if (Model.AddDayId == day.DayId)
-                    {
-                        if (Model.AddType == "Activity")
-                        {
-                            <form asp-controller="DayItems"
-                                    asp-action="CreateActivity"
-                                    asp-route-dayId="@day.DayId"
-                                    method="post"
-                                    class="border p-3 rounded mb-3">
-                                <h5>Add Activity</h5>
-                                <div class="mb-2">
-                                    <label>Name</label>
-                                    <input class="form-control" name="Name" required />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Time</label>
-                                    <input class="form-control" type="time" name="Time" />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Location</label>
-                                    <input class="form-control" name="Location" />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Notes</label>
-                                    <textarea class="form-control" name="Notes"></textarea>
-                                </div>
-                                <button class="btn btn-success btn-sm">Save</button>
-                                <a asp-action="Details"
-                                    asp-route-id="@Model.HolidayId"
-                                    class="btn btn-secondary btn-sm">
-                                    Cancel
-                                </a>
-                            </form>
-                        }
-                        if (Model.AddType == "Restaurant")
-                        {
-                            <form asp-controller="DayItems"
-                                    asp-action="CreateRestaurant"
-                                    asp-route-dayId="@day.DayId"
-                                    method="post"
-                                    class="border p-3 rounded mb-3">
-                                <h5>Add Restaurant</h5>
-                                <div class="mb-2">
-                                    <label>Name</label>
-                                    <input class="form-control" name="Name" required />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Time</label>
-                                    <input class="form-control" type="time" name="Time" />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Location</label>
-                                    <input class="form-control" name="Location" />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Notes</label>
-                                    <textarea class="form-control" name="Notes"></textarea>
-                                </div>
-                                <button class="btn btn-success btn-sm">Save</button>
-                                <a asp-action="Details"
-                                    asp-route-id="@Model.HolidayId"
-                                    class="btn btn-secondary btn-sm">
-                                    Cancel
-                                </a>
-                            </form>
-                        }
-                        if (Model.AddType == "Accommodation")
-                        {
-                            <form asp-controller="DayItems"
-                                    asp-action="CreateAccommodation"
-                                    asp-route-dayId="@day.DayId"
-                                    method="post"
-                                    class="border p-3 rounded mb-3">
-                                <h5>Add Accommodation</h5>
-                                <div class="mb-2">
-                                    <label>Name</label>
-                                    <input class="form-control" name="Name" required />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Time</label>
-                                    <input class="form-control" type="time" name="Time" />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Location</label>
-                                    <input class="form-control" name="Location" />
-                                </div>
-                                <div class="mb-2">
-                                    <label>Notes</label>
-                                    <textarea class="form-control" name="Notes"></textarea>
-                                </div>
-                                <button class="btn btn-success btn-sm">Save</button>
-                                <a asp-action="Details"
-                                    asp-route-id="@Model.HolidayId"
-                                    class="btn btn-secondary btn-sm">
-                                    Cancel
-                                </a>
-                            </form>
-                        }
-                    }
-                    <!-- TIMELINE -->
-                    @if (!day.Items.Any())
-                    {
-                        <p>No items planned for this day.</p>
-                    }
-                    else
-                    {
-                        <ul class="timeline">
-                            @foreach (var item in day.Items)
-                            {
-                            <li class="timeline-item">
-                                @{
-                                    var editing = TempData["EditingItemId"] != null &&
-                                                (int)TempData["EditingItemId"] == item.Id;
-                                }
-                                @if (!editing)
-                                {
-                                    <!-- DISPLAY MODE -->
-                                    <span class="time">@((item.Time?.ToString("HH:mm") ?? "--:--"))</span>
-                                    <span class="item-title">@item.Name</span>
-                                    <span class="item-type">(@item.ItemType)</span>
-                                    @if (!string.IsNullOrEmpty(item.Location))
-                                    {
-                                        <span class="location"> - @item.Location</span>
-                                    }
-                                    @if (!string.IsNullOrEmpty(item.Notes))
-                                    {
-                                        <div class="notes">@item.Notes</div>
-                                    }
-                                    @if (currentUserId == Model.OwnerUserId)
-                                    {
-                                        <div class="item-actions mt-2">
-                                            <!-- EDIT BUTTON -->
-                                            <form method="post"
-                                                asp-controller="DayItems"
-                                                asp-action="EditInline"
-                                                asp-route-id="@item.Id"
-                                                class="d-inline">
-                                                <button type="submit" class="btn btn-outline-dark btn-sm me-2">Edit</button>
-                                            </form>
-                                            <!-- DELETE BUTTON -->
-                                            <form asp-controller="DayItems"
-                                                asp-action="DeleteItem"
-                                                asp-route-id="@item.Id"
-                                                method="post"
-                                                class="d-inline">
-                                                <button class="btn btn btn-outline-danger btn-sm"
-                                                        onclick="return confirm('Delete this item?');">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </div>
-                                    }
-                                }
-                                else
-                                {
-                                    <form asp-controller="DayItems"
-                                        asp-action="UpdateItem"
-                                        asp-route-id="@item.Id"
-                                        method="post"
-                                        class="edit-inline-form mt-2 d-inline">
-                                        <div class="row g-2">
-                                            <div class="col-3">
-                                                <input type="time" name="time" value="@item.Time" class="form-control form-control-sm" />
-                                            </div>
-                                            <div class="col-3">
-                                                <input type="text" name="name" value="@item.Name" placeholder="Name" class="form-control form-control-sm" />
-                                            </div>
-                                            <div class="col-3">
-                                                <input type="text" name="location" value="@item.Location" placeholder="Location" class="form-control form-control-sm" />
-                                            </div>
-                                            <div class="col-3">
-                                                <input type="text" name="notes" value="@item.Notes" placeholder="Notes" class="form-control form-control-sm"/>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-success btn-sm mt-2 me-2">Save</button>
-                                    </form>
-                                    <form method="post"
-                                        asp-controller="DayItems"
-                                        asp-action="CancelInline"
-                                        asp-route-id="@item.Id"
-                                        class="d-inline">
-                                        <button type="submit" class="btn btn-outline-dark btn-sm mt-2">Cancel</button>
-                                    </form>
-                                }
-                            </li>
-                            }
-                        </ul>
-                    }
-                </div>
-            </div>
+                        <div class="col-3">
+                          <input type="text" name="name" value="@item.Name" placeholder="Name"
+                                 class="form-control form-control-sm" />
+                        </div>
+                        <div class="col-3">
+                          <input type="text" name="location" value="@item.Location" placeholder="Location"
+                                 class="form-control form-control-sm" />
+                        </div>
+                        <div class="col-3">
+                          <input type="text" name="notes" value="@item.Notes" placeholder="Notes"
+                                 class="form-control form-control-sm" />
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-save-edit btn-sm mt-2 me-2">Save</button>
+                    </form>
+                    <form method="post"                                       asp-controller="DayItems"                             asp-action="CancelInline"                    asp-route-id="@item.Id"
+                          class="d-inline">
+                      <button type="submit" class="btn btn-save-edit btn-sm mt-2">Cancel</button>
+                    </form>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
 
     </div>
 
@@ -314,8 +280,9 @@
   <!-- PHOTOS -->
   <div class="row mb-4">
     <div class="col-12">
-      <div class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary rounded">
-        <h2>Photos</h2>
+      <div
+        class="photo-carousel-card @(Model.Images == null || !Model.Images.Any() ? "empty" : "") card-itinerary rounded">
+        <h2 class="card-header">Photos</h2>
         <form id="uploadForm" asp-action="AddImages" method="post" enctype="multipart/form-data">
           <input type="hidden" asp-for="HolidayId" />
           <div class="mb-3">
@@ -335,18 +302,16 @@
               </div>
             }
             @if (currentUserId == Model.OwnerUserId)
-            {<label class="form-label">Add more photos to your trip</label>
+            {
+              <label class="form-label">Add more photos to your trip</label>
               <div class="photo-input-group d-flex align-items-center gap-3 mb-4">
-              <input asp-for="ImageFiles" 
-                    type="file" 
-                    accept="image/*" 
-                    multiple 
-                    class="form-control photos-form-field" 
-                    id="ImageFiles" />
-              <button type="submit" class="photo-upload-btn" id="uploadBtn">
-                <i class="bi bi-cloud-upload"></i> Upload Photos
-              </button>
-            </div>}
+                <input asp-for="ImageFiles"          type="file"                   accept="image/*"               multiple           class="form-control photos-form-field"
+                       id="ImageFiles" />
+                <button type="submit" class="photo-upload-btn" id="uploadBtn">
+                  <i class="bi bi-cloud-upload"></i> Upload Photos
+                </button>
+              </div>
+            }
             <div id="sizeError" class="text-danger mt-1" style="display:none;">
               Total size exceeds 50MB. Please select fewer or smaller images.
             </div>
@@ -354,24 +319,24 @@
         </form>
 
         <script>
-          document.getElementById('ImageFiles').addEventListener('change', function () {
-            const files = this.files;
-            let totalSize = 0;
-            const limit = 50 * 1024 * 1024;
+                  document.getElementById('ImageFiles').addEventListener('change', function () {
+                    const files = this.files;
+                    let totalSize = 0;
+                    const limit = 50 * 1024 * 1024;
 
-            for (let i = 0; i < files.length; i++) {
-              totalSize += files[i].size;
-            }
-            const errorDiv = document.getElementById('sizeError');
-            const btn = document.getElementById('uploadBtn');
-            if (totalSize > limit) {
-              errorDiv.style.display = 'block';
-              btn.disabled = true;
-            } else {
-              errorDiv.style.display = 'none';
-              btn.disabled = false;
-            }
-          });
+                    for (let i = 0; i < files.length; i++) {
+                      totalSize += files[i].size;
+                    }
+                    const errorDiv = document.getElementById('sizeError');
+                    const btn = document.getElementById('uploadBtn');
+                    if (totalSize > limit) {
+                      errorDiv.style.display = 'block';
+                      btn.disabled = true;
+                    } else {
+                      errorDiv.style.display = 'none';
+                      btn.disabled = false;
+                    }
+                  });
         </script>
 
         <div id="photos" class="photo-carousel">
@@ -408,44 +373,44 @@
               }
 
               <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                  const carousel = document.getElementById('holidayCarousel');
-                  if (!carousel) return;
+                            document.addEventListener('DOMContentLoaded', function () {
+                              const carousel = document.getElementById('holidayCarousel');
+                              if (!carousel) return;
 
-                  const inner = carousel.querySelector('.carousel-inner');
-                  const items = carousel.querySelectorAll('.carousel-item');
-                  const total = items.length;
-                  const updateLayout = (targetIndex) => {
-                    items.forEach(el => {
-                      el.classList.remove('active', 'item-wing-left', 'item-wing-right');
-                      el.classList.remove('carousel-item-next', 'carousel-item-prev', 'carousel-item-start', 'carousel-item-end');
-                    });
+                              const inner = carousel.querySelector('.carousel-inner');
+                              const items = carousel.querySelectorAll('.carousel-item');
+                              const total = items.length;
+                              const updateLayout = (targetIndex) => {
+                                items.forEach(el => {
+                                  el.classList.remove('active', 'item-wing-left', 'item-wing-right');
+                                  el.classList.remove('carousel-item-next', 'carousel-item-prev', 'carousel-item-start', 'carousel-item-end');
+                                });
 
-                    items[targetIndex].classList.add('active');
+                                items[targetIndex].classList.add('active');
 
-                    if (total > 1) {
-                      const prevIndex = (targetIndex - 1 + total) % total;
-                      const nextIndex = (targetIndex + 1) % total;
-                      const offset = -(targetIndex * 100);
-                      
-                      inner.style.transform = `translateX(${offset}%)`;
-                      if (total === 2) {
-                        items[nextIndex].classList.add('item-wing-right');
-                      } else {
-                        items[prevIndex].classList.add('item-wing-left');
-                        items[nextIndex].classList.add('item-wing-right');
-                      }
-                    } else {
-                      inner.style.transform = `translateX(0)`;
-                      items[0].style.opacity = "1";
-                    }
-                  };
+                                if (total > 1) {
+                                  const prevIndex = (targetIndex - 1 + total) % total;
+                                  const nextIndex = (targetIndex + 1) % total;
+                                  const offset = -(targetIndex * 100);
 
-                  carousel.addEventListener('slide.bs.carousel', function (e) {
-                    updateLayout(e.to);
-                  });
-                  updateLayout(0);
-                });
+                                  inner.style.transform = `translateX(${offset}%)`;
+                                  if (total === 2) {
+                                    items[nextIndex].classList.add('item-wing-right');
+                                  } else {
+                                    items[prevIndex].classList.add('item-wing-left');
+                                    items[nextIndex].classList.add('item-wing-right');
+                                  }
+                                } else {
+                                  inner.style.transform = `translateX(0)`;
+                                  items[0].style.opacity = "1";
+                                }
+                              };
+
+                              carousel.addEventListener('slide.bs.carousel', function (e) {
+                                updateLayout(e.to);
+                              });
+                              updateLayout(0);
+                            });
               </script>
             </div>
           }
@@ -467,13 +432,13 @@
     <div class="mt-4">
       <a asp-action="EditHoliday" asp-route-id="@Model.HolidayId" class="holiday-submit-btn">Edit Holiday</a>
 
-            <form asp-action="DeleteHoliday" asp-route-id="@Model.HolidayId" method="post" class="d-inline">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="holiday-cancel-btn"
-                        onclick="return confirm('Are you sure you want to delete this holiday?');">
-                    Remove Holiday
-                </button>
-            </form>
-        </div>
-    }
+      <form asp-action="DeleteHoliday" asp-route-id="@Model.HolidayId" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="holiday-cancel-btn"
+                onclick="return confirm('Are you sure you want to delete this holiday?');">
+          Remove Holiday
+        </button>
+      </form>
+    </div>
+  }
 </div>

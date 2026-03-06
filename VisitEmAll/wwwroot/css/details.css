@@ -65,6 +65,18 @@
       #f7e1b0cd 100%);
 }
 
+.card-header, .day-header  {
+  color: var(--ink);
+  font-size: 1.75rem;
+  font-style: italic;
+  padding-bottom: 8px;
+  margin-top: 1rem;
+}
+
+.day-header {
+  font-size: 1.5rem;
+}
+
 
 .card-travel-tips {
   max-height: 260px;
@@ -121,10 +133,11 @@
    ============================================================ */
 .btn-add-activity,
 .btn-add-restaurant,
-.btn-add-accommodation {
-  background: #ffffff;
-  border: 2px solid #394949;
-  color: #394949;
+.btn-add-accommodation, 
+.btn-save-edit {
+  background: var(--mist);
+  color: var(--card);
+  border-color: var(--mist);
   padding: 6px 12px;
   font-size: 0.9rem;
   border-radius: 6px;
@@ -133,11 +146,30 @@
 
 .btn-add-activity:hover,
 .btn-add-restaurant:hover,
-.btn-add-accommodation:hover {
-  background: #394949;
-  color: #ffffff;
-  border-color: #394949;
+.btn-add-accommodation:hover,
+.btn-save-edit:hover {
+  background: var(--card);
+  border: 2px solid var(--mist);
+  color: var(--mist);
 }
+
+.btn-cancel-delete {
+  background: var(--card);
+  border: 2px solid var(--sand);
+  color: var(--sand);
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-cancel-delete:hover {
+  background: var(--sand);
+  border: 2px solid var(--sand);
+  color: var(--card);
+}
+
 
 .holiday-submit-btn, 
 .holiday-cancel-btn {
@@ -151,30 +183,30 @@
 }
 
 .holiday-submit-btn {
-  background: var(--green);
-  color: white;
-  border: solid 2px var(--green);
+  background: var(--mist);
+  color: var(--card);
+  border-color: var(--mist);
   text-decoration: none;
 }
 
 .holiday-submit-btn:hover {
   background: var(--card);
-  color: var(--green);
-  border: solid 2px var(--green);
+  border: 2px solid var(--mist);
+  color: var(--mist);
   transform: translateY(-4px);
 }
 
 .holiday-cancel-btn {
   background: var(--card);
-  color: var(--mist);
-  border: solid 2px var(--mist);
+  border: 2px solid var(--sand);
+  color: var(--sand);
   text-decoration: none;
 }
 
 .holiday-cancel-btn:hover {
-  background: var(--mist);
+  background: var(--sand);
+  border: 2px solid var(--sand);
   color: var(--card);
-  border: solid 2px var(--card);
   transform: translateY(-4px);
 }
 
