@@ -96,12 +96,12 @@ public static class DbSeeder
       new Holiday { UserId = users[0].Id, Title = "Canal boating, Amsterdam", Location = "Amsterdam, The Netherlands", StartDate = new DateOnly(2024, 7, 10), EndDate = new DateOnly(2024, 7, 11), HeroImageUrl = "https://www.blueboat.nl/wp-content/uploads/2021/08/CCC_main-960x600.jpg"},
       new Holiday { UserId = users[0].Id, Title = "Guitar shopping in Sapporo", Location = "Sapporo, Japan", StartDate = new DateOnly(2024, 9, 10), EndDate = new DateOnly(2024, 9, 15), HeroImageUrl = "https://visit.sapporo.travel/wp2022/wp-content/uploads/2024/10/spring-s02-img01.jpg" },
       new Holiday { UserId = users[0].Id, Title = "Ski trip to Vancouver", Location = "Vancouver, Canada", StartDate = new DateOnly(2024, 12, 12), EndDate = new DateOnly(2024, 12, 20), HeroImageUrl = "https://www.vancouverplanner.com/wp-content/uploads/2020/04/grouse-mountain-2-1024x640.jpeg"},
-      new Holiday { UserId = users[0].Id, Title = "Oktoberfest in Hamburg", Location = "Hamburg, Germany", StartDate = new DateOnly(2024, 3, 10), EndDate = new DateOnly(2024, 3, 21), HeroImageUrl = "https://tischreservierung-oktoberfest.de/wp-content/uploads/2018/01/human-3237513_1920.jpg" },
+      new Holiday { UserId = users[1].Id, Title = "Oktoberfest in Hamburg", Location = "Hamburg, Germany", StartDate = new DateOnly(2024, 3, 10), EndDate = new DateOnly(2024, 3, 21), HeroImageUrl = "https://tischreservierung-oktoberfest.de/wp-content/uploads/2018/01/human-3237513_1920.jpg" },
       new Holiday { UserId = users[1].Id, Title = "Skiing in the Alps", Location = "Chamonix, France", StartDate = new DateOnly(2024, 12, 15), EndDate = new DateOnly(2024, 12, 16), HeroImageUrl = "https://cdn.prod.website-files.com/5f5777504c01823e93e92c7b/619778bdcf885c9bb9739f57_AdobeStock_122648427.jpg" },
-      new Holiday { UserId = users[3].Id, Title = "Tokyo Adventure", Location = "Japan", StartDate = new DateOnly(2025, 3, 5), EndDate = new DateOnly(2025, 3, 6), HeroImageUrl = "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_6000,h_3375,c_limit/tokyoGettyImages-1031467664.jpeg"  },
-      new Holiday { UserId = users[4].Id, Title = "Weekend in Rome", Location = "Rome, Italy", StartDate = new DateOnly(2024, 5, 12), EndDate = new DateOnly(2024, 5, 13), HeroImageUrl = "https://a.loveholidays.com/media-library/~production/73842e65d182c5ddce219a66da2cf5d0036e7954-4683x3122.jpg"  },
-      new Holiday { UserId = users[6].Id, Title = "Hiking in the Highlands", Location = "Scotland", StartDate = new DateOnly(2024, 8, 1), EndDate = new DateOnly(2024, 8, 2), HeroImageUrl = "https://wanderlusters.com/wp-content/uploads/2018/10/Scottish-Highlands-Hiking-Guide-1155x770.jpg"  }
-    };
+      new Holiday { UserId = users[1].Id, Title = "Tokyo Adventure", Location = "Japan", StartDate = new DateOnly(2026, 5, 5), EndDate = new DateOnly(2026, 6, 6), HeroImageUrl = "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_6000,h_3375,c_limit/tokyoGettyImages-1031467664.jpeg"  },
+      new Holiday { UserId = users[1].Id, Title = "Weekend in Rome", Location = "Rome, Italy", StartDate = new DateOnly(2024, 5, 12), EndDate = new DateOnly(2024, 5, 13), HeroImageUrl = "https://a.loveholidays.com/media-library/~production/73842e65d182c5ddce219a66da2cf5d0036e7954-4683x3122.jpg"  },
+      new Holiday { UserId = users[1].Id, Title = "Hiking in the Highlands", Location = "Scotland", StartDate = new DateOnly(2024, 8, 1), EndDate = new DateOnly(2024, 8, 2), HeroImageUrl = "https://wanderlusters.com/wp-content/uploads/2018/10/Scottish-Highlands-Hiking-Guide-1155x770.jpg"  },
+            };
 
         // Set CountryId before saving holidays
         foreach (var h in holidays)
@@ -231,10 +231,25 @@ new DayActivity { HolidayDayId = holidayDays[29].Id, Name = "Miniatur Wunderland
 new DayRestaurant { HolidayDayId = holidayDays[29].Id, Name = "Currywurst at Schanzenstern", Time = new TimeOnly(18, 30) },
 
 // Skiing in the Alps – Chamonix (holidayDays[30], [31]
-    
+// Skiing in the Alps – Chamonix (holidayDays[30], [31])
+
+    // Day 1
     new DayAccommodation { HolidayDayId = holidayDays[30].Id, Name = "Alpine Lodge", Time = new TimeOnly(15, 0), Location = "Chamonix" },
-    new DayActivity      { HolidayDayId = holidayDays[30].Id, Name = "Full Day Ski Pass", Time = new TimeOnly(8, 30), Cost = 65.00m },
-    new DayRestaurant    { HolidayDayId = holidayDays[31].Id, Name = "Après-ski at La Folie Douce", Time = new TimeOnly(16, 0) },
+
+    new DayActivity { HolidayDayId = holidayDays[30].Id, Name = "Ski Rental Pickup", Time = new TimeOnly(8, 0), Cost = 40.00m },
+    new DayActivity { HolidayDayId = holidayDays[30].Id, Name = "Full Day Ski Pass – Chamonix Brévent", Time = new TimeOnly(9, 0), Cost = 65.00m },
+    new DayActivity { HolidayDayId = holidayDays[30].Id, Name = "Lunch Break on the Mountain", Time = new TimeOnly(12, 30), Notes = "Hot chocolate and tartiflette" },
+    new DayActivity { HolidayDayId = holidayDays[30].Id, Name = "Afternoon Ski Runs", Time = new TimeOnly(14, 0), Cost = 0.00m },
+
+    new DayRestaurant { HolidayDayId = holidayDays[30].Id, Name = "Dinner at La Table de l'Idéal 1850", Time = new TimeOnly(19, 0) },
+
+    // Day 2
+    new DayActivity { HolidayDayId = holidayDays[31].Id, Name = "Breakfast at Chalet Café", Time = new TimeOnly(8, 0) },
+    new DayActivity { HolidayDayId = holidayDays[31].Id, Name = "Mont Blanc Cable Car Ride", Time = new TimeOnly(9, 30), Cost = 75.00m },
+    new DayActivity { HolidayDayId = holidayDays[31].Id, Name = "Valley Blanche Glacier Ski Route", Time = new TimeOnly(11, 30), Cost = 0.00m, Notes = "Guide required" },
+
+    new DayRestaurant { HolidayDayId = holidayDays[31].Id, Name = "Après-ski at La Folie Douce", Time = new TimeOnly(16, 0) },
+    new DayRestaurant { HolidayDayId = holidayDays[31].Id, Name = "Fondue Dinner at Le Monchu", Time = new TimeOnly(19, 30) },
 
     // Tokyo Adventure (holidayDays[32], [33])
     new DayAccommodation { HolidayDayId = holidayDays[32].Id, Name = "Shinjuku Park Hotel", Time = new TimeOnly(15, 0) },
@@ -254,13 +269,15 @@ new DayRestaurant { HolidayDayId = holidayDays[29].Id, Name = "Currywurst at Sch
         context.DayItems.AddRange(items);
 
         // === FRIENDSHIPS ===
-        var friendships = new List<Friendship>
-        {
-            new() { RequesterId = users[0].Id, ReceiverId = users[1].Id, Status = FriendshipStatus.Accepted },
-            new() { RequesterId = users[2].Id, ReceiverId = users[0].Id, Status = FriendshipStatus.Pending },
-            new() { RequesterId = users[3].Id, ReceiverId = users[0].Id, Status = FriendshipStatus.Pending },
-            new() { RequesterId = users[0].Id, ReceiverId = users[5].Id, Status = FriendshipStatus.Pending }
-        };
+            var friendships = new List<Friendship>
+            {
+                new() { RequesterId = users[0].Id, ReceiverId = users[1].Id, Status = FriendshipStatus.Accepted }, // Brian
+                new() { RequesterId = users[0].Id, ReceiverId = users[2].Id, Status = FriendshipStatus.Accepted }, // Charlie
+                new() { RequesterId = users[0].Id, ReceiverId = users[3].Id, Status = FriendshipStatus.Accepted }, // Dave
+                new() { RequesterId = users[4].Id, ReceiverId = users[0].Id, Status = FriendshipStatus.Pending }, // Emily
+                new() { RequesterId = users[0].Id, ReceiverId = users[5].Id, Status = FriendshipStatus.Pending },  // Frank
+                new() { RequesterId = users[6].Id, ReceiverId = users[0].Id, Status = FriendshipStatus.Pending }   // Grace
+            };
         context.Friendships.AddRange(friendships);
 
         context.SaveChanges();
